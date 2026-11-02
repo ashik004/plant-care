@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct OnboardingView: View {
-    @Environment(AppModel.self) private var model
+    @Environment(AppModel.self) var model
 
     var body: some View {
         ZStack {
@@ -19,8 +19,8 @@ struct OnboardingView: View {
 // MARK: 1a Welcome
 
 private struct WelcomeStep: View {
-    @Environment(AppModel.self) private var model
-    @State private var settled = false
+    @Environment(AppModel.self) var model
+    @State var settled = false
 
     var body: some View {
         StepScroll {
@@ -31,7 +31,7 @@ private struct WelcomeStep: View {
                     Image("OnboardPlant")
                         .resizable()
                         .scaledToFill()
-                        .frame(width: g.size.width, height: g.size.height, alignment: UnitPoint(x: 0.5, y: 0.3))
+                        .frame(width: g.size.width, height: g.size.height)
                         .clipped()
                         .scaleEffect(settled ? 1 : 1.08)
                 }
@@ -86,7 +86,7 @@ private struct ProgressPips: View {
 }
 
 private struct LevelStep: View {
-    @Environment(AppModel.self) private var model
+    @Environment(AppModel.self) var model
 
     var body: some View {
         StepScroll {
@@ -135,7 +135,7 @@ private struct LevelStep: View {
 // MARK: 1c Reminders
 
 private struct RemindersStep: View {
-    @Environment(AppModel.self) private var model
+    @Environment(AppModel.self) var model
 
     var body: some View {
         StepScroll {

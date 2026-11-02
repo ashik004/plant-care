@@ -2,8 +2,8 @@ import SwiftUI
 
 @main
 struct TendApp: App {
-    @State private var model = AppModel()
-    @State private var store = Store()
+    @State var model = AppModel()
+    @State var store = Store()
 
     var body: some Scene {
         WindowGroup {
@@ -20,7 +20,7 @@ struct TendApp: App {
 }
 
 struct RootView: View {
-    @Environment(AppModel.self) private var model
+    @Environment(AppModel.self) var model
 
     var body: some View {
         Group {

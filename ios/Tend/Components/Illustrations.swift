@@ -39,7 +39,7 @@ struct LoopingCanvas: View {
     let viewBox: CGSize
     var stillTime: Double = 1.2
     let draw: (inout GraphicsContext, Double) -> Void
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
 
     var body: some View {
         TimelineView(.animation(paused: reduceMotion)) { tl in
@@ -208,13 +208,13 @@ struct EmptyPotIllustration: View {
 // MARK: - Premium success: a seedling grows inside the check circle, with two bursting rings
 
 struct SeedlingSuccess: View {
-    @State private var popped = false
-    @State private var sprout = false
-    @State private var leafA = false
-    @State private var leafB = false
-    @State private var burst1 = false
-    @State private var burst2 = false
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State var popped = false
+    @State var sprout = false
+    @State var leafA = false
+    @State var leafB = false
+    @State var burst1 = false
+    @State var burst2 = false
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
 
     private let box = CGSize(width: 64, height: 64)
 

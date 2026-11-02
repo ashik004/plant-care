@@ -94,7 +94,7 @@ struct TextLinkButton: View {
 struct BackPill: View {
     var label = "Back"
     var action: (() -> Void)? = nil
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) var dismiss
 
     var body: some View {
         Button { if let action { action() } else { dismiss() } } label: {
@@ -326,7 +326,7 @@ struct SegmentedPicker<T: Hashable>: View {
     var stretch = true
     var track: Color = Tend.C.surface
     var onChange: ((T) -> Void)? = nil
-    @Namespace private var ns
+    @Namespace var ns
 
     var body: some View {
         HStack(spacing: 0) {
@@ -485,8 +485,8 @@ struct StepCheck: View {
 /// Task check: empty 30 pt ring; when done, a 32 pt brand circle pops in (0.4→1.18→1) with a ripple.
 struct TaskCheck: View {
     let checking: Bool
-    @State private var ripple = false
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State var ripple = false
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
 
     var body: some View {
         ZStack {
@@ -533,7 +533,7 @@ struct ToastView: View {
 }
 
 struct ToastOverlay: ViewModifier {
-    @Environment(AppModel.self) private var model
+    @Environment(AppModel.self) var model
     var bottom: CGFloat = 100
     func body(content: Content) -> some View {
         content.overlay(alignment: .bottom) {
@@ -559,8 +559,8 @@ struct Entrance: ViewModifier {
     var delay: Double = 0
     var rise: CGFloat = 14
     var scale: CGFloat = 1
-    @State private var shown = false
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State var shown = false
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
 
     func body(content: Content) -> some View {
         content

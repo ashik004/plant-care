@@ -4,7 +4,7 @@ import SwiftUI
 /// Guides are tabs; Scan is the trailing glass button (`Tab(role: .search)`), which opens
 /// the scanner as a full-screen cover instead of switching tabs.
 struct MainTabView: View {
-    @Environment(AppModel.self) private var model
+    @Environment(AppModel.self) var model
 
     var body: some View {
         @Bindable var model = model
@@ -58,7 +58,7 @@ func premiumBindingFor(_ model: AppModel, level: Int) -> Binding<Bool> {
 /// Content of a full-screen cover: the scanner flow or a guide.
 struct CoverView: View {
     let cover: Cover
-    @Environment(AppModel.self) private var model
+    @Environment(AppModel.self) var model
 
     var body: some View {
         Group {
