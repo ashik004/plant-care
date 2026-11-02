@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>body{margin:0;background:#E7E1D1;font-family:'Geist',system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:#3E7A37}a:hover{color:#2F5D2A}button{font-family:inherit;cursor:pointer}input{font-family:inherit}[data-om-starter] ::-webkit-scrollbar{display:none}
+@keyframes tdIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes tdRise{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes tdRing{from{stroke-dashoffset:239}to{stroke-dashoffset:0}}
+@keyframes tdGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes tdPop{0%{transform:scale(.4)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes tdRipple{from{transform:scale(1);opacity:.55}to{transform:scale(2.4);opacity:0}}
+@keyframes tdBreath{0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 30px -10px rgba(46,62,38,.45),0 0 0 0 rgba(74,124,63,.35)}50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 30px -10px rgba(46,62,38,.45),0 0 0 10px rgba(74,124,63,0)}}
+@keyframes tdKen{from{transform:scale(1.08)}to{transform:scale(1)}}
+@keyframes tdSway{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+@keyframes tdCorner{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.015)}}
+@keyframes tdSweep{0%{top:12%}50%{top:84%}100%{top:12%}}
+@keyframes tdToast{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes tdSwayL{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(3deg)}}
+@keyframes tdLeafA{0%,100%{transform:rotate(0)}50%{transform:rotate(-7deg)}}
+@keyframes tdLeafB{0%,100%{transform:rotate(0)}50%{transform:rotate(6deg)}}
+@keyframes tdZ{0%{opacity:0;transform:translate(0,0) scale(.7)}30%{opacity:1}100%{opacity:0;transform:translate(14px,-26px) scale(1.1)}}
+@keyframes tdTilt{0%,15%{transform:rotate(0)}35%,75%{transform:rotate(16deg)}95%,100%{transform:rotate(0)}}
+@keyframes tdDrop{0%,30%{opacity:0;transform:translateY(0)}38%{opacity:1}70%{opacity:1;transform:translateY(34px)}74%,100%{opacity:0;transform:translateY(38px)}}
+@keyframes tdPerk{0%,55%{transform:scaleY(.86) rotate(-6deg)}80%,100%{transform:scaleY(1) rotate(0)}}
+@keyframes tdDraw{0%{stroke-dashoffset:100}55%,80%{stroke-dashoffset:0}100%{stroke-dashoffset:-100}}
+@keyframes tdFade{0%,40%{opacity:0}60%,85%{opacity:1}100%{opacity:0}}
+@keyframes tdSprout{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes tdUnfurl{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
+@keyframes tdBurst{from{transform:scale(.6);opacity:.7}to{transform:scale(2.6);opacity:0}}</style></helmet>
+<div style="min-height:100vh;box-sizing:border-box;background:#E7E1D1;color:#1F2B1C;font-family:'Geist',sans-serif;padding:40px 32px;display:flex;flex-wrap:wrap;gap:40px;justify-content:center;align-items:flex-start">
+<div style="width:220px;display:flex;flex-direction:column;gap:18px;padding-top:12px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:10px"><span style="width:30px;height:30px;border-radius:9px;background:#3A6E33;box-shadow:0 0 20px rgba(74,124,63,0.16)"></span><span style="font-family:'Newsreader',serif;font-size:32px;line-height:1">Tend</span></div>
+<div style="font-size:13px;line-height:1.5;color:#67755F">Your personal plant expert. Full iOS prototype, and everything is tappable. Use these to jump straight to a screen.</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:2px">
+<sc-for list="{{ jumps }}" as="j" hint-placeholder-count="12">
+<button onClick="{{ j.onGo }}" style="text-align:left;height:36px;padding:0 12px;border-radius:10px;border:1px solid {{ j.border }};background:{{ j.bg }};color:{{ j.color }};font-size:14px;font-weight:500" style-hover="border-color:rgba(46,62,38,0.26)">{{ j.label }}</button>
+</sc-for>
+</div>
+<div style="font:500 10px/1.6 'JetBrains Mono',monospace;color:#8E977F;letter-spacing:.04em">PHOTOS ARE PLACEHOLDERS · SENSOR VALUES ARE SIMULATED LIVE</div>
+</div>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ false }}" hint-size="402px,874px">
+<div style="position:relative;height:100%;background:#F4F0E6;color:#1F2B1C;font-family:'Geist',sans-serif;overflow:hidden">
+<div style="position:absolute;top:-150px;right:-130px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(74,124,63,0.18),transparent 65%);pointer-events:none"></div>
+<div ref="{{ scrollRef }}" style="position:relative;height:100%;overflow-y:auto;scrollbar-width:none">
+
+<sc-if value="{{ isOb0 }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;min-height:874px;box-sizing:border-box;padding:64px 22px 56px;display:flex;flex-direction:column;gap:24px">
+<div style="position:relative;height:420px;border-radius:30px;overflow:hidden;background:#43523E"><img src="assets/onboard-plant.avif" alt="Potted bird of paradise in a terracotta pot" style="width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block;animation:tdKen 2.4s cubic-bezier(.2,.8,.2,1) both"></img><div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(244,240,230,0.85) 100%);pointer-events:none"></div></div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:48px;line-height:.98;letter-spacing:-.01em">A plant expert in your pocket.</h1>
+<p style="margin:0;font-size:16px;line-height:1.5;color:#566551;text-wrap:pretty">Identify any plant, catch problems early, and know exactly what each one needs. No gardening experience required.</p>
+</div>
+<div style="margin-top:auto;display:flex;flex-direction:column;gap:6px">
+<button onClick="{{ obNext }}" style="height:56px;border:none;border-radius:18px;background:#2F5D2A;color:#fff;font-size:16px;font-weight:600;box-shadow:0 0 30px rgba(74,124,63,0.11)" style-hover="background:#3A6E33">Get started</button>
+<button onClick="{{ obFinish }}" style="height:44px;border:none;background:transparent;color:#566551;font-size:15px;font-weight:500">I already have an account</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isOb1 }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;min-height:874px;box-sizing:border-box;padding:70px 22px 56px;display:flex;flex-direction:column;gap:26px">
+<div style="display:flex;gap:6px"><span style="width:22px;height:4px;border-radius:2px;background:#3E7A37"></span><span style="width:22px;height:4px;border-radius:2px;background:rgba(46,62,38,0.2)"></span></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:42px;line-height:1.02">How at home are you with plants?</h1>
+<p style="margin:0;font-size:15px;color:#566551">This sets how much Tend explains. You can change it later.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ levels }}" as="l" hint-placeholder-count="2">
+<button onClick="{{ l.onPick }}" style="text-align:left;padding:20px;border-radius:22px;border:1.5px solid {{ l.border }};background:{{ l.bg }};color:#1F2B1C;display:flex;flex-direction:column;gap:6px;box-shadow:{{ l.shadow }};transition:all .2s">
+<span style="font-family:'Newsreader',serif;font-size:26px">{{ l.title }}</span>
+<span style="font-size:14px;line-height:1.45;color:#566551">{{ l.body }}</span>
+</button>
+</sc-for>
+</div>
+<button onClick="{{ obNext }}" style="margin-top:auto;height:56px;border:none;border-radius:18px;background:#2F5D2A;color:#fff;font-size:16px;font-weight:600" style-hover="background:#3A6E33">Continue</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isOb2 }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;min-height:874px;box-sizing:border-box;padding:70px 22px 56px;display:flex;flex-direction:column;gap:26px">
+<div style="display:flex;gap:6px"><span style="width:22px;height:4px;border-radius:2px;background:#3E7A37"></span><span style="width:22px;height:4px;border-radius:2px;background:#3E7A37"></span></div>
+<div style="height:132px;border-radius:24px;background:linear-gradient(170deg,#EAF1E0,#F7F2E6);border:1px solid rgba(46,62,38,0.08);display:flex;align-items:center;justify-content:center;overflow:hidden"><svg width="220" height="120" viewBox="0 0 220 120" fill="none" aria-hidden="true"><ellipse cx="156" cy="113" rx="26" ry="3" fill="rgba(46,62,38,.1)"></ellipse><g style="transform-box:view-box;transform-origin:68px 70px;animation:tdTilt 2.8s ease-in-out infinite"><path d="M50 44c0-18 38-18 38 0" stroke="#2F5D2A" stroke-width="5" stroke-linecap="round"></path><path d="M42 46h52a4 4 0 0 1 4 4v32a6 6 0 0 1-6 6H44a6 6 0 0 1-6-6V50a4 4 0 0 1 4-4Z" fill="#8DB07A" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><path d="M98 58l34-20 4 6-34 26Z" fill="#9DBE88" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><path d="M130 34l9-3 3 10-7 3Z" fill="#7A9F66" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><path d="M46 58h48" stroke="#2F5D2A" stroke-width="1.4" opacity=".4"></path></g><path d="M139 50c0 0-3 4-3 6a3 3 0 0 0 6 0c0-2-3-6-3-6Z" fill="#6FA0C8" style="opacity:0;animation:tdDrop 2.8s ease-in 0s infinite"></path><path d="M143 50c0 0-3 4-3 6a3 3 0 0 0 6 0c0-2-3-6-3-6Z" fill="#6FA0C8" style="opacity:0;animation:tdDrop 2.8s ease-in 0.35s infinite"></path><path d="M147 50c0 0-3 4-3 6a3 3 0 0 0 6 0c0-2-3-6-3-6Z" fill="#6FA0C8" style="opacity:0;animation:tdDrop 2.8s ease-in 0.7s infinite"></path><g style="transform-box:view-box;transform-origin:156px 92px;animation:tdPerk 2.8s ease-in-out infinite"><path d="M156 92V74" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><path d="M156 82c-8 0-12-6-12-12 7 0 12 5 12 12Z" fill="#9DBE88" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><path d="M156 78c7-1 11-7 10-13-7 1-10 6-10 13Z" fill="#B7D3A3" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path></g><path d="M138 90h36l-4 21h-28Z" fill="#C9774F" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><path d="M135 88h42v5h-42Z" fill="#B5603A" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path></svg></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:42px;line-height:1.02">When should we nudge you?</h1>
+<p style="margin:0;font-size:15px;line-height:1.45;color:#566551">Reminders adapt to each plant's type and condition. You get one a day, and only when something's due.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ remindOpts }}" as="r" hint-placeholder-count="3">
+<button onClick="{{ r.onPick }}" style="display:flex;justify-content:space-between;align-items:center;height:60px;padding:0 20px;border-radius:18px;border:1.5px solid {{ r.border }};background:{{ r.bg }};color:#1F2B1C;font-size:16px;font-weight:600"><span>{{ r.label }}</span><span style="font:500 13px 'JetBrains Mono',monospace;color:{{ r.timeColor }}">{{ r.time }}</span></button>
+</sc-for>
+</div>
+<div style="padding:16px;border-radius:18px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);display:flex;gap:12px;align-items:flex-start">
+<span style="flex:none;width:36px;height:36px;border-radius:9px;background:#3A6E33"></span>
+<div style="display:flex;flex-direction:column;gap:2px;font-size:14px"><span style="font-weight:600">Tend · {{ remindTime }}</span><span style="color:#566551">Ottoline is dry and Goldie is ready for a feed.</span></div>
+</div>
+<div style="margin-top:auto;display:flex;flex-direction:column;gap:6px">
+<button onClick="{{ obFinish }}" style="height:56px;border:none;border-radius:18px;background:#2F5D2A;color:#fff;font-size:16px;font-weight:600" style-hover="background:#3A6E33">Allow reminders</button>
+<button onClick="{{ obFinish }}" style="height:44px;border:none;background:transparent;color:#566551;font-size:15px;font-weight:500">Not now</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;padding:70px 22px 150px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#67755F">Wednesday, 28 October</div>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02">Good evening, Alex.</h1>
+</div>
+<button onClick="{{ openSettings }}" aria-label="Settings" style="position:relative;flex:none;width:44px;height:44px;border-radius:50%;border:1px solid rgba(46,62,38,0.16);background:#FFFCF5;color:#1F2B1C;font-family:'Newsreader',serif;font-size:20px;display:flex;align-items:center;justify-content:center" style-hover="border-color:rgba(74,124,63,0.4)">A<sc-if value="{{ isPremium }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:-2px;bottom:-2px;width:16px;height:16px;border-radius:50%;background:#3A6E33;border:2px solid #F4F0E6;box-shadow:0 0 10px rgba(74,124,63,0.27)"></span></sc-if></button>
+</div>
+<div style="display:flex;align-items:center;gap:20px;padding:18px;border-radius:24px;background:linear-gradient(160deg,rgba(74,124,63,0.18),rgba(74,124,63,0.05));border:1px solid rgba(74,124,63,0.16)">
+<div style="position:relative;flex:none;width:92px;height:92px">
+<svg width="92" height="92" viewBox="0 0 92 92" style="transform:rotate(-90deg)"><circle cx="46" cy="46" r="38" fill="none" stroke="rgba(46,62,38,0.1)" stroke-width="8"></circle><circle cx="46" cy="46" r="38" fill="none" stroke="#3E7A37" stroke-width="8" stroke-linecap="round" style="stroke-dasharray:{{ ringDash }};transition:stroke-dasharray .8s;animation:tdRing 1.3s cubic-bezier(.2,.8,.2,1) .15s both;filter:drop-shadow(0 0 6px rgba(74,124,63,0.6))"></circle></svg>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-family:'Newsreader',serif;font-size:28px;line-height:1">{{ healthPct }}</span><span style="font-size:10px;color:#566551;letter-spacing:.06em">HEALTHY</span></div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:7px">
+<sc-for list="{{ healthLegend }}" as="h" hint-placeholder-count="3">
+<div onClick="{{ h.onTap }}" style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><span style="width:8px;height:8px;border-radius:50%;background:{{ h.color }};box-shadow:0 0 8px {{ h.color }}"></span><span style="flex:1">{{ h.label }}</span><span style="font:500 13px 'JetBrains Mono',monospace;color:{{ h.color }}">{{ h.n }}</span></div>
+</sc-for>
+</div>
+</div>
+<sc-if value="{{ showAlert }}" hint-placeholder-val="{{ true }}">
+<div onClick="{{ openDiagnosis }}" style="display:flex;gap:14px;align-items:center;padding:14px;border-radius:20px;background:rgba(181,96,58,0.1);border:1px solid rgba(181,96,58,0.28);cursor:pointer">
+<span style="flex:none;width:52px;height:52px;border-radius:14px;background:repeating-linear-gradient(135deg,#EFE3D6 0 5px,#E8DACB 5px 10px);font:500 7px 'JetBrains Mono',monospace;color:#8A6A58;display:flex;align-items:center;justify-content:center">SCAN</span>
+<span style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#B5603A">{{ alertEyebrow }}</span><span style="font-size:15px;font-weight:600">{{ alertTitle }}</span><span style="font-size:13px;color:#566551">{{ alertSub }}</span></span>
+<span style="font-size:20px;color:#B5603A">›</span>
+</div>
+</sc-if>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Newsreader',serif;font-size:24px">Today</span><span style="font-size:13px;color:#67755F">{{ taskCountLine }}</span></div>
+<sc-for list="{{ tasks }}" as="t" hint-placeholder-count="3">
+<div style="animation:tdRise .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:{{ t.delay }};display:flex;align-items:center;gap:14px;padding:12px 14px 12px 12px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);border-radius:20px">
+<button onClick="{{ t.onOpen }}" style="flex:none;width:52px;height:52px;border:none;padding:0;border-radius:14px;background:repeating-linear-gradient(135deg,#EDE7D8 0 6px,#E4DDCB 6px 12px);font:500 8px 'JetBrains Mono',monospace;color:#8E977F;text-transform:uppercase">photo</button>
+<div onClick="{{ t.onOpen }}" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;cursor:pointer">
+<div style="font-family:'Newsreader',serif;font-size:21px;line-height:1.1">{{ t.title }}</div>
+<div style="font-size:13px;color:#67755F">{{ t.meta }}</div>
+<div style="display:flex;gap:10px;align-items:center;font-size:12px;font-weight:600">
+<span style="display:flex;align-items:center;gap:6px;color:{{ t.whenColor }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ t.whenColor }};box-shadow:0 0 8px {{ t.whenColor }}"></span>{{ t.when }}</span>
+<span onClick="{{ t.onSnooze }}" style="color:#76826D;font-weight:500;text-decoration:underline;text-underline-offset:3px" style-hover="color:#1F2B1C">Later</span>
+</div>
+</div>
+<button onClick="{{ t.onCheck }}" aria-label="Mark done" style="flex:none;width:44px;height:44px;border:none;background:transparent;padding:0;display:flex;align-items:center;justify-content:center">
+<sc-if value="{{ t.checking }}" hint-placeholder-val="{{ false }}"><span style="position:relative;width:32px;height:32px;border-radius:50%;background:#3A6E33;animation:tdPop .45s cubic-bezier(.34,1.56,.64,1) both;box-shadow:0 0 18px rgba(74,124,63,0.25);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700"><span style="position:absolute;inset:0;border-radius:50%;border:2px solid #3A6E33;animation:tdRipple .7s ease-out both"></span>✓</span></sc-if>
+<sc-if value="{{ t.idle }}" hint-placeholder-val="{{ true }}"><span style="width:30px;height:30px;border-radius:50%;border:1.5px solid #B8BDA9;box-sizing:border-box" style-hover="border-color:#3E7A37;background:rgba(74,124,63,0.08)"></span></sc-if>
+</button>
+</div>
+</sc-for>
+<sc-if value="{{ allDone }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdRise .5s cubic-bezier(.2,.8,.2,1) both;padding:22px 22px 26px;border-radius:20px;border:1px dashed rgba(46,62,38,0.21);text-align:center;display:flex;flex-direction:column;gap:6px"><svg width="130" height="112" viewBox="0 0 120 112" fill="none" aria-hidden="true" style="align-self:center;overflow:visible"><ellipse cx="60" cy="106" rx="30" ry="3.5" fill="rgba(46,62,38,.1)"></ellipse><g style="transform-box:view-box;transform-origin:60px 74px;animation:tdSwayL 4.5s ease-in-out infinite"><path d="M60 74C60 60 58 50 60 36" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><g style="transform-box:view-box;transform-origin:60px 58px;animation:tdLeafA 3.2s ease-in-out infinite"><path d="M60 58C46 57 37 47 39 35C52 37 60 46 60 58Z" fill="#9DBE88" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><path d="M59 56 45 42" stroke="#2F5D2A" stroke-width="1.2" stroke-linecap="round"></path></g><g style="transform-box:view-box;transform-origin:60px 50px;animation:tdLeafB 3.6s ease-in-out infinite"><path d="M60 50C73 47 81 37 79 25C66 27 60 37 60 50Z" fill="#B7D3A3" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><path d="M61 48 74 32" stroke="#2F5D2A" stroke-width="1.2" stroke-linecap="round"></path></g><path d="M60 37C54 30 55 20 61 13C67 21 66 30 60 37Z" fill="#8DB07A" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path></g><path d="M34 72h52a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3H34a3 3 0 0 1-3-3v-4a3 3 0 0 1 3-3Z" fill="#B5603A" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><path d="M36 82h48l-5 22H41Z" fill="#C9774F" stroke="#2F5D2A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><text x="84" y="34" fill="#67755F" style="font:italic 500 13px 'Newsreader',serif;animation:tdZ 3s ease-out infinite">z</text><text x="92" y="22" fill="#67755F" style="font:italic 500 10px 'Newsreader',serif;animation:tdZ 3s ease-out 1.5s infinite">z</text></svg><div style="font-family:'Newsreader',serif;font-size:24px">All tended. Enjoy the quiet.</div><div style="font-size:14px;color:#67755F">{{ tomorrowLine }}</div></div>
+</sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Newsreader',serif;font-size:24px">Environment</span><span onClick="{{ openEnv }}" style="font-size:13px;font-weight:600;color:#3E7A37;cursor:pointer">All rooms ›</span></div>
+<div style="display:flex;gap:10px;overflow-x:auto;margin:0 -22px;padding:0 22px;scrollbar-width:none">
+<sc-for list="{{ roomCards }}" as="rc" hint-placeholder-count="3">
+<div onClick="{{ openEnv }}" style="flex:none;width:150px;padding:14px;border-radius:20px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);display:flex;flex-direction:column;gap:10px;cursor:pointer">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:600">{{ rc.name }}</span><span style="width:7px;height:7px;border-radius:50%;background:{{ rc.dot }};box-shadow:0 0 8px {{ rc.dot }}"></span></div>
+<div style="display:flex;flex-direction:column;gap:4px;font:500 12px 'JetBrains Mono',monospace;color:#566551"><span>{{ rc.t }}</span><span>{{ rc.h }}</span><span>{{ rc.l }}</span></div>
+</div>
+</sc-for>
+</div>
+</div>
+<sc-if value="{{ hasSuggestion }}" hint-placeholder-val="{{ true }}">
+<div style="padding:16px 18px;border-radius:20px;background:#FFFCF5;border:1px solid rgba(74,124,63,0.18);display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#3E7A37"><span style="width:6px;height:6px;border-radius:50%;background:#3E7A37;box-shadow:0 0 8px #3E7A37"></span>Tend suggests</div>
+<div style="font-family:'Newsreader',serif;font-size:20px;line-height:1.25;text-wrap:pretty">{{ topSugg.title }}</div>
+<div style="font-size:13px;line-height:1.5;color:#566551">{{ topSugg.why }}</div>
+<div style="display:flex;gap:8px"><button onClick="{{ topSugg.onAccept }}" style="height:38px;padding:0 16px;border-radius:12px;border:none;background:#2F5D2A;color:#fff;font-size:14px;font-weight:600" style-hover="background:#3A6E33">{{ topSugg.cta }}</button><button onClick="{{ topSugg.onDismiss }}" style="height:38px;padding:0 14px;border-radius:12px;border:1px solid rgba(46,62,38,0.16);background:transparent;color:#566551;font-size:14px;font-weight:500">Not now</button></div>
+</div>
+</sc-if>
+<div onClick="{{ openAway }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-radius:20px;border:1px solid rgba(46,62,38,0.1);cursor:pointer" style-hover="background:#FFFCF5">
+<span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:600">Going away?</span><span style="font-size:13px;color:#67755F">Brief a plant-sitter in under a minute.</span></span><span style="font-size:20px;color:#67755F">›</span>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlants }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;padding:70px 0 150px;display:flex;flex-direction:column;gap:18px">
+<div style="padding:0 22px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px">
+<div style="display:flex;flex-direction:column;gap:8px"><div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#67755F">{{ plantCountLine }}</div><h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02">Your collection</h1></div>
+<div style="display:flex;padding:3px;border-radius:999px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.1)">
+<sc-for list="{{ views }}" as="vw" hint-placeholder-count="2"><button onClick="{{ vw.onPick }}" style="height:32px;padding:0 12px;border:none;border-radius:999px;background:{{ vw.bg }};color:{{ vw.color }};font-size:13px;font-weight:600">{{ vw.label }}</button></sc-for>
+</div>
+</div>
+<div style="display:flex;gap:8px;overflow-x:auto;padding:0 22px;scrollbar-width:none">
+<sc-for list="{{ rooms }}" as="r" hint-placeholder-count="5"><button onClick="{{ r.onPick }}" style="flex:none;height:36px;padding:0 15px;border-radius:999px;border:1px solid {{ r.border }};background:{{ r.bg }};color:{{ r.color }};font-size:14px;font-weight:500;white-space:nowrap">{{ r.label }}</button></sc-for>
+</div>
+<sc-if value="{{ isGrid }}" hint-placeholder-val="{{ true }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 22px">
+<sc-for list="{{ plantCards }}" as="p" hint-placeholder-count="4">
+<div onClick="{{ p.onOpen }}" style="animation:tdRise .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:{{ p.delay }};display:flex;flex-direction:column;gap:10px;padding:8px 8px 14px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);border-radius:20px;cursor:pointer;transition:transform .15s" style-hover="transform:translateY(-2px)">
+<div style="position:relative;height:150px;border-radius:14px;background:repeating-linear-gradient(135deg,#EDE7D8 0 6px,#E4DDCB 6px 12px);display:flex;align-items:flex-end;padding:8px;box-sizing:border-box;font:500 8.5px/1.2 'JetBrains Mono',monospace;color:#8E977F;text-transform:uppercase">{{ p.species }}<span style="position:absolute;top:8px;left:8px;height:22px;padding:0 8px;border-radius:999px;background:rgba(244,240,230,0.75);color:{{ p.healthColor }};font:600 11px 'Geist',sans-serif;text-transform:none;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:{{ p.healthColor }}"></span>{{ p.healthLabel }}</span></div>
+<div style="padding:0 6px;display:flex;flex-direction:column;gap:6px">
+<div style="font-family:'Newsreader',serif;font-size:21px;line-height:1">{{ p.name }}</div>
+<div style="font-size:12px;font-weight:600;color:{{ p.statusColor }}">{{ p.status }}</div>
+<div style="height:3px;border-radius:2px;background:rgba(46,62,38,0.1)"><div style="height:100%;width:{{ p.fill }};background:{{ p.statusColor }};border-radius:2px;box-shadow:0 0 8px {{ p.glow }};transition:width .6s"></div></div>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ isShelf }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;gap:18px;overflow-x:auto;padding:10px 22px 4px;scrollbar-width:none">
+<sc-for list="{{ plantCards }}" as="s" hint-placeholder-count="5">
+<div onClick="{{ s.onOpen }}" style="flex:none;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;width:62px">
+<div style="font:500 11px 'JetBrains Mono',monospace;color:{{ s.statusColor }}">{{ s.pct }}</div>
+<div style="position:relative;width:46px;height:260px;border-radius:23px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.08);overflow:hidden"><div style="position:absolute;left:4px;right:4px;bottom:4px;height:{{ s.h }};border-radius:19px;background:linear-gradient(to top,{{ s.statusColor }},{{ s.color2 }});box-shadow:0 0 24px {{ s.glow }};transition:height 1s cubic-bezier(.2,.8,.2,1)"></div></div>
+<div style="font-family:'Newsreader',serif;font-size:16px;text-align:center;line-height:1.05">{{ s.short }}</div>
+</div>
+</sc-for>
+</div>
+<div style="margin:0 22px;font-size:13px;line-height:1.5;color:#67755F">Live soil moisture from each plant's sensor or schedule. Tap a stem for details.</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;padding:62px 0 60px;display:flex;flex-direction:column;gap:18px">
+<div style="padding:0 16px;display:flex;justify-content:space-between"><button onClick="{{ back }}" style="height:40px;padding:0 16px 0 12px;border-radius:999px;border:1px solid rgba(46,62,38,0.13);background:rgba(255,252,245,0.9);font-size:15px;font-weight:500;color:#1F2B1C;display:flex;align-items:center;gap:6px"><span style="font-size:20px;line-height:1;margin-top:-2px">‹</span>Back</button><button onClick="{{ scanThis }}" style="height:40px;padding:0 16px;border-radius:999px;border:1px solid rgba(74,124,63,0.3);background:rgba(74,124,63,0.12);font-size:14px;font-weight:600;color:#3E7A37">Check health</button></div>
+<div style="position:relative;margin:0 16px;height:260px;border-radius:26px;background:repeating-linear-gradient(135deg,#EDE7D8 0 7px,#FFFCF5 7px 14px);display:flex;align-items:center;justify-content:center;font:500 10px 'JetBrains Mono',monospace;color:#8E977F;text-transform:uppercase;letter-spacing:.06em">photo · {{ sel.species }}</div>
+<div style="padding:0 22px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#67755F">{{ sel.room }}</div><h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:44px;line-height:1">{{ sel.name }}</h1><div style="font-family:'Newsreader',serif;font-style:italic;font-size:18px;color:#67755F">{{ sel.species }}</div></div>
+<span style="flex:none;height:28px;padding:0 11px;border-radius:999px;background:{{ sel.healthBg }};color:{{ sel.healthColor }};font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:{{ sel.healthColor }};box-shadow:0 0 8px {{ sel.healthColor }}"></span>{{ sel.healthLabel }}</span>
+</div>
+<div style="margin:0 22px;display:flex;padding:3px;border-radius:14px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09)">
+<sc-for list="{{ detailTabs }}" as="dt" hint-placeholder-count="3"><button onClick="{{ dt.onPick }}" style="flex:1;height:38px;border:none;border-radius:11px;background:{{ dt.bg }};color:{{ dt.color }};font-size:14px;font-weight:600">{{ dt.label }}</button></sc-for>
+</div>
+
+<sc-if value="{{ isDOverview }}" hint-placeholder-val="{{ true }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;display:flex;flex-direction:column;gap:18px">
+<div style="margin:0 22px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<sc-for list="{{ sensors }}" as="sn" hint-placeholder-count="4">
+<div style="padding:14px;border-radius:18px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#67755F"><span>{{ sn.label }}</span><span style="width:6px;height:6px;border-radius:50%;background:{{ sn.color }};box-shadow:0 0 8px {{ sn.color }}"></span></div>
+<div style="font-family:'Newsreader',serif;font-size:30px;line-height:1">{{ sn.value }}</div>
+<div style="height:4px;border-radius:2px;background:rgba(46,62,38,0.09);position:relative"><div style="position:absolute;top:0;bottom:0;left:{{ sn.idealL }};width:{{ sn.idealW }};background:rgba(74,124,63,0.22);border-radius:2px"></div><div style="position:absolute;top:-3px;width:10px;height:10px;border-radius:50%;left:{{ sn.pos }};margin-left:-5px;background:{{ sn.color }};box-shadow:0 0 8px {{ sn.color }};transition:left .8s"></div></div>
+<div style="font-size:11px;color:{{ sn.noteColor }}">{{ sn.note }}</div>
+</div>
+</sc-for>
+</div>
+<div style="padding:0 22px">
+<sc-if value="{{ sel.canWater }}" hint-placeholder-val="{{ true }}"><button onClick="{{ waterSel }}" style="width:100%;height:56px;border:none;border-radius:18px;background:#2F5D2A;color:#fff;font-size:16px;font-weight:600;box-shadow:0 0 30px rgba(74,124,63,0.09)" style-hover="background:#3A6E33" style-active="transform:scale(.98)">{{ sel.waterLabel }}</button></sc-if>
+<sc-if value="{{ sel.wateredToday }}" hint-placeholder-val="{{ false }}"><div style="height:56px;border-radius:18px;background:rgba(74,124,63,0.1);color:#3E7A37;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center">✓ {{ sel.nextText }}</div></sc-if>
+</div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:8px"><div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#67755F">Tend's read</div><p style="margin:0;font-family:'Newsreader',serif;font-size:20px;line-height:1.35;text-wrap:pretty">{{ sel.insight }}</p></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDGrowth }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;display:flex;flex-direction:column;gap:18px">
+<div style="margin:0 22px;padding:18px;border-radius:20px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Newsreader',serif;font-size:30px">{{ growth.delta }}</span><span style="font-size:12px;color:#67755F">{{ growth.caption }}</span></div>
+<div style="display:flex;align-items:flex-end;gap:8px;height:120px">
+<sc-for list="{{ growth.bars }}" as="gb" hint-placeholder-count="8"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="width:100%;height:{{ gb.h }};border-radius:6px 6px 3px 3px;background:{{ gb.bg }};box-shadow:{{ gb.shadow }};transition:height .6s;transform-origin:bottom;animation:tdGrow .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:{{ gb.delay }}"></div><span style="font:500 9px 'JetBrains Mono',monospace;color:#8E977F">{{ gb.wk }}</span></div></sc-for>
+</div>
+<div style="display:flex;gap:16px;font-size:13px;color:#566551"><span>{{ growth.size }}</span><span>{{ growth.leaves }}</span></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="padding:0 22px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#67755F">Weekly photos</div>
+<div style="display:flex;gap:10px;overflow-x:auto;padding:0 22px;scrollbar-width:none">
+<button onClick="{{ addGrowthPhoto }}" style="flex:none;width:110px;height:146px;border-radius:16px;border:1.5px dashed rgba(74,124,63,0.4);background:rgba(74,124,63,0.06);color:#3E7A37;font-size:13px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><span style="font-size:24px;font-weight:300">+</span>This week</button>
+<sc-for list="{{ growth.photos }}" as="ph" hint-placeholder-count="4"><div style="flex:none;width:110px;display:flex;flex-direction:column;gap:6px"><div style="height:120px;border-radius:16px;background:repeating-linear-gradient(135deg,#EDE7D8 0 6px,#E4DDCB 6px 12px);font:500 8px 'JetBrains Mono',monospace;color:#8E977F;display:flex;align-items:center;justify-content:center">PHOTO</div><span style="font-size:12px;color:#67755F">{{ ph.label }}</span></div></sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDCare }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;display:flex;flex-direction:column;gap:14px">
+<div style="margin:0 22px;padding:16px 18px;border-radius:20px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);display:flex;align-items:center;justify-content:space-between;gap:12px">
+<div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:600">Water every {{ sel.every }} days</span><span style="font-size:12px;color:#67755F">{{ sel.scheduleHint }}</span></div>
+<div style="display:flex;gap:4px"><button onClick="{{ everyMinus }}" aria-label="Fewer days" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(46,62,38,0.16);background:transparent;color:#1F2B1C;font-size:20px">−</button><button onClick="{{ everyPlus }}" aria-label="More days" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(46,62,38,0.16);background:transparent;color:#1F2B1C;font-size:20px">+</button></div>
+</div>
+<div style="margin:0 22px;display:flex;flex-direction:column;border-radius:20px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);overflow:hidden">
+<sc-for list="{{ careRows }}" as="cr" hint-placeholder-count="4">
+<div onClick="{{ cr.onGuide }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(46,62,38,0.08);cursor:pointer" style-hover="background:#EDE7D8">
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:600">{{ cr.label }}</span><span style="font-size:12px;color:{{ cr.color }}">{{ cr.next }}</span></span><span style="font-size:13px;font-weight:600;color:#3E7A37">Guide ›</span>
+</div>
+</sc-for>
+</div>
+<div style="padding:0 22px;display:flex;flex-direction:column">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#67755F;padding:6px 0 8px">Health history</div>
+<sc-for list="{{ sel.log }}" as="l" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid rgba(46,62,38,0.1);font-size:14px"><span>{{ l.what }}</span><span style="color:#67755F;flex:none">{{ l.when }}</span></div></sc-for>
+</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isScan }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;min-height:874px;box-sizing:border-box;padding:60px 22px 50px;display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;justify-content:space-between;align-items:center"><button onClick="{{ back }}" style="height:40px;padding:0 4px;border:none;background:transparent;color:#566551;font-size:15px;font-weight:500">Close</button><span style="font-size:15px;font-weight:600">AI scanner</span><span style="width:44px"></span></div>
+<div style="display:flex;padding:3px;border-radius:14px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09)">
+<sc-for list="{{ scanModes }}" as="sm" hint-placeholder-count="2"><button onClick="{{ sm.onPick }}" style="flex:1;height:40px;border:none;border-radius:11px;background:{{ sm.bg }};color:{{ sm.color }};font-size:14px;font-weight:600">{{ sm.label }}</button></sc-for>
+</div>
+<div style="position:relative;height:440px;border-radius:30px;background:repeating-linear-gradient(135deg,#EDE7D8 0 7px,#FFFCF5 7px 14px);display:flex;align-items:center;justify-content:center;overflow:hidden">
+<div style="position:absolute;inset:56px 46px;border-radius:24px;border:1.5px solid {{ scanBorder }};box-shadow:0 0 40px {{ scanGlow }},inset 0 0 40px {{ scanGlow }};transition:all .4s;animation:tdCorner 2.4s ease-in-out infinite"></div>
+<div style="position:absolute;left:46px;right:46px;height:2px;top:24%;background:linear-gradient(90deg,transparent,#3E7A37,transparent);box-shadow:0 0 14px #3E7A37;opacity:{{ scanLineOp }};transition:opacity .3s;animation:tdSweep 1.6s ease-in-out infinite"></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding:0 70px"><svg width="120" height="140" viewBox="0 0 120 140" fill="none" aria-hidden="true"><path pathLength="100" d="M60 132V108M60 108C26 100 14 66 26 34 34 14 50 8 60 6c10 2 26 8 34 28 12 32 0 66-34 74Z" stroke="#3E7A37" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:100;animation:tdDraw 3.6s ease-in-out infinite"></path><g style="animation:tdFade 3.6s ease-in-out infinite"><path d="M60 106V14" stroke="#3E7A37" stroke-width="1.6" stroke-linecap="round"></path><path d="M60 40 42 28M60 40l18-12M60 62 36 48M60 62l24-14M60 84 40 74M60 84l20-10" stroke="#3E7A37" stroke-width="1.3" stroke-linecap="round" opacity=".7"></path></g></svg><span style="font:500 10px 'JetBrains Mono',monospace;color:#76826D;text-transform:uppercase;letter-spacing:.06em">{{ scanText }}</span></div>
+</div>
+<div style="font-size:14px;line-height:1.5;color:#566551;text-align:center;text-wrap:pretty">{{ scanHint }}</div>
+<sc-if value="{{ showScanQuota }}" hint-placeholder-val="{{ true }}"><div style="display:flex;justify-content:center;gap:8px;font-size:13px"><span style="color:#67755F">{{ scanQuota }}</span><span onClick="{{ openPremium }}" style="color:#3E7A37;font-weight:600;cursor:pointer">Go unlimited ›</span></div></sc-if>
+<button onClick="{{ capture }}" style="margin-top:auto;height:56px;border:none;border-radius:18px;background:#2F5D2A;color:#fff;font-size:16px;font-weight:600;box-shadow:0 0 30px rgba(74,124,63,0.11)" style-hover="background:#3A6E33">{{ captureLabel }}</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isIdResult }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;min-height:874px;box-sizing:border-box;padding:60px 22px 50px;display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;justify-content:space-between;align-items:center"><button onClick="{{ back }}" style="height:40px;padding:0 4px;border:none;background:transparent;color:#566551;font-size:15px;font-weight:500">‹ Rescan</button><span style="font:500 11px 'JetBrains Mono',monospace;color:#3E7A37">IDENTIFIED</span></div>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02">It's a {{ pickSpeciesLower }}.</h1>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ suggestions }}" as="sg" hint-placeholder-count="3">
+<button onClick="{{ sg.onPick }}" style="display:flex;align-items:center;gap:14px;padding:10px 16px 10px 10px;border-radius:20px;border:1.5px solid {{ sg.border }};background:{{ sg.bg }};color:#1F2B1C;text-align:left;box-shadow:{{ sg.shadow }};transition:all .2s">
+<span style="flex:none;width:60px;height:60px;border-radius:14px;background:repeating-linear-gradient(135deg,#EDE7D8 0 6px,#E4DDCB 6px 12px);font:500 7px 'JetBrains Mono',monospace;color:#8E977F;display:flex;align-items:center;justify-content:center">PHOTO</span>
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-family:'Newsreader',serif;font-size:21px">{{ sg.species }}</span><span style="font-family:'Newsreader',serif;font-style:italic;font-size:14px;color:#67755F">{{ sg.latin }}</span></span>
+<span style="font:500 12px 'JetBrains Mono',monospace;color:{{ sg.confColor }}">{{ sg.conf }}</span>
+</button>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid rgba(46,62,38,0.13);border-bottom:1px solid rgba(46,62,38,0.13)">
+<div style="padding:12px 8px 12px 0;display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#76826D">Water</span><span style="font-size:14px;font-weight:500">Every {{ pick.every }} days</span></div>
+<div style="padding:12px 8px;border-left:1px solid rgba(46,62,38,0.13);display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#76826D">Light</span><span style="font-size:14px;font-weight:500">{{ pick.light }}</span></div>
+<div style="padding:12px 0 12px 8px;border-left:1px solid rgba(46,62,38,0.13);display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#76826D">Humidity</span><span style="font-size:14px;font-weight:500">{{ pick.hum }}</span></div>
+</div>
+<div style="font-size:14px;line-height:1.5;color:#566551">{{ pick.care }}</div>
+<button onClick="{{ toAddDetails }}" style="margin-top:auto;height:56px;border:none;border-radius:18px;background:#2F5D2A;color:#fff;font-size:16px;font-weight:600" style-hover="background:#3A6E33">Add to my plants</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAddDetails }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;min-height:874px;box-sizing:border-box;padding:60px 22px 50px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;justify-content:space-between;align-items:center"><button onClick="{{ back }}" style="height:40px;padding:0 4px;border:none;background:transparent;color:#566551;font-size:15px;font-weight:500">‹ Back</button><span style="font-size:15px;font-weight:600">New plant</span><span style="width:44px"></span></div>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02">Make it yours.</h1>
+<div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:13px;font-weight:600">Name</div><input value="{{ addNick }}" onChange="{{ onNick }}" placeholder="{{ nickPlaceholder }}" style="height:52px;border-radius:16px;border:1px solid rgba(46,62,38,0.18);background:#FFFCF5;padding:0 16px;font-size:16px;color:#1F2B1C;outline:none" style-focus="border-color:#3E7A37;box-shadow:0 0 0 3px rgba(74,124,63,0.15)"></input></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;font-weight:600">Where it lives</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ addRooms }}" as="r" hint-placeholder-count="5"><button onClick="{{ r.onPick }}" style="height:38px;padding:0 14px;border-radius:999px;border:1px solid {{ r.border }};background:{{ r.bg }};color:{{ r.color }};font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px">{{ r.label }}<sc-if value="{{ r.best }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:700;color:{{ r.bestColor }};letter-spacing:.04em">BEST</span></sc-if></button></sc-for></div>
+<div style="font-size:13px;line-height:1.5;color:#67755F">{{ roomFit }}</div>
+</div>
+<div style="padding:16px 18px;border-radius:20px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);display:flex;align-items:center;justify-content:space-between;gap:12px">
+<div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:600">Water every {{ addEvery }} days</span><span style="font-size:12px;color:#67755F">{{ addEveryHint }}</span></div>
+<div style="display:flex;gap:4px"><button onClick="{{ addMinus }}" aria-label="Fewer days" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(46,62,38,0.16);background:transparent;color:#1F2B1C;font-size:20px">−</button><button onClick="{{ addPlus }}" aria-label="More days" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(46,62,38,0.16);background:transparent;color:#1F2B1C;font-size:20px">+</button></div>
+</div>
+<button onClick="{{ addConfirm }}" style="margin-top:auto;height:56px;border:none;border-radius:18px;background:#2F5D2A;color:#fff;font-size:16px;font-weight:600;box-shadow:0 0 30px rgba(74,124,63,0.09)" style-hover="background:#3A6E33">Add to collection</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDiagnosis }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;padding:60px 0 60px;display:flex;flex-direction:column;gap:18px">
+<div style="padding:0 16px;display:flex;justify-content:space-between;align-items:center"><button onClick="{{ back }}" style="height:40px;padding:0 16px 0 12px;border-radius:999px;border:1px solid rgba(46,62,38,0.13);background:rgba(255,252,245,0.9);font-size:15px;font-weight:500;color:#1F2B1C;display:flex;align-items:center;gap:6px"><span style="font-size:20px;line-height:1;margin-top:-2px">‹</span>Back</button><span style="font:500 11px 'JetBrains Mono',monospace;color:#B5603A">DIAGNOSIS · FIGGY</span></div>
+<div style="margin:0 16px;display:grid;grid-template-columns:1.4fr 1fr;gap:8px;height:200px">
+<div style="position:relative;border-radius:22px;background:repeating-linear-gradient(135deg,#EDE7D8 0 7px,#FFFCF5 7px 14px);font:500 9px 'JetBrains Mono',monospace;color:#8E977F;display:flex;align-items:flex-end;padding:10px;box-sizing:border-box">YOUR PHOTO<span style="position:absolute;top:44px;left:60px;width:54px;height:54px;border-radius:50%;border:1.5px solid #B5603A;box-shadow:0 0 18px rgba(181,96,58,0.5)"></span></div>
+<div style="border-radius:22px;background:repeating-linear-gradient(135deg,#EFE3D6 0 7px,#E8DACB 7px 14px);font:500 9px 'JetBrains Mono',monospace;color:#8A6A58;display:flex;align-items:flex-end;padding:10px;box-sizing:border-box">CLOSE-UP · UNDERSIDE</div>
+</div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:8px">
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:42px;line-height:1">Spider mites</h1>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><span style="height:26px;padding:0 10px;border-radius:999px;background:rgba(181,96,58,0.14);color:#B5603A;font-size:12px;font-weight:600;display:flex;align-items:center">87% match</span><span style="height:26px;padding:0 10px;border-radius:999px;background:rgba(169,133,43,0.14);color:#A9852B;font-size:12px;font-weight:600;display:flex;align-items:center">Moderate · caught early</span><span style="height:26px;padding:0 10px;border-radius:999px;background:rgba(46,62,38,0.08);color:#566551;font-size:12px;font-weight:600;display:flex;align-items:center">Contagious</span></div>
+</div>
+<div style="margin:0 22px;padding:16px 18px;border-radius:20px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);display:flex;flex-direction:column;gap:10px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#67755F">What Tend saw</div>
+<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.45;color:#2E3C2A"><span>· Fine webbing where leaves meet the stem</span><span>· Pale speckling across the upper surface</span><span>· Mostly the lower leaves. New growth looks clean</span></div>
+<div style="font-size:13px;line-height:1.5;color:#67755F">Likely cause: dry air. Living room humidity has stayed under 45% for 9 days.</div>
+</div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:4px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:6px"><span style="font-family:'Newsreader',serif;font-size:24px">Treatment</span><span style="font-size:12px;color:#67755F">{{ treatProgress }}</span></div>
+<sc-for list="{{ treatSteps }}" as="ts" hint-placeholder-count="4">
+<div onClick="{{ ts.onToggle }}" style="display:flex;gap:14px;padding:14px 0;border-top:1px solid rgba(46,62,38,0.1);cursor:pointer">
+<span style="flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid {{ ts.ring }};background:{{ ts.fill }};color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;box-sizing:border-box;box-shadow:{{ ts.shadow }}">{{ ts.mark }}</span>
+<span style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:600;color:{{ ts.titleColor }}">{{ ts.title }}</span><span style="font-size:13px;line-height:1.45;color:#67755F">{{ ts.body }}</span></span>
+</div>
+</sc-for>
+</div>
+<div style="padding:0 22px">
+<sc-if value="{{ treatNotActive }}" hint-placeholder-val="{{ true }}"><button onClick="{{ startTreatment }}" style="width:100%;height:56px;border:none;border-radius:18px;background:#2F5D2A;color:#fff;font-size:16px;font-weight:600;box-shadow:0 0 30px rgba(74,124,63,0.09)" style-hover="background:#3A6E33">Add treatment reminders</button></sc-if>
+<sc-if value="{{ treatActive }}" hint-placeholder-val="{{ false }}"><div style="height:56px;border-radius:18px;background:rgba(74,124,63,0.1);color:#3E7A37;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center">✓ Neem reminders every 5 days, for 3 weeks</div></sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isEnv }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;padding:62px 0 60px;display:flex;flex-direction:column;gap:18px">
+<div style="padding:0 16px"><button onClick="{{ back }}" style="height:40px;padding:0 16px 0 12px;border-radius:999px;border:1px solid rgba(46,62,38,0.13);background:rgba(255,252,245,0.9);font-size:15px;font-weight:500;color:#1F2B1C;display:flex;align-items:center;gap:6px"><span style="font-size:20px;line-height:1;margin-top:-2px">‹</span>Home</button></div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#3E7A37"><span style="width:6px;height:6px;border-radius:50%;background:#3E7A37;box-shadow:0 0 8px #3E7A37"></span>Live · updated just now</div>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02">Your home, room by room.</h1>
+</div>
+<sc-for list="{{ envSuggs }}" as="es" hint-placeholder-count="2">
+<div style="margin:0 16px;padding:16px 18px;border-radius:20px;background:linear-gradient(160deg,rgba(74,124,63,0.16),rgba(74,124,63,0.04));border:1px solid rgba(74,124,63,0.18);display:flex;flex-direction:column;gap:8px">
+<div style="font-family:'Newsreader',serif;font-size:19px;line-height:1.25">{{ es.title }}</div>
+<div style="font-size:13px;line-height:1.5;color:#566551">{{ es.why }}</div>
+<div><button onClick="{{ es.onAccept }}" style="height:36px;padding:0 14px;border-radius:12px;border:none;background:#2F5D2A;color:#fff;font-size:13px;font-weight:600" style-hover="background:#3A6E33">{{ es.cta }}</button></div>
+</div>
+</sc-for>
+<sc-for list="{{ envRooms }}" as="er" hint-placeholder-count="4">
+<div style="margin:0 16px;padding:16px 18px;border-radius:20px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Newsreader',serif;font-size:22px">{{ er.name }}</span><span style="font-size:12px;color:#67755F">{{ er.plants }}</span></div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+<sc-for list="{{ er.metrics }}" as="m" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;color:#76826D">{{ m.label }}</span><span style="font:500 15px 'JetBrains Mono',monospace;color:#1F2B1C">{{ m.value }}</span><span style="height:3px;border-radius:2px;background:rgba(46,62,38,0.09)"><span style="display:block;height:100%;width:{{ m.w }};border-radius:2px;background:{{ m.color }};box-shadow:0 0 6px {{ m.color }};transition:width .8s"></span></span></div></sc-for>
+</div>
+<div style="font-size:13px;color:{{ er.noteColor }}">{{ er.note }}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isGuides }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;padding:70px 22px 150px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:8px"><div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#67755F">Care guides</div><h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02">Learn it once, do it well.</h1></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#3E7A37">For your plants this week</div>
+<sc-for list="{{ recGuides }}" as="rg" hint-placeholder-count="2">
+<div onClick="{{ rg.onOpen }}" style="display:flex;align-items:center;gap:14px;padding:14px;border-radius:20px;background:linear-gradient(160deg,rgba(74,124,63,0.14),rgba(74,124,63,0.03));border:1px solid rgba(74,124,63,0.16);cursor:pointer">
+<span style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="font-family:'Newsreader',serif;font-size:20px">{{ rg.title }}</span><span style="font-size:13px;color:#566551">{{ rg.sub }}</span></span><span style="font-size:20px;color:#3E7A37">›</span>
+</div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<sc-for list="{{ guideCards }}" as="gc" hint-placeholder-count="4">
+<div onClick="{{ gc.onOpen }}" style="display:flex;flex-direction:column;gap:10px;padding:8px 8px 14px;border-radius:20px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);cursor:pointer" style-hover="background:#EDE7D8">
+<div style="height:110px;border-radius:14px;background:repeating-linear-gradient(135deg,#EDE7D8 0 6px,#E4DDCB 6px 12px);font:500 8px 'JetBrains Mono',monospace;color:#8E977F;display:flex;align-items:flex-end;padding:8px;box-sizing:border-box;text-transform:uppercase">{{ gc.img }}</div>
+<div style="padding:0 6px;display:flex;flex-direction:column;gap:3px"><span style="font-family:'Newsreader',serif;font-size:21px">{{ gc.title }}</span><span style="font-size:12px;color:#67755F">{{ gc.meta }}</span></div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isGuide }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;min-height:874px;box-sizing:border-box;padding:60px 22px 50px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;justify-content:space-between;align-items:center"><button onClick="{{ back }}" style="height:40px;padding:0 4px;border:none;background:transparent;color:#566551;font-size:15px;font-weight:500">Close</button><span style="font-size:15px;font-weight:600">{{ guide.title }}</span><span style="width:44px;text-align:right;font:500 11px 'JetBrains Mono',monospace;color:#76826D">{{ guide.counter }}</span></div>
+<div style="display:flex;gap:4px"><sc-for list="{{ guide.pips }}" as="gp" hint-placeholder-count="4"><span style="flex:1;height:3px;border-radius:2px;background:{{ gp.c }};box-shadow:{{ gp.s }};transition:background .3s"></span></sc-for></div>
+<div style="height:300px;border-radius:26px;background:repeating-linear-gradient(135deg,#EDE7D8 0 7px,#FFFCF5 7px 14px);font:500 10px 'JetBrains Mono',monospace;color:#8E977F;display:flex;align-items:center;justify-content:center;text-transform:uppercase;letter-spacing:.06em">step photo · {{ guide.img }}</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-if value="{{ guide.hasCtx }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#3E7A37">For {{ guide.ctx }}</div></sc-if>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:36px;line-height:1.05;text-wrap:pretty">{{ guide.stepTitle }}</h1>
+<p style="margin:0;font-size:16px;line-height:1.55;color:#566551;text-wrap:pretty">{{ guide.stepBody }}</p>
+</div>
+<div style="margin-top:auto;display:flex;gap:10px">
+<button onClick="{{ guidePrev }}" style="flex:1;height:56px;border-radius:18px;border:1px solid rgba(46,62,38,0.18);background:transparent;color:#1F2B1C;font-size:16px;font-weight:600;opacity:{{ guide.prevOp }}">Back</button>
+<button onClick="{{ guideNext }}" style="flex:1.6;height:56px;border:none;border-radius:18px;background:#2F5D2A;color:#fff;font-size:16px;font-weight:600" style-hover="background:#3A6E33">{{ guide.nextLabel }}</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAwayPlan }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;padding:62px 22px 60px;display:flex;flex-direction:column;gap:22px">
+<div><button onClick="{{ back }}" style="height:40px;padding:0 16px 0 12px;border-radius:999px;border:1px solid rgba(46,62,38,0.13);background:rgba(255,252,245,0.9);font-size:15px;font-weight:500;color:#1F2B1C;display:flex;align-items:center;gap:6px"><span style="font-size:20px;line-height:1;margin-top:-2px">‹</span>Home</button></div>
+<div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#67755F">Plant-sitter hand-off</div><h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02">Leave them in good hands.</h1></div>
+<div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:13px;font-weight:600">How long</div>
+<div style="display:flex;gap:8px"><sc-for list="{{ ranges }}" as="r" hint-placeholder-count="3"><button onClick="{{ r.onPick }}" style="flex:1;padding:12px 8px;border-radius:16px;border:1px solid {{ r.border }};background:{{ r.bg }};color:{{ r.color }};display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left"><span style="font-size:14px;font-weight:600">{{ r.label }}</span><span style="font-size:12px;opacity:.75">{{ r.sub }}</span></button></sc-for></div>
+<div style="font-size:13px;color:#67755F">{{ rangeDates }}</div></div>
+<div style="display:flex;flex-direction:column;gap:10px"><div style="font-size:13px;font-weight:600">Who's looking after them</div><input value="{{ sitter }}" onChange="{{ onSitter }}" placeholder="Sitter's name" style="height:52px;border-radius:16px;border:1px solid rgba(46,62,38,0.18);background:#FFFCF5;padding:0 16px;font-size:16px;color:#1F2B1C;outline:none" style-focus="border-color:#3E7A37;box-shadow:0 0 0 3px rgba(74,124,63,0.15)"></input></div>
+<div style="display:flex;flex-direction:column;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);border-radius:20px;padding:16px 16px 6px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px"><span style="font-family:'Newsreader',serif;font-size:22px">{{ visitSummary }}</span><span style="font-size:12px;color:#67755F">{{ plantSummary }}</span></div>
+<sc-for list="{{ visits }}" as="v" hint-placeholder-count="3"><div style="display:flex;gap:12px;padding:10px 0;border-top:1px solid rgba(46,62,38,0.09);font-size:14px"><span style="flex:none;width:88px;font-weight:600">{{ v.date }}</span><span style="color:#566551">{{ v.names }}</span></div></sc-for>
+</div>
+<sc-if value="{{ hasFine }}" hint-placeholder-val="{{ true }}"><div style="font-size:14px;line-height:1.45;color:#566551"><span style="font-weight:600;color:#1F2B1C">Fine on their own · </span>{{ fineLine }}</div></sc-if>
+<button onClick="{{ createHandoff }}" style="height:56px;border:none;border-radius:18px;background:#1F2B1C;color:#F4F0E6;font-size:16px;font-weight:600" style-hover="background:#2E3C2A">Create plan for {{ sitterName }}</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAwayShared }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;padding:70px 22px 60px;display:flex;flex-direction:column;gap:20px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#3E7A37">✓ Hand-off ready</div>
+<div style="background:#FFFCF5;border-radius:24px;border:1px solid rgba(46,62,38,0.1);padding:26px 22px;display:flex;flex-direction:column;gap:14px">
+<div style="font-family:'Newsreader',serif;font-size:34px;line-height:1.02">{{ sitterName }}, thank you.</div>
+<div style="font-size:14px;color:#566551;line-height:1.45">{{ letterBody }}</div>
+<sc-for list="{{ visits }}" as="v" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:3px;padding:12px 0;border-top:1px solid rgba(46,62,38,0.1)"><span style="font-size:13px;font-weight:600">{{ v.date }}</span><span style="font-size:14px;color:#566551">{{ v.detail }}</span></div></sc-for>
+</div>
+<button onClick="{{ copyLink }}" style="height:56px;border:none;border-radius:18px;background:#2F5D2A;color:#fff;font-size:16px;font-weight:600" style-hover="background:#3A6E33">{{ copyLabel }}</button>
+<div style="display:flex;justify-content:center;gap:24px"><button onClick="{{ openSitter }}" style="height:44px;border:none;background:transparent;color:#3E7A37;font-size:15px;font-weight:600">Preview as {{ sitterName }}</button><button onClick="{{ back }}" style="height:44px;border:none;background:transparent;color:#566551;font-size:15px;font-weight:500">Edit plan</button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSitter }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;padding:58px 0 60px;display:flex;flex-direction:column;gap:18px">
+<div style="margin:0 16px;padding:10px 12px 10px 16px;border-radius:14px;background:rgba(181,96,58,0.12);border:1px solid rgba(181,96,58,0.25);display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#B5603A"><span>Previewing {{ sitterName }}'s link</span><button onClick="{{ back }}" style="height:32px;padding:0 12px;border-radius:999px;border:none;background:#B5603A;color:#F4F0E6;font-size:13px;font-weight:700">Done</button></div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:10px"><div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#67755F">{{ rangeDates }}</div><h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02">Hi {{ sitterName }}. Here's everything.</h1><p style="margin:0;font-size:15px;line-height:1.45;color:#566551">Tick plants off as you go. No app needed.</p></div>
+<div style="margin:0 22px;display:flex;align-items:center;font-size:13px"><span style="color:#566551">{{ sitterProgress }}</span><span style="flex:1;margin-left:14px;height:4px;border-radius:2px;background:#FFFCF5"><span style="display:block;height:100%;width:{{ sitterPct }};border-radius:2px;background:#3E7A37;box-shadow:0 0 10px rgba(74,124,63,0.5);transition:width .5s"></span></span></div>
+<sc-for list="{{ sitterVisits }}" as="v" hint-placeholder-count="3">
+<div style="margin:0 16px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);border-radius:22px;padding:16px 16px 6px;display:flex;flex-direction:column">
+<div style="font-family:'Newsreader',serif;font-size:22px;padding-bottom:8px">{{ v.date }}</div>
+<sc-for list="{{ v.items }}" as="it" hint-placeholder-count="2">
+<div onClick="{{ it.onToggle }}" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid rgba(46,62,38,0.09);cursor:pointer">
+<span style="flex:none;width:44px;height:44px;border-radius:12px;background:repeating-linear-gradient(135deg,#EDE7D8 0 5px,#E4DDCB 5px 10px);font:500 7px 'JetBrains Mono',monospace;color:#8E977F;display:flex;align-items:center;justify-content:center">PHOTO</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:600;color:{{ it.nameColor }}">{{ it.name }} · {{ it.amount }}</span><span style="font-size:12px;color:#67755F">{{ it.where }}</span></span>
+<span style="flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid {{ it.ring }};background:{{ it.fill }};color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;box-sizing:border-box;box-shadow:{{ it.shadow }}">{{ it.mark }}</span>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;padding:62px 0 60px;display:flex;flex-direction:column;gap:20px">
+<div style="padding:0 16px"><button onClick="{{ back }}" style="height:40px;padding:0 16px 0 12px;border-radius:999px;border:1px solid rgba(46,62,38,0.13);background:rgba(255,252,245,0.9);font-size:15px;font-weight:500;color:#1F2B1C;display:flex;align-items:center;gap:6px"><span style="font-size:20px;line-height:1;margin-top:-2px">‹</span>Home</button></div>
+<div style="padding:0 22px"><h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02">Settings</h1></div>
+<div style="margin:0 16px;display:flex;align-items:center;gap:14px;padding:16px;border-radius:22px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09)">
+<span style="flex:none;width:54px;height:54px;border-radius:50%;background:repeating-linear-gradient(135deg,#EDE7D8 0 5px,#E4DDCB 5px 10px);font:500 7px 'JetBrains Mono',monospace;color:#8E977F;display:flex;align-items:center;justify-content:center">PHOTO</span>
+<span style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="font-family:'Newsreader',serif;font-size:22px">Alex Moreno</span><span style="font-size:13px;color:#67755F">{{ planLine }}</span></span>
+<span style="height:26px;padding:0 10px;border-radius:999px;background:{{ planBadgeBg }};color:{{ planBadgeColor }};font-size:12px;font-weight:700;display:flex;align-items:center">{{ planBadge }}</span>
+</div>
+<sc-if value="{{ notPremium }}" hint-placeholder-val="{{ true }}">
+<div onClick="{{ openPremium }}" style="position:relative;overflow:hidden;margin:0 16px;padding:20px;border-radius:24px;background:linear-gradient(150deg,#2A4F25,#1C3618);border:1px solid rgba(74,124,63,0.3);box-shadow:0 0 40px -10px rgba(74,124,63,0.18);cursor:pointer;display:flex;flex-direction:column;gap:8px">
+<span style="position:absolute;top:-60px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(74,124,63,0.35),transparent 65%)"></span>
+<span style="position:relative;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#E3F0D9">Tend Premium</span>
+<span style="position:relative;font-family:'Newsreader',serif;font-size:24px;line-height:1.15;text-wrap:pretty;color:#FFFCF5">Unlimited scans, live sensors and growth timelapses.</span>
+<span style="position:relative;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#E8F1E0"><span>From $4.99 a month</span><span style="height:34px;padding:0 14px;border-radius:12px;background:#F4F0E6;color:#1F2B1C;font-weight:700;display:flex;align-items:center">See plans</span></span>
+</div>
+</sc-if>
+<sc-for list="{{ settingsGroups }}" as="sg" hint-placeholder-count="4">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="padding:0 28px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#67755F">{{ sg.title }}</div>
+<div style="margin:0 16px;border-radius:20px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);overflow:hidden">
+<sc-for list="{{ sg.rows }}" as="r" hint-placeholder-count="3">
+<div onClick="{{ r.onTap }}" style="display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 16px;box-sizing:border-box;border-bottom:1px solid rgba(46,62,38,0.08);cursor:{{ r.cursor }}">
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:500;color:{{ r.labelColor }}">{{ r.label }}</span><sc-if value="{{ r.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:#67755F">{{ r.sub }}</span></sc-if></span>
+<sc-if value="{{ r.isToggle }}" hint-placeholder-val="{{ false }}"><span style="flex:none;position:relative;width:50px;height:30px;border-radius:15px;background:{{ r.track }};box-shadow:{{ r.trackGlow }};transition:background .2s"><span style="position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transform:{{ r.knob }};transition:transform .2s;box-shadow:0 2px 4px rgba(0,0,0,.3)"></span></span></sc-if>
+<sc-if value="{{ r.isSeg }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;padding:3px;border-radius:10px;background:#F4F0E6;border:1px solid rgba(46,62,38,0.1)"><sc-for list="{{ r.opts }}" as="o" hint-placeholder-count="2"><span onClick="{{ o.onPick }}" style="height:28px;padding:0 10px;border-radius:8px;background:{{ o.bg }};color:{{ o.color }};font-size:13px;font-weight:600;display:flex;align-items:center;cursor:pointer">{{ o.label }}</span></sc-for></span></sc-if>
+<sc-if value="{{ r.isLink }}" hint-placeholder-val="{{ true }}"><span style="flex:none;display:flex;align-items:center;gap:8px;font-size:14px;color:#67755F">{{ r.value }}<span style="font-size:18px">›</span></span></sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+<div style="padding:0 22px;display:flex;flex-direction:column;align-items:center;gap:6px">
+<button onClick="{{ signOut }}" style="height:44px;border:none;background:transparent;color:#B5603A;font-size:15px;font-weight:600">Sign out</button>
+<span style="font:500 10px 'JetBrains Mono',monospace;color:#8E977F">TEND 2.0.1 · BUILD 418</span>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPremiumScreen }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;position:relative;min-height:874px;box-sizing:border-box;padding:56px 20px 40px;display:flex;flex-direction:column;gap:22px;background:radial-gradient(120% 60% at 50% 0%,rgba(74,124,63,0.28),transparent 60%)">
+<sc-if value="{{ notBought }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;justify-content:space-between;align-items:center"><button onClick="{{ back }}" aria-label="Close" style="width:40px;height:40px;border-radius:50%;border:1px solid rgba(46,62,38,0.16);background:rgba(244,240,230,0.5);color:#1F2B1C;font-size:18px">✕</button><button onClick="{{ restore }}" style="height:40px;border:none;background:transparent;color:#566551;font-size:14px;font-weight:500">{{ restoreLabel }}</button></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding-top:4px">
+<span style="width:76px;height:76px;border-radius:24px;background:linear-gradient(150deg,#5A9450,#24441F);box-shadow:0 0 50px rgba(74,124,63,0.25),inset 0 1px 0 rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:9px;border:2.5px solid #fff;box-sizing:border-box;display:flex;align-items:center;justify-content:center"><span style="width:8px;height:8px;border-radius:50%;background:#fff"></span></span></span>
+<span style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#3E7A37">Tend Premium</span>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02;text-wrap:balance">Grow with an expert beside you.</h1>
+</div>
+<div style="display:flex;flex-direction:column;gap:2px;padding:6px 4px">
+<sc-for list="{{ premiumFeatures }}" as="pf" hint-placeholder-count="5">
+<div style="display:flex;gap:14px;align-items:flex-start;padding:9px 0"><span style="flex:none;margin-top:2px;width:22px;height:22px;border-radius:50%;background:rgba(74,124,63,0.28);color:#2F5D2A;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(74,124,63,0.16)">✓</span><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:600">{{ pf.title }}</span><span style="font-size:13px;color:#67755F">{{ pf.sub }}</span></span></div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ plans }}" as="pl" hint-placeholder-count="2">
+<button onClick="{{ pl.onPick }}" style="position:relative;display:flex;align-items:center;gap:14px;padding:18px 18px;border-radius:22px;border:1.5px solid {{ pl.border }};background:{{ pl.bg }};color:#1F2B1C;text-align:left;box-shadow:{{ pl.shadow }};transition:all .2s">
+<sc-if value="{{ pl.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-11px;right:18px;height:22px;padding:0 10px;border-radius:999px;background:#A9852B;color:#FFFCF5;font-size:11px;font-weight:800;letter-spacing:.06em;display:flex;align-items:center">{{ pl.badge }}</span></sc-if>
+<span style="flex:none;width:24px;height:24px;border-radius:50%;border:2px solid {{ pl.radio }};box-sizing:border-box;display:flex;align-items:center;justify-content:center"><span style="width:12px;height:12px;border-radius:50%;background:{{ pl.dot }};box-shadow:{{ pl.dotGlow }}"></span></span>
+<span style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="font-size:17px;font-weight:700">{{ pl.name }}</span><span style="font-size:13px;color:#566551">{{ pl.sub }}</span></span>
+<span style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><span style="font-family:'Newsreader',serif;font-size:26px;line-height:1">{{ pl.price }}</span><span style="font-size:12px;color:#67755F">{{ pl.per }}</span></span>
+</button>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<button onClick="{{ buy }}" style="height:58px;border:none;border-radius:18px;background:#3A6E33;color:#fff;font-size:17px;font-weight:700;box-shadow:0 0 36px rgba(74,124,63,0.18)" style-hover="background:#447D3C" style-active="transform:scale(.98)">{{ buyLabel }}</button>
+<div style="font-size:12px;line-height:1.5;color:#76826D;text-align:center;text-wrap:pretty">{{ finePrint }}</div>
+<div style="display:flex;justify-content:center;gap:18px;font-size:12px;color:#67755F"><span onClick="{{ openTerms }}" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px">Terms</span><span onClick="{{ openPrivacy }}" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px">Privacy</span><span onClick="{{ restore }}" style="cursor:pointer">Restore purchase</span></div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ bought }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:760px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:0 10px">
+<span style="position:relative;width:96px;height:96px;border-radius:50%;background:#3A6E33;box-shadow:0 0 70px rgba(74,124,63,0.27);display:flex;align-items:center;justify-content:center;color:#fff;font-size:40px;font-weight:700;animation:tdPop .6s cubic-bezier(.34,1.56,.64,1) both"><span style="position:absolute;inset:0;border-radius:50%;border:2px solid #3E7A37;animation:tdBurst 1.1s ease-out .15s both"></span><span style="position:absolute;inset:0;border-radius:50%;border:2px solid #A9852B;animation:tdBurst 1.1s ease-out .35s both"></span><svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true" style="position:relative"><path d="M18 52h28" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="opacity:.6"></path><path d="M32 52V26" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="transform-box:view-box;transform-origin:32px 52px;animation:tdSprout .6s cubic-bezier(.2,.8,.2,1) .35s both"></path><path d="M32 36c-10 0-16-7-16-15 9 0 16 6 16 15Z" fill="rgba(255,255,255,.22)" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="transform-box:view-box;transform-origin:32px 36px;animation:tdUnfurl .55s cubic-bezier(.34,1.56,.64,1) .8s both"></path><path d="M32 30c9-1 15-8 14-17-9 1-14 8-14 17Z" fill="rgba(255,255,255,.22)" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="transform-box:view-box;transform-origin:32px 30px;animation:tdUnfurl .55s cubic-bezier(.34,1.56,.64,1) 1s both"></path></svg></span>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:42px;line-height:1.02">Welcome to Premium.</h1>
+<p style="margin:0;font-size:16px;line-height:1.5;color:#566551;text-wrap:pretty">{{ boughtLine }}</p>
+<button onClick="{{ finishPurchase }}" style="margin-top:12px;width:100%;height:56px;border:none;border-radius:18px;background:#1F2B1C;color:#F4F0E6;font-size:16px;font-weight:700">Start exploring</button>
+</div>
+</sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ isLegal }}" hint-placeholder-val="{{ false }}">
+<div style="animation:tdIn .45s cubic-bezier(.2,.8,.2,1) both;padding:62px 0 60px;display:flex;flex-direction:column;gap:20px">
+<div style="padding:0 16px;display:flex;justify-content:space-between;align-items:center"><button onClick="{{ back }}" style="height:40px;padding:0 16px 0 12px;border-radius:999px;border:1px solid rgba(46,62,38,0.13);background:rgba(255,252,245,0.9);font-size:15px;font-weight:500;color:#1F2B1C;display:flex;align-items:center;gap:6px"><span style="font-size:20px;line-height:1;margin-top:-2px">‹</span>Back</button>
+<span style="display:flex;padding:3px;border-radius:12px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.1)"><sc-for list="{{ legalTabs }}" as="lt" hint-placeholder-count="2"><span onClick="{{ lt.onPick }}" style="height:32px;padding:0 12px;border-radius:9px;background:{{ lt.bg }};color:{{ lt.color }};font-size:13px;font-weight:600;display:flex;align-items:center;cursor:pointer">{{ lt.label }}</span></sc-for></span></div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:10px">
+<div style="font:500 11px 'JetBrains Mono',monospace;color:#76826D;letter-spacing:.04em">{{ legal.updated }}</div>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02">{{ legal.title }}</h1>
+<p style="margin:0;font-size:15px;line-height:1.55;color:#566551;text-wrap:pretty">{{ legal.intro }}</p>
+</div>
+<sc-if value="{{ legal.hasGlance }}" hint-placeholder-val="{{ false }}">
+<div style="margin:0 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<sc-for list="{{ legal.glance }}" as="gl" hint-placeholder-count="4">
+<div style="padding:14px;border-radius:18px;background:{{ gl.bg }};border:1px solid {{ gl.border }};display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:{{ gl.color }}">{{ gl.k }}</span><span style="font-size:13px;line-height:1.45;color:#2E3C2A">{{ gl.v }}</span></div>
+</sc-for>
+</div>
+</sc-if>
+<div style="margin:0 16px;padding:14px 16px;border-radius:18px;background:#FFFCF5;border:1px solid rgba(46,62,38,0.09);display:flex;flex-direction:column;gap:2px">
+<div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#67755F;padding-bottom:6px">Contents</div>
+<sc-for list="{{ legal.sections }}" as="ls" hint-placeholder-count="6"><div style="display:flex;gap:10px;padding:5px 0;font-size:14px;color:#566551"><span style="font:500 12px 'JetBrains Mono',monospace;color:#8E977F;width:18px">{{ ls.n }}</span><span>{{ ls.h }}</span></div></sc-for>
+</div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:22px">
+<sc-for list="{{ legal.sections }}" as="ls" hint-placeholder-count="6">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;gap:10px;align-items:baseline"><span style="font:500 12px 'JetBrains Mono',monospace;color:#3E7A37">{{ ls.n }}</span><h2 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:24px;line-height:1.15">{{ ls.h }}</h2></div>
+<sc-for list="{{ ls.ps }}" as="pp" hint-placeholder-count="1"><p style="margin:0;font-size:15px;line-height:1.6;color:#43523E;text-wrap:pretty">{{ pp.t }}</p></sc-for>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ legal.hasActions }}" hint-placeholder-val="{{ false }}">
+<div style="margin:0 16px;display:flex;flex-direction:column;gap:8px">
+<button onClick="{{ exportData }}" style="height:52px;border-radius:16px;border:1px solid rgba(46,62,38,0.18);background:#FFFCF5;color:#1F2B1C;font-size:15px;font-weight:600">{{ exportLabel }}</button>
+<button onClick="{{ deleteAcct }}" style="height:52px;border-radius:16px;border:1px solid rgba(181,96,58,0.3);background:transparent;color:#B5603A;font-size:15px;font-weight:600">{{ deleteLabel }}</button>
+</div>
+</sc-if>
+<div style="margin:0 22px;padding-top:16px;border-top:1px solid rgba(46,62,38,0.1);font-size:13px;line-height:1.55;color:#67755F">Questions? Write to <span style="color:#3E7A37">{{ legal.email }}</span>. Tend Labs Ltd., 12 Greenhouse Lane, London.</div>
+</div>
+</sc-if>
+</div>
+
+<sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;bottom:22px;left:16px;right:16px;display:flex;align-items:center;gap:10px;z-index:20;pointer-events:none">
+<div style="position:relative;flex:1;display:flex;gap:2px;padding:5px;border-radius:999px;background:rgba(255,253,247,.58);backdrop-filter:blur(22px) saturate(1.8);-webkit-backdrop-filter:blur(22px) saturate(1.8);border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(46,62,38,.06),0 10px 34px -10px rgba(46,62,38,.32),0 2px 6px rgba(46,62,38,.06);pointer-events:auto">
+<span style="position:absolute;top:5px;bottom:5px;left:{{ tabPillLeft }};width:calc((100% - 14px) / 3);border-radius:999px;background:rgba(58,110,51,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.6);opacity:{{ tabPillOp }};transition:left .45s cubic-bezier(.34,1.35,.5,1),opacity .2s;pointer-events:none"></span>
+<button onClick="{{ tab_home.onPick }}" aria-label="{{ tab_home.label }}" style="flex:1;height:54px;border:none;border-radius:999px;position:relative;background:transparent;color:{{ tab_home.color }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0;transition:background .25s,color .25s"><span style="position:relative;display:flex"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10.5 12 3.5l8.5 7"></path><path d="M5.5 9v10.5h13V9"></path><path d="M10 19.5v-5h4v5"></path></svg><sc-if value="{{ tab_home.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-5px;right:-9px;min-width:17px;height:17px;padding:0 4px;box-sizing:border-box;border-radius:9px;background:#B5603A;color:#fff;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,.9)">{{ tab_home.badge }}</span></sc-if></span><span style="font-size:10.5px;font-weight:600;letter-spacing:.01em">{{ tab_home.label }}</span></button>
+<button onClick="{{ tab_plants.onPick }}" aria-label="{{ tab_plants.label }}" style="flex:1;height:54px;border:none;border-radius:999px;position:relative;background:transparent;color:{{ tab_plants.color }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0;transition:background .25s,color .25s"><span style="position:relative;display:flex"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13V8"></path><path d="M12 9c0-3 2-5.5 6-5.5 0 3.5-2.5 5.5-6 5.5Z"></path><path d="M12 11C12 8.5 10 6.5 6.5 6.5c0 3 2 4.5 5.5 4.5Z"></path><path d="M6 13h12l-1.5 7.5h-9Z"></path></svg><sc-if value="{{ tab_plants.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-5px;right:-9px;min-width:17px;height:17px;padding:0 4px;box-sizing:border-box;border-radius:9px;background:#B5603A;color:#fff;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,.9)">{{ tab_plants.badge }}</span></sc-if></span><span style="font-size:10.5px;font-weight:600;letter-spacing:.01em">{{ tab_plants.label }}</span></button>
+<button onClick="{{ tab_guides.onPick }}" aria-label="{{ tab_guides.label }}" style="flex:1;height:54px;border:none;border-radius:999px;position:relative;background:transparent;color:{{ tab_guides.color }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0;transition:background .25s,color .25s"><span style="position:relative;display:flex"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5c2.5-1 5.5-1 8 .8v13.2c-2.5-1.8-5.5-1.8-8-.8Z"></path><path d="M20 5.5c-2.5-1-5.5-1-8 .8v13.2c2.5-1.8 5.5-1.8 8-.8Z"></path></svg><sc-if value="{{ tab_guides.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-5px;right:-9px;min-width:17px;height:17px;padding:0 4px;box-sizing:border-box;border-radius:9px;background:#B5603A;color:#fff;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,.9)">{{ tab_guides.badge }}</span></sc-if></span><span style="font-size:10.5px;font-weight:600;letter-spacing:.01em">{{ tab_guides.label }}</span></button>
+</div>
+<button onClick="{{ openScan }}" aria-label="Scan a plant" style="pointer-events:auto;flex:none;width:64px;height:64px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:rgba(58,110,51,.9);backdrop-filter:blur(22px) saturate(1.8);-webkit-backdrop-filter:blur(22px) saturate(1.8);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 30px -10px rgba(46,62,38,.45);animation:tdBreath 2.8s ease-in-out infinite" style-hover="background:rgba(68,125,60,.95)"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V5a3 3 0 0 1 3-3h3"></path><path d="M18 2h3a3 3 0 0 1 3 3v3"></path><path d="M24 18v3a3 3 0 0 1-3 3h-3"></path><path d="M8 24H5a3 3 0 0 1-3-3v-3"></path><path d="M6.5 13h13"></path></svg></button>
+</div>
+</sc-if>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:16px;right:16px;bottom:100px;z-index:30;animation:tdToast .4s cubic-bezier(.34,1.4,.64,1) both;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:#1F2B1C;color:#F4F0E6;font-size:14px;box-shadow:0 12px 30px -10px rgba(46,62,38,0.2)">
+<span style="flex:1">{{ toastText }}</span>
+<sc-if value="{{ toastUndo }}" hint-placeholder-val="{{ true }}"><button onClick="{{ undo }}" style="border:none;background:transparent;color:#2F5D2A;font-size:14px;font-weight:700;padding:4px">Undo</button></sc-if>
+</div>
+</sc-if>
+</div>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startAt&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Onboarding&quot;,&quot;Home&quot;],&quot;default&quot;:&quot;Onboarding&quot;,&quot;tsType&quot;:&quot;'Onboarding'|'Home'&quot;},&quot;plantsView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Grid&quot;,&quot;Shelf&quot;],&quot;default&quot;:&quot;Grid&quot;,&quot;tsType&quot;:&quot;'Grid'|'Shelf'&quot;}}">
+const BASE = new Date(2026, 9, 28);
+const fmt = (o) => { const d = new Date(BASE); d.setDate(d.getDate() + o); return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }); };
+const GREEN = '#3E7A37', AMBER = '#A9852B', CLAY = '#B5603A';
+const ROOMS = {
+  'Living room': { t: 21.5, h: 44, l: 8200 }, 'Bedroom': { t: 19.0, h: 52, l: 2400 }, 'Kitchen': { t: 22.5, h: 48, l: 3600 },
+  'Bathroom': { t: 22.0, h: 68, l: 1800 }, 'Balcony': { t: 9.0, h: 71, l: 24000 },
+};
+const P = (o) => o;
+const PLANTS = [
+  P({ id: 'ott', name: 'Ottoline', species: 'Boston fern', room: 'Bedroom', spot: 'Bedroom, on the dresser', every: 3, last: 4, amount: '200 ml', hum: [50, 80], light: [1000, 5000], temp: [16, 24], fertEvery: 30, fertLast: 12, repot: 'Spring 2027', heights: [38, 39, 39, 40, 41, 41, 42, 43], leaves: 6 }),
+  P({ id: 'mon', name: 'Big Monstera', species: 'Monstera deliciosa', room: 'Living room', spot: 'Living room, by the big window', every: 7, last: 7, amount: '400 ml', hum: [40, 70], light: [3000, 15000], temp: [18, 27], fertEvery: 14, fertLast: 9, repot: 'Due spring 2027 · roots at drainage', heights: [62, 63, 65, 66, 68, 70, 71, 74], leaves: 3 }),
+  P({ id: 'fig', name: 'Figgy', species: 'Fiddle-leaf fig', room: 'Living room', spot: 'Living room, corner by the sofa', every: 9, last: 6, amount: '350 ml', hum: [45, 65], light: [5000, 20000], temp: [16, 26], fertEvery: 21, fertLast: 18, repot: 'Autumn 2027', heights: [110, 110, 111, 111, 112, 112, 112, 113], leaves: 1, pest: true }),
+  P({ id: 'gol', name: 'Goldie', species: 'Golden pothos', room: 'Kitchen', spot: 'Kitchen, top shelf', every: 7, last: 3, amount: '250 ml', hum: [40, 70], light: [1000, 10000], temp: [15, 29], fertEvery: 14, fertLast: 15, repot: 'Spring 2027', heights: [80, 84, 88, 91, 95, 99, 102, 106], leaves: 9, trail: true }),
+  P({ id: 'pin', name: 'Pinstripe', species: 'Calathea ornata', room: 'Bedroom', spot: 'Bedroom, by the bed', every: 5, last: 2, amount: '200 ml', hum: [60, 80], light: [1000, 5000], temp: [18, 26], fertEvery: 30, fertLast: 10, repot: 'Not needed this year', heights: [30, 30, 31, 31, 32, 32, 33, 33], leaves: 2 }),
+  P({ id: 'ros', name: 'Rosemary', species: 'Salvia rosmarinus', room: 'Balcony', spot: 'Balcony, left planter', every: 4, last: 2, amount: '300 ml', hum: [30, 60], light: [10000, 50000], temp: [7, 27], fertEvery: 30, fertLast: 20, repot: 'Spring 2027', heights: [41, 42, 42, 43, 43, 44, 44, 44], leaves: 0 }),
+  P({ id: 'sgt', name: 'Sergeant', species: 'Snake plant', room: 'Living room', spot: 'Living room, by the door', every: 21, last: 6, amount: '200 ml', hum: [30, 60], light: [500, 20000], temp: [15, 29], fertEvery: 45, fertLast: 20, repot: 'Not needed this year', heights: [55, 55, 55, 56, 56, 56, 57, 57], leaves: 1 }),
+  P({ id: 'zed', name: 'Zed', species: 'ZZ plant', room: 'Bedroom', spot: 'Bedroom, floor by the wardrobe', every: 18, last: 12, amount: '250 ml', hum: [30, 60], light: [300, 8000], temp: [15, 26], fertEvery: 45, fertLast: 30, repot: 'Not needed this year', heights: [46, 46, 47, 47, 48, 48, 49, 49], leaves: 2 }),
+];
+const NUM = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+const RANGES = [{ id: 'wkd', label: 'Weekend', sub: '4 days', start: 2, days: 4 }, { id: '1w', label: 'A week', sub: '7 days', start: 3, days: 7 }, { id: '2w', label: 'Two weeks', sub: '14 days', start: 3, days: 14 }];
+const SUGG = [
+  { species: 'Peace lily', latin: 'Spathiphyllum wallisii', conf: '92%', every: 6, light: 'Medium', hum: '50–70%', humR: [50, 70], lightR: [1000, 6000], tempR: [18, 27], amount: '300 ml', care: 'Droops dramatically when thirsty and perks up within hours. Keep it away from cold draughts and wipe the leaves monthly.' },
+  { species: 'Chinese evergreen', latin: 'Aglaonema commutatum', conf: '5%', every: 10, light: 'Low', hum: '40–60%', humR: [40, 60], lightR: [300, 4000], tempR: [18, 27], amount: '250 ml', care: 'Slow and forgiving. Let the top half of the soil dry out between drinks.' },
+  { species: 'Dumb cane', latin: 'Dieffenbachia seguine', conf: '3%', every: 7, light: 'Bright', hum: '50–65%', humR: [50, 65], lightR: [3000, 10000], tempR: [18, 27], amount: '300 ml', care: 'Its sap irritates skin, so wear gloves when pruning. Keep it out of reach of pets.' },
+];
+const GUIDES = {
+  water: { title: 'Watering', img: 'watering can at soil', meta: '4 steps · 2 min', steps: [
+    ['Check before you pour', 'Push a finger 2 cm into the soil. Dry means water. Damp means wait a day or two. This one habit prevents most houseplant deaths.'],
+    ['Use room-temperature water', 'Cold water shocks roots. Fill your can the night before so it sits at room temperature, and chlorine has time to evaporate.'],
+    ['Pour slowly at the base', 'Water the soil, not the leaves. Keep going until water runs from the drainage hole so the whole root ball gets wet.'],
+    ['Empty the saucer', 'After 15 minutes, tip away anything left in the saucer. Roots sitting in water rot quietly.']] },
+  feed: { title: 'Fertilizing', img: 'liquid feed and measuring cap', meta: '4 steps · 3 min', steps: [
+    ['Feed in the growing season', 'March to September is when plants put on new growth. In winter most rest, so skip feeding or halve it.'],
+    ['Dilute to half strength', 'Houseplants need far less than the bottle suggests. Half strength every two to four weeks is plenty.'],
+    ['Water first, then feed', 'Never fertilize dry soil, which can scorch the roots. Give a normal drink, then apply the diluted feed.'],
+    ['Watch the response', 'Deeper green and steady new leaves mean it\'s working. Crispy leaf edges mean too much, so flush with plain water.']] },
+  repot: { title: 'Repotting', img: 'root ball out of pot', meta: '5 steps · 20 min', steps: [
+    ['Know when it\'s time', 'Roots circling the pot or poking from the drainage hole, or water rushing straight through, all mean it\'s ready.'],
+    ['Go only one size up', 'Pick a pot 2–5 cm wider than the current one. Too big a pot holds excess water and invites rot.'],
+    ['Loosen the root ball', 'Tip the plant out and gently tease circling roots outward with your fingers. Trim any that are black and mushy.'],
+    ['Settle into fresh mix', 'Add fresh potting mix, set the plant at the same depth as before and firm lightly. Don\'t pack it down hard.'],
+    ['Water and rest', 'Water thoroughly, then keep it out of direct sun for a week while the roots recover.']] },
+  prune: { title: 'Pruning', img: 'clean scissors at a node', meta: '4 steps · 5 min', steps: [
+    ['Start with clean, sharp scissors', 'Wipe the blades with alcohol. A clean cut heals fast, while a crushed stem invites disease.'],
+    ['Remove what\'s spent', 'Cut yellow, brown or damaged leaves at the base of their stem. The plant stops spending energy on them.'],
+    ['Cut just above a node', 'A node is the bump where a leaf meets the stem. Cutting just above it encourages two new shoots and fuller growth.'],
+    ['Never take more than a quarter', 'Remove at most 25% at once. If you need more, spread it over a few weeks.']] },
+};
+const TREAT = [
+  ['Isolate Figgy', 'Move it at least a metre from other plants. Mites travel on air currents and sleeves.'],
+  ['Rinse in the shower', 'Lukewarm water over tops and undersides knocks off most mites and webbing.'],
+  ['Wipe with neem solution', '5 ml neem oil and a drop of soap per litre. Repeat every 5 days for 3 weeks.'],
+  ['Raise the humidity', 'Mites thrive in dry air. Group plants together or add a humidifier to keep it above 50%.'],
+];
+
+const LEGAL = {
+  terms: { title: 'Terms of Service', updated: 'LAST UPDATED · 1 OCTOBER 2026', email: 'legal@tend.app', hasGlance: false, hasActions: false,
+    intro: 'These terms cover your use of Tend: the app, the AI scanner, connected sensors and Premium. Plain language where we can, precise where we must.',
+    sections: [
+      ['Using Tend', ['You need to be 13 or older to create an account. You\'re responsible for keeping your login secure and for activity on your account.']],
+      ['AI advice is guidance, not a guarantee', ['Plant identification, health scores and diagnoses are generated by machine-learning models. They are usually right, but not always. Use your judgement, especially with treatments involving chemicals, pets or children.', 'Tend is not liable for loss of plants, property or crops resulting from following in-app recommendations.']],
+      ['Premium subscriptions', ['Monthly plans renew automatically each month until cancelled. Free trials convert to a paid plan unless you cancel at least 24 hours before the trial ends.', 'Manage or cancel anytime in your Apple ID settings. Payment is charged to your Apple ID at confirmation of purchase.']],
+      ['Lifetime purchase', ['Lifetime is a one-time purchase that unlocks all current and future Premium features for as long as Tend operates. It is tied to your Apple ID and can be restored on any device signed in to that ID.']],
+      ['Refunds', ['Purchases are processed by Apple, and refund requests are handled through Apple\'s standard process at reportaproblem.apple.com.']],
+      ['Your content', ['Photos, notes and plant data you add remain yours. You grant Tend a limited licence to store and process them solely to provide the service to you.']],
+      ['Sensors and third-party hardware', ['Readings from connected sensors depend on the hardware. Tend isn\'t responsible for inaccurate data caused by faulty, misplaced or uncalibrated devices.']],
+      ['Ending your account', ['You can delete your account at any time from Settings. We may suspend accounts that abuse the service, such as by automated scraping of the scanner.']],
+      ['Changes to these terms', ['If we make material changes, we\'ll tell you in the app at least 14 days before they take effect.']],
+    ] },
+  privacy: { title: 'Privacy Policy', updated: 'LAST UPDATED · 1 OCTOBER 2026', email: 'privacy@tend.app', hasGlance: true, hasActions: true,
+    intro: 'Tend exists to keep your plants alive, not to sell your data. Here\'s exactly what we collect, why, and how to take it back.',
+    glance: [
+      ['We collect', 'Plant photos, care logs, sensor readings, rough location for weather.', 'ok'],
+      ['We never', 'Sell your data, show ads, or share photos with advertisers.', 'ok'],
+      ['Stored', 'Encrypted in EU data centres. Photos deleted 30 days after you remove them.', 'ok'],
+      ['You control', 'Export everything or delete your account in two taps, below.', 'ok'],
+    ],
+    sections: [
+      ['What we collect', ['Account details (name, email), plants you add, photos you take with the scanner, care history, and readings from sensors you connect.', 'Approximate location (city level) for frost and heat alerts, only if you enable weather alerts.']],
+      ['How AI scanning uses your photos', ['Photos are sent to our servers for identification and diagnosis, then stored with your plant\'s history. We don\'t use your photos to train models unless you opt in under Settings › Privacy.']],
+      ['Sharing with plant-sitters', ['A hand-off link shares only the plants, photos and instructions in that plan. Links expire automatically when your trip ends.']],
+      ['Service providers', ['We use a small number of processors for hosting, crash reporting and payments (Apple). Each is bound by a data-processing agreement and may only act on our instructions.']],
+      ['Your rights', ['You can access, correct, export or delete your data at any time. If you\'re in the UK or EU you also have the right to object to processing and to complain to your data protection authority.']],
+      ['Retention', ['We keep your data while your account is active. After you delete your account, everything is erased within 30 days, except records we must keep for tax purposes.']],
+      ['Children', ['Tend isn\'t directed at children under 13, and we don\'t knowingly collect their data.']],
+    ] },
+};
+const listNames = (a) => a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+const sel3 = (on) => ({ bg: on ? '#1F2B1C' : 'transparent', color: on ? '#F4F0E6' : '#1F2B1C', border: on ? '#1F2B1C' : 'rgba(46,62,38,0.18)' });
+const inR = (v, r) => v >= r[0] && v <= r[1];
+const near = (v, r) => !inR(v, r) && (v >= r[0] - (r[1] - r[0]) * .15 && v <= r[1] + (r[1] - r[0]) * .15);
+const fmtLux = (l) => l >= 1000 ? (l / 1000).toFixed(1) + 'k lux' : Math.round(l) + ' lux';
+
+class Component extends DCLogic {
+  state = {
+    ob: 0, level: 'new', remind: 'Evening', tick: 0,
+    stack: ['home'], plants: PLANTS.map(p => ({ ...p, photos: 4 })), completed: [], completing: null, snoozed: [], mistDone: false,
+    toast: null, selId: 'fig', detailTab: 'overview', room: 'All', view: 'grid',
+    scan: { mode: 'diagnose', phase: 'aim' }, add: { pick: 0, nick: '', room: 'Living room', every: 6 },
+    treatActive: false, treatDone: {}, treatTaskDone: false, dismissed: [],
+    guideId: 'water', guideStep: 0, guideCtx: null,
+    range: '1w', sitter: 'Sam', copied: false, sitterDone: {},
+    legalDoc: 'terms', exportState: 0, deleteArm: false, premium: null, plan: 'lifetime', buying: false, bought: false, restoring: false, scansLeft: 2,
+    prefs: { daily: true, smartPause: true, weather: true, sitterUpdates: true, sensorAlerts: true, temp: 'C', vol: 'ml' },
+  };
+  scrollRef = React.createRef();
+  componentDidMount() { this.applyProps(); this._iv = setInterval(() => this.setState(s => ({ tick: s.tick + 1 })), 2500); }
+  componentWillUnmount() { clearInterval(this._iv); clearTimeout(this._t); }
+  componentDidUpdate(prev) { if (prev.startAt !== this.props.startAt || prev.plantsView !== this.props.plantsView) this.applyProps(); }
+  applyProps() { this.setState({ ob: (this.props.startAt ?? 'Onboarding') === 'Onboarding' ? 0 : null, view: (this.props.plantsView ?? 'Grid') === 'Shelf' ? 'shelf' : 'grid' }); }
+  get screen() { const s = this.state.stack; return s[s.length - 1]; }
+  top() { if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; }
+  push(screen, extra) { this.setState(s => ({ stack: [...s.stack, screen], ...(extra || {}) })); this.top(); }
+  tab(screen) { this.setState({ stack: [screen], ob: null }); this.top(); }
+  back = () => { this.setState(s => ({ stack: s.stack.length > 1 ? s.stack.slice(0, -1) : s.stack })); this.top(); };
+  showToast(text, undo) { clearTimeout(this._t); this.setState({ toast: { text, undo } }); this._t = setTimeout(() => this.setState({ toast: null }), 4000); }
+  snapshot() { const { plants, completed, mistDone, snoozed, treatTaskDone } = this.state; return { plants, completed, mistDone, snoozed, treatTaskDone }; }
+  env(room, i = 0) {
+    const r = ROOMS[room] || ROOMS['Living room']; const k = this.state.tick + i;
+    return { t: r.t + .2 * Math.sin(k * .9), h: Math.round(r.h + Math.sin(k * .6 + 1)), l: Math.round(r.l * (1 + .03 * Math.sin(k * .7 + 2))) };
+  }
+  moist(p) { return Math.max(.04, Math.min(1, 1 - p.last / p.every)); }
+  health(p) {
+    if (p.pest) return this.state.treatActive ? { k: 'watch', label: 'Treating', color: AMBER } : { k: 'issue', label: 'Pest found', color: CLAY };
+    const e = ROOMS[p.room];
+    const out = [!inR(e.h, p.hum) && 'humidity', !inR(e.l, p.light) && 'light', !inR(e.t, p.temp) && 'temp'].filter(Boolean);
+    if (e.t - p.temp[0] < 3) out.push('cold');
+    return out.length ? { k: 'watch', label: 'Needs attention', color: AMBER, out } : { k: 'good', label: 'Thriving', color: GREEN };
+  }
+  water(id) {
+    const snap = this.snapshot(); const p = this.state.plants.find(x => x.id === id);
+    this.setState(s => ({ plants: s.plants.map(x => x.id === id ? { ...x, last: 0 } : x), completed: [...s.completed.filter(c => c.id !== 'w-' + id), { id: 'w-' + id, title: 'Watered ' + p.name }] }));
+    this.showToast(`${p.name} is watered. Next drink ${fmt(p.every)}.`, snap);
+  }
+  suggestions() {
+    const st = this.state; const out = [];
+    const pin = st.plants.find(p => p.id === 'pin'); const ros = st.plants.find(p => p.id === 'ros');
+    if (pin && pin.room !== 'Bathroom' && !st.dismissed.includes('pin')) out.push({ id: 'pin', title: 'Pinstripe would be happier in the bathroom.', why: `Bedroom humidity is ${ROOMS[pin.room].h}%. Calatheas want 60–80%, and the bathroom sits at ${ROOMS.Bathroom.h}% with gentle light.`, cta: 'Move to bathroom', to: 'Bathroom' });
+    if (ros && ros.room === 'Balcony' && !st.dismissed.includes('ros')) out.push({ id: 'ros', title: 'Bring Rosemary in tonight.', why: 'It\'s 9°C on the balcony now, with 4°C forecast overnight. The kitchen windowsill has the most light indoors.', cta: 'Move to kitchen', to: 'Kitchen' });
+    return out.map(s => ({ ...s,
+      onAccept: () => { const snap = this.snapshot(); this.setState(st2 => ({ plants: st2.plants.map(p => p.id === s.id ? { ...p, room: s.to, spot: s.to } : p) })); this.showToast(`Moved. Tend will watch how it settles in.`, snap); },
+      onDismiss: () => this.setState(st2 => ({ dismissed: [...st2.dismissed, s.id] })) }));
+  }
+  tasks() {
+    const st = this.state; const { plants, snoozed, completing } = st; const t = [];
+    plants.filter(p => p.last >= p.every && !snoozed.includes(p.id)).forEach(p => { const late = p.last - p.every; t.push({ id: 'w-' + p.id, plantId: p.id, kind: 'water', title: p.name, meta: `Water · ${p.amount} · ${p.room}`, when: late <= 0 ? 'Due today' : `${late} day${late > 1 ? 's' : ''} late`, late: late > 0 }); });
+    plants.filter(p => p.fertLast >= p.fertEvery && !snoozed.includes('f' + p.id)).forEach(p => t.push({ id: 'f-' + p.id, plantId: p.id, kind: 'feed', title: p.name, meta: `Feed · half-strength · ${p.room}`, when: 'Growing season', late: false }));
+    if (st.treatActive && !st.treatTaskDone) t.unshift({ id: 't-fig', plantId: 'fig', kind: 'treat', title: 'Figgy', meta: 'Neem treatment · 1 of 5', when: 'Today', late: true });
+    if (!st.mistDone && !snoozed.includes('mist')) t.push({ id: 'm-pin', plantId: 'pin', kind: 'mist', title: 'Pinstripe', meta: 'Mist the leaves · ' + plants.find(p => p.id === 'pin').room, when: 'This evening', late: false });
+    t.sort((a, b) => b.late - a.late);
+    return t.map((x, i) => ({ ...x, delay: (0.08 + i * 0.06) + 's', whenColor: x.late ? CLAY : GREEN, checking: completing === x.id, idle: completing !== x.id,
+      onOpen: () => x.kind === 'treat' ? this.push('diagnosis') : this.push('detail', { selId: x.plantId, detailTab: 'overview' }),
+      onSnooze: (e) => { e.stopPropagation(); const snap = this.snapshot(); const key = x.kind === 'mist' ? 'mist' : x.kind === 'feed' ? 'f' + x.plantId : x.plantId; this.setState(s => ({ snoozed: [...s.snoozed, key] })); this.showToast(`${x.title} can wait until tomorrow.`, snap); },
+      onCheck: () => {
+        if (this.state.completing) return; this.setState({ completing: x.id });
+        setTimeout(() => {
+          this.setState({ completing: null });
+          if (x.kind === 'water') return this.water(x.plantId);
+          const snap = this.snapshot();
+          if (x.kind === 'feed') { this.setState(s => ({ plants: s.plants.map(p => p.id === x.plantId ? { ...p, fertLast: 0 } : p) })); this.showToast(`${x.title} is fed. Next feed in ${this.state.plants.find(p => p.id === x.plantId).fertEvery} days.`, snap); }
+          else if (x.kind === 'mist') { this.setState({ mistDone: true }); this.showToast('Pinstripe is misted.', snap); }
+          else { this.setState({ treatTaskDone: true }); this.showToast('Treatment logged. Next round Mon 2 Nov.', snap); }
+        }, 450);
+      } }));
+  }
+  awayPlan() {
+    const r = RANGES.find(x => x.id === this.state.range); const byDay = {}; const need = [], fine = [];
+    this.state.plants.forEach(p => {
+      const atDep = (p.last + r.start) >= p.every ? 0 : p.last + r.start; let any = false;
+      for (let i = 1; i <= r.days; i++) if ((atDep + i) % p.every === 0) { (byDay[i] = byDay[i] || []).push(p); any = true; }
+      (any ? need : fine).push(p.name);
+    });
+    const visits = Object.keys(byDay).map(Number).sort((a, b) => a - b).map(i => ({ key: i, date: fmt(r.start + i), plants: byDay[i], names: byDay[i].map(p => p.name).join(', '), detail: byDay[i].map(p => `${p.name} ${p.amount}`).join(' · ') }));
+    return { r, visits, need, fine };
+  }
+  openGuide(id, ctx) { this.push('guide', { guideId: id, guideStep: 0, guideCtx: ctx || null }); }
+  renderVals() {
+    const st = this.state; const scr = this.screen; const inApp = st.ob === null;
+    const tasks = this.tasks(); const dueCount = tasks.length;
+    const H = st.plants.map(p => ({ p, h: this.health(p) }));
+    const nGood = H.filter(x => x.h.k === 'good').length, nWatch = H.filter(x => x.h.k === 'watch').length, nIssue = H.filter(x => x.h.k === 'issue').length;
+    const pctH = nGood / st.plants.length; const C = 2 * Math.PI * 38;
+    const sel = st.plants.find(p => p.id === st.selId) || st.plants[0]; const selH = this.health(sel); const left = sel.every - sel.last; const selM = this.moist(sel);
+    const e = this.env(sel.room);
+    const suggs = this.suggestions();
+    const ap = this.awayPlan(); const sitterName = st.sitter.trim() || 'your sitter';
+    const sitterTotal = ap.visits.reduce((n, v) => n + v.plants.length, 0);
+    const sitterDoneN = ap.visits.reduce((n, v) => n + v.plants.filter(p => st.sitterDone[v.key + p.id]).length, 0);
+    const pick = SUGG[st.add.pick];
+    const g = GUIDES[st.guideId]; const gs = g.steps[st.guideStep];
+    const growthP = sel; const hs = growthP.heights; const mn = Math.min(...hs), mx = Math.max(...hs);
+    const sensorOf = (label, v, r, disp, min, max, noteOk) => {
+      const ok = inR(v, r); const nr = near(v, r); const color = ok ? GREEN : nr ? AMBER : CLAY;
+      const pos = (x) => Math.max(2, Math.min(98, (x - min) / (max - min) * 100)) + '%';
+      return { label, value: disp, color, pos: pos(v), idealL: pos(r[0]), idealW: `calc(${pos(r[1])} - ${pos(r[0])})`, note: ok ? noteOk : (v < r[0] ? `Low · ideal ${r[0]}–${r[1]}` : `High · ideal ${r[0]}–${r[1]}`), noteColor: ok ? '#67755F' : color };
+    };
+    const roomBest = (rn) => { const r = ROOMS[rn]; return [inR(r.h, pick.humR), inR(r.l, pick.lightR), inR(r.t, pick.tempR)].filter(Boolean).length; };
+    const bestRoom = Object.keys(ROOMS).sort((a, b) => roomBest(b) - roomBest(a))[0];
+    const jumpDefs = [
+      ['ob', 'Onboarding', () => this.setState({ ob: 0 })], ['home', 'Home dashboard', () => this.tab('home')], ['plants', 'My plants', () => this.tab('plants')],
+      ['detail', 'Plant · health', () => { this.setState({ ob: null, stack: ['plants', 'detail'], selId: 'mon', detailTab: 'overview' }); this.top(); }],
+      ['growth', 'Plant · growth', () => { this.setState({ ob: null, stack: ['plants', 'detail'], selId: 'gol', detailTab: 'growth' }); this.top(); }],
+      ['scan', 'AI scanner', () => { this.setState({ ob: null, stack: ['home', 'scan'], scan: { mode: 'identify', phase: 'aim' } }); this.top(); }],
+      ['diagnosis', 'Diagnosis', () => { this.setState({ ob: null, stack: ['home', 'diagnosis'] }); this.top(); }],
+      ['env', 'Environment', () => { this.setState({ ob: null, stack: ['home', 'env'] }); this.top(); }],
+      ['guides', 'Care guides', () => this.tab('guides')],
+      ['guide', 'Guide · step by step', () => { this.setState({ ob: null, stack: ['guides', 'guide'], guideId: 'repot', guideStep: 0, guideCtx: 'Big Monstera' }); this.top(); }],
+      ['away', 'Plant-sitter', () => { this.setState({ ob: null, stack: ['home', 'away'] }); this.top(); }],
+      ['settings', 'Settings', () => { this.setState({ ob: null, stack: ['home', 'settings'] }); this.top(); }],
+      ['legal', 'Terms & privacy', () => { this.setState({ ob: null, stack: ['home', 'settings', 'legal'], legalDoc: 'terms' }); this.top(); }],
+      ['premium', 'Premium plans', () => { this.setState({ ob: null, stack: ['home', 'settings', 'premium'], bought: false, buying: false }); this.top(); }],
+    ];
+    const curKey = !inApp ? 'ob' : scr === 'premium' ? 'premium' : scr === 'legal' ? 'legal' : scr === 'detail' && st.detailTab === 'growth' ? 'growth' : ['idResult', 'addDetails'].includes(scr) ? 'scan' : ['shared', 'sitter'].includes(scr) ? 'away' : scr;
+
+    const pf = st.prefs; const setPref = (k, v) => this.setState(s => ({ prefs: { ...s.prefs, [k]: v } }));
+    const tog = (k, label, sub) => ({ label, sub, hasSub: !!sub, isToggle: true, isSeg: false, isLink: false, cursor: 'pointer', labelColor: '#1F2B1C', track: pf[k] ? '#3A6E33' : 'rgba(46,62,38,0.21)', trackGlow: pf[k] ? '0 0 14px rgba(74,124,63,0.16)' : 'none', knob: pf[k] ? 'translateX(20px)' : 'translateX(0)', onTap: () => setPref(k, !pf[k]) });
+    const seg = (k, label, opts) => ({ label, hasSub: false, isToggle: false, isSeg: true, isLink: false, cursor: 'default', labelColor: '#1F2B1C', onTap: undefined, opts: opts.map(([v, l]) => ({ label: l, bg: pf[k] === v ? '#1F2B1C' : 'transparent', color: pf[k] === v ? '#F4F0E6' : '#566551', onPick: () => setPref(k, v) })) });
+    const link = (label, value, onTap, sub, labelColor) => ({ label, value, sub, hasSub: !!sub, isToggle: false, isSeg: false, isLink: true, cursor: 'pointer', labelColor: labelColor || '#1F2B1C', onTap: onTap || (() => {}) });
+    const remindCycle = () => { const o = ['Morning', 'Midday', 'Evening']; this.setState(s => ({ remind: o[(o.indexOf(s.remind) + 1) % 3] })); };
+    const isPrem = !!st.premium;
+    const lifetime = st.plan === 'lifetime';
+    return {
+      scrollRef: this.scrollRef, back: this.back,
+      isLegal: inApp && scr === 'legal',
+      openTerms: () => this.push('legal', { legalDoc: 'terms' }), openPrivacy: () => this.push('legal', { legalDoc: 'privacy' }),
+      legalTabs: [['terms', 'Terms'], ['privacy', 'Privacy']].map(([k, l]) => ({ label: l, bg: st.legalDoc === k ? '#1F2B1C' : 'transparent', color: st.legalDoc === k ? '#F4F0E6' : '#566551', onPick: () => { this.setState({ legalDoc: k }); this.top(); } })),
+      legal: (() => { const d = LEGAL[st.legalDoc]; return { ...d, sections: d.sections.map(([h, ps], i) => ({ n: String(i + 1).padStart(2, '0'), h, ps: ps.map(t => ({ t })) })), glance: (d.glance || []).map(([k, v]) => ({ k, v, bg: k === 'We never' ? 'rgba(181,96,58,0.08)' : 'rgba(74,124,63,0.1)', border: k === 'We never' ? 'rgba(181,96,58,0.2)' : 'rgba(74,124,63,0.16)', color: k === 'We never' ? '#B5603A' : '#3E7A37' })) }; })(),
+      exportLabel: ['Download my data', 'Preparing export…', '✓ Sent to alex@moreno.co'][st.exportState],
+      exportData: () => { if (st.exportState) return; this.setState({ exportState: 1 }); setTimeout(() => this.setState({ exportState: 2 }), 1200); },
+      deleteLabel: st.deleteArm ? 'Tap again to permanently delete' : 'Delete my account',
+      deleteAcct: () => { if (!st.deleteArm) { this.setState({ deleteArm: true }); setTimeout(() => this.setState({ deleteArm: false }), 3000); } else { this.setState({ deleteArm: false, ob: 0, stack: ['home'] }); } },
+      isSettings: inApp && scr === 'settings', isPremiumScreen: inApp && scr === 'premium',
+      openSettings: () => this.push('settings'), openPremium: () => this.push('premium', { bought: false, buying: false }),
+      isPremium: isPrem, notPremium: !isPrem,
+      planLine: isPrem ? (st.premium === 'lifetime' ? 'Premium · Lifetime access' : 'Premium · Renews 28 Nov') : 'Free plan · ' + st.scansLeft + ' of 3 scans left',
+      planBadge: isPrem ? 'PREMIUM' : 'FREE', planBadgeBg: isPrem ? 'rgba(74,124,63,0.24)' : 'rgba(46,62,38,0.1)', planBadgeColor: isPrem ? '#2F5D2A' : '#566551',
+      settingsGroups: [
+        { title: 'Reminders', rows: [tog('daily', 'Daily care reminder', 'One notification, only when something is due'), link('Reminder time', { Morning: '08:00', Midday: '12:30', Evening: '19:00' }[st.remind], remindCycle), tog('weather', 'Weather alerts', 'Frost and heat warnings for outdoor plants'), tog('smartPause', 'Pause while I\'m away', 'Your sitter gets the reminders instead')] },
+        { title: 'Plant care', rows: [seg('level', 'Experience', []), tog('sensorAlerts', 'Sensor alerts', 'When moisture, light or humidity leaves range'), link('Connected sensors', '3 active', null), link('Rooms', '5 rooms', null)] },
+        { title: 'Units', rows: [seg('temp', 'Temperature', [['C', '°C'], ['F', '°F']]), seg('vol', 'Water', [['ml', 'ml'], ['oz', 'fl oz']])] },
+        { title: 'Account', rows: [link('Subscription', isPrem ? (st.premium === 'lifetime' ? 'Lifetime' : 'Monthly') : 'Free', () => this.push('premium', { bought: false, buying: false })), tog('sitterUpdates', 'Sitter check-ins', 'Notify me when a sitter ticks off a plant'), link('Export plant data', 'CSV', null), link('Help & support', '', null), link('Terms of service', '', () => this.push('legal', { legalDoc: 'terms' })), link('Privacy policy', '', () => this.push('legal', { legalDoc: 'privacy' }))] },
+      ].map(gr => gr.title === 'Plant care' ? { ...gr, rows: gr.rows.map(r => r.label === 'Experience' ? { ...r, opts: [['new', 'Learning'], ['mid', 'Confident']].map(([v, l]) => ({ label: l, bg: st.level === v ? '#1F2B1C' : 'transparent', color: st.level === v ? '#F4F0E6' : '#566551', onPick: () => this.setState({ level: v }) })) } : r) } : gr),
+      signOut: () => this.setState({ ob: 0, stack: ['home'] }),
+      showScanQuota: !isPrem, scanQuota: `${st.scansLeft} of 3 free scans left this month`,
+      premiumFeatures: [
+        ['Unlimited AI scans & diagnoses', 'Free includes 3 a month'],
+        ['Live sensor monitoring', 'Instant alerts when conditions drift'],
+        ['Growth timelapse', 'Weekly photos turned into a growth film'],
+        ['Room-by-room advice', 'Placement tips for every plant you own'],
+        ['Unlimited plants & sitter hand-offs', 'Free covers up to 10 plants'],
+      ].map(([title, sub]) => ({ title, sub })),
+      plans: [
+        { id: 'lifetime', name: 'Lifetime', sub: 'Pay once. Yours forever.', price: '$59.99', per: 'one-time', badge: 'BEST VALUE', hasBadge: true },
+        { id: 'monthly', name: 'Monthly', sub: '7-day free trial, cancel anytime', price: '$4.99', per: 'per month', hasBadge: false },
+      ].map(p => { const on = st.plan === p.id; return { ...p, border: on ? GREEN : 'rgba(46,62,38,0.13)', bg: on ? 'rgba(74,124,63,0.14)' : '#FFFCF5', shadow: on ? '0 0 30px rgba(74,124,63,0.1)' : 'none', radio: on ? GREEN : '#B8BDA9', dot: on ? GREEN : 'transparent', dotGlow: on ? '0 0 8px rgba(74,124,63,0.7)' : 'none', onPick: () => this.setState({ plan: p.id }) }; }),
+      buyLabel: st.buying ? 'Confirming…' : lifetime ? 'Unlock Lifetime · $59.99' : 'Start 7-day free trial',
+      finePrint: lifetime ? 'One payment of $59.99. No subscription, no renewals. Includes every future Premium feature.' : 'Free for 7 days, then $4.99 a month. Cancel anytime in Settings at least 24 hours before renewal.',
+      buy: () => { if (st.buying) return; this.setState({ buying: true }); setTimeout(() => this.setState(s => ({ buying: false, bought: true, premium: s.plan })), 1300); },
+      notBought: !st.bought, bought: st.bought,
+      boughtLine: lifetime ? 'Lifetime access is unlocked. Every scan, sensor and growth feature is yours to keep.' : 'Your 7-day trial has started. We\'ll remind you 2 days before it ends.',
+      finishPurchase: () => { this.setState({ stack: ['home'], bought: false }); this.top(); this.showToast('Premium unlocked. Unlimited scans are on.', null); },
+      restoreLabel: st.restoring ? 'Checking…' : 'Restore',
+      restore: () => { if (st.restoring) return; this.setState({ restoring: true }); setTimeout(() => { this.setState({ restoring: false }); this.showToast('No previous purchase found on this Apple ID.', null); }, 1100); },
+      jumps: jumpDefs.map(([k, l, fn]) => ({ label: l, onGo: fn, bg: curKey === k ? '#FFFCF5' : 'transparent', color: curKey === k ? '#1F2B1C' : '#67755F', border: curKey === k ? 'rgba(74,124,63,0.35)' : 'transparent' })),
+      isOb0: st.ob === 0, isOb1: st.ob === 1, isOb2: st.ob === 2,
+      obNext: () => this.setState(s => ({ ob: s.ob + 1 })), obFinish: () => this.tab('home'),
+      levels: [['new', 'Still learning', 'Step-by-step guidance and plain-language tips. Reminders explain why.'], ['mid', 'I know my way around', 'Raw sensor data, schedules I can tune and fewer explanations.']].map(([k, t, b]) => { const on = st.level === k; return { title: t, body: b, border: on ? GREEN : 'rgba(46,62,38,0.13)', bg: on ? 'rgba(74,124,63,0.16)' : '#FFFCF5', shadow: on ? '0 0 30px rgba(74,124,63,0.07)' : 'none', onPick: () => this.setState({ level: k }) }; }),
+      remindOpts: [['Morning', '08:00'], ['Midday', '12:30'], ['Evening', '19:00']].map(([l, t]) => { const on = st.remind === l; return { label: l, time: t, border: on ? GREEN : 'rgba(46,62,38,0.13)', bg: on ? 'rgba(74,124,63,0.16)' : '#FFFCF5', timeColor: on ? GREEN : '#76826D', onPick: () => this.setState({ remind: l }) }; }),
+      remindTime: { Morning: '08:00', Midday: '12:30', Evening: '19:00' }[st.remind],
+      isHome: inApp && scr === 'home', isPlants: inApp && scr === 'plants', isDetail: inApp && scr === 'detail', isScan: inApp && scr === 'scan', isIdResult: inApp && scr === 'idResult', isAddDetails: inApp && scr === 'addDetails',
+      isDiagnosis: inApp && scr === 'diagnosis', isEnv: inApp && scr === 'env', isGuides: inApp && scr === 'guides', isGuide: inApp && scr === 'guide',
+      isAwayPlan: inApp && scr === 'away', isAwayShared: inApp && scr === 'shared', isSitter: inApp && scr === 'sitter',
+      showTabs: inApp && ['home', 'plants', 'guides'].includes(scr),
+      tabPillLeft: `calc(5px + ${Math.max(0, ['home', 'plants', 'guides'].indexOf(scr))} * ((100% - 14px) / 3 + 2px))`, tabPillOp: ['home', 'plants', 'guides'].includes(scr) ? 1 : 0,
+      ...Object.fromEntries([['home', 'Home'], ['plants', 'Plants'], ['guides', 'Guides']].map(([k, l]) => { const on = scr === k; return ['tab_' + k, { label: l, bg: on ? 'rgba(58,110,51,.13)' : 'transparent', color: on ? '#2F5D2A' : '#2E3C2A', hasBadge: k === 'home' && dueCount > 0, badge: dueCount, onPick: () => this.tab(k) }]; })),
+      openScan: () => this.push('scan', { scan: { mode: 'identify', phase: 'aim' } }),
+      // home
+      ringDash: `${C * pctH} ${C}`, healthPct: Math.round(pctH * 100) + '%',
+      healthLegend: [['Thriving', nGood, GREEN, () => this.tab('plants')], ['Needs attention', nWatch, AMBER, () => this.push('env')], ['Pest or disease', nIssue, CLAY, () => this.push('diagnosis')]].map(([label, n, color, onTap]) => ({ label, n, color, onTap })),
+      showAlert: true, alertEyebrow: st.treatActive ? 'Treatment in progress' : 'Detected in Monday\'s scan', alertTitle: st.treatActive ? 'Figgy · spider mites' : 'Possible spider mites on Figgy', alertSub: st.treatActive ? `${Object.values(st.treatDone).filter(Boolean).length} of 4 steps done · next neem round Mon 2 Nov` : '87% match · caught early · see treatment',
+      openDiagnosis: () => this.push('diagnosis'), openEnv: () => this.push('env'), openAway: () => this.push('away'),
+      tasks, allDone: dueCount === 0, taskCountLine: dueCount ? `${dueCount} to do` : 'All done',
+      tomorrowLine: 'Tomorrow: ' + (listNames(st.plants.filter(p => p.every - p.last === 1).map(p => p.name)) || 'nothing due'),
+      roomCards: ['Living room', 'Bedroom', 'Kitchen', 'Balcony'].map((rn, i) => { const v = this.env(rn, i); const bad = H.some(x => x.p.room === rn && x.h.k !== 'good'); return { name: rn, t: v.t.toFixed(1) + '°C', h: v.h + '% hum', l: fmtLux(v.l), dot: bad ? AMBER : GREEN }; }),
+      hasSuggestion: suggs.length > 0, topSugg: suggs[0] || {},
+      // plants
+      plantCountLine: `${st.plants.length} plants · ${new Set(st.plants.map(p => p.room)).size} rooms`,
+      views: [['grid', 'Grid'], ['shelf', 'Moisture']].map(([k, l]) => ({ label: l, bg: st.view === k ? '#1F2B1C' : 'transparent', color: st.view === k ? '#F4F0E6' : '#566551', onPick: () => this.setState({ view: k }) })),
+      isGrid: st.view === 'grid', isShelf: st.view === 'shelf',
+      rooms: ['All', ...Array.from(new Set(st.plants.map(p => p.room)))].map(r => ({ label: r, ...sel3(st.room === r), onPick: () => this.setState({ room: r }) })),
+      plantCards: H.filter(x => st.room === 'All' || x.p.room === st.room).map(({ p, h }, ci) => { const d = p.every - p.last; const m = this.moist(p); const low = m < .25; return {
+        delay: (ci * 0.05) + 's', name: p.name, short: p.name.replace('Big ', ''), species: p.species, healthLabel: h.label, healthColor: h.color,
+        status: d <= 0 ? 'Thirsty now' : d === 1 ? 'Water tomorrow' : `Water in ${d} days`, statusColor: low ? CLAY : GREEN, color2: low ? '#9A4A2A' : '#2F5D2A', glow: low ? 'rgba(181,96,58,0.4)' : 'rgba(74,124,63,0.35)',
+        fill: Math.round(m * 100) + '%', pct: Math.round(m * 100) + '%', h: `calc(${Math.max(6, m * 100)}% - 8px)`, onOpen: () => this.push('detail', { selId: p.id, detailTab: 'overview' }) }; }),
+      // detail
+      detailTabs: [['overview', 'Health'], ['growth', 'Growth'], ['care', 'Care']].map(([k, l]) => ({ label: l, bg: st.detailTab === k ? '#1F2B1C' : 'transparent', color: st.detailTab === k ? '#F4F0E6' : '#566551', onPick: () => this.setState({ detailTab: k }) })),
+      isDOverview: st.detailTab === 'overview', isDGrowth: st.detailTab === 'growth', isDCare: st.detailTab === 'care',
+      scanThis: () => this.push('scan', { scan: { mode: 'diagnose', phase: 'aim' } }),
+      sensors: [
+        sensorOf('Soil moisture', Math.round(selM * 100), [25, 80], Math.round(selM * 100) + '%', 0, 100, left <= 0 ? 'Dry · water today' : `Water in ${left} day${left === 1 ? '' : 's'}`),
+        sensorOf('Light', e.l, sel.light, fmtLux(e.l), 0, Math.max(sel.light[1] * 1.4, e.l * 1.1), 'In the ideal range'),
+        sensorOf('Humidity', e.h, sel.hum, e.h + '%', 20, 90, 'Comfortable'),
+        sensorOf('Temperature', +e.t.toFixed(1), sel.temp, e.t.toFixed(1) + '°C', 0, 35, 'Comfortable'),
+      ],
+      sel: { ...sel, healthLabel: selH.label, healthColor: selH.color, healthBg: selH.color === GREEN ? 'rgba(74,124,63,0.12)' : selH.color === AMBER ? 'rgba(169,133,43,0.14)' : 'rgba(181,96,58,0.14)',
+        canWater: sel.last > 0, wateredToday: sel.last === 0, waterLabel: left <= 0 ? `Water ${sel.name} now` : 'Watered early? Log it', nextText: `Watered. Next drink ${fmt(sel.every)}`,
+        scheduleHint: st.level === 'new' ? 'Tuned by Tend for this species and room' : `Next drink ${fmt(Math.max(0, left))}`,
+        insight: sel.pest ? (st.treatActive ? 'Treatment is under way. New leaves look clean, which is a good sign. Keep humidity above 50% while it recovers.' : 'Spider mites spotted on the lower leaves, likely from dry air. Caught early. The treatment plan takes about three weeks.')
+          : selH.k === 'watch' ? (selH.out.includes('humidity') ? `Everything is fine except the air. At ${e.h}% humidity, expect crispy leaf edges. A move to the bathroom would fix it.` : `Nights are getting cold for ${sel.name}. Bring it indoors when it drops below ${sel.temp[0]}°C.`)
+          : left <= 0 ? `${sel.name} is healthy, just thirsty. Water today and it'll be back in range by morning.` : `${sel.name} is thriving. Light, humidity and temperature are all where it likes them.`,
+        log: sel.pest ? [{ what: 'Scan · spider mites detected', when: 'Mon 26 Oct' }, { what: 'Watered · ' + sel.amount, when: fmt(-sel.last) }, { what: 'Scan · healthy', when: 'Mon 12 Oct' }]
+          : [{ what: 'Watered · ' + sel.amount, when: fmt(-sel.last) }, { what: 'Fed · half-strength', when: fmt(-sel.fertLast) }, { what: 'Scan · healthy', when: 'Mon 19 Oct' }] },
+      waterSel: () => this.water(sel.id),
+      everyMinus: () => this.setState(s => ({ plants: s.plants.map(p => p.id === sel.id ? { ...p, every: Math.max(1, p.every - 1) } : p) })),
+      everyPlus: () => this.setState(s => ({ plants: s.plants.map(p => p.id === sel.id ? { ...p, every: Math.min(45, p.every + 1) } : p) })),
+      growth: {
+        delta: `+${hs[hs.length - 1] - hs[0]} cm`, caption: 'over 8 weeks', size: `${sel.trail ? 'Longest vine' : 'Height'} ${hs[hs.length - 1]} cm`, leaves: `${sel.leaves} new leaves`,
+        bars: hs.map((v, i) => ({ h: (25 + 75 * (v - mn) / ((mx - mn) || 1)) + '%', wk: 'W' + (37 + i), delay: (i * 0.06) + 's', bg: i === hs.length - 1 ? GREEN : 'rgba(74,124,63,0.28)', shadow: i === hs.length - 1 ? '0 0 14px rgba(74,124,63,0.5)' : 'none' })),
+        photos: Array.from({ length: sel.photos }, (_, i) => ({ label: i === 0 && sel.photos > 4 ? 'Week 44 · now' : `Week ${44 - i - (sel.photos > 4 ? 0 : 1)}` })),
+      },
+      addGrowthPhoto: () => { if (sel.photos > 4) return; this.setState(s => ({ plants: s.plants.map(p => p.id === sel.id ? { ...p, photos: p.photos + 1, heights: [...p.heights.slice(1), p.heights[p.heights.length - 1] + 1] } : p) })); this.showToast(`Week 44 photo saved. ${sel.name} grew 1 cm.`, null); },
+      careRows: [
+        ['Fertilize', sel.fertLast >= sel.fertEvery ? 'Due now · half-strength' : `Next ${fmt(sel.fertEvery - sel.fertLast)} · every ${sel.fertEvery} days`, sel.fertLast >= sel.fertEvery ? AMBER : '#67755F', 'feed'],
+        ['Repot', sel.repot, sel.repot.includes('roots') ? AMBER : '#67755F', 'repot'],
+        ['Prune', sel.leaves > 4 ? 'Trim leggy growth this month' : 'Only as needed', '#67755F', 'prune'],
+        ['Watering technique', `${sel.amount} at the base`, '#67755F', 'water'],
+      ].map(([label, next, color, gid]) => ({ label, next, color, onGuide: () => this.openGuide(gid, sel.name) })),
+      // scan
+      scanModes: [['identify', 'Identify'], ['diagnose', 'Diagnose']].map(([k, l]) => ({ label: l, bg: st.scan.mode === k ? '#1F2B1C' : 'transparent', color: st.scan.mode === k ? '#F4F0E6' : '#566551', onPick: () => this.setState({ scan: { mode: k, phase: 'aim' } }) })),
+      scanText: st.scan.phase === 'analyzing' ? (st.scan.mode === 'identify' ? 'Matching 30,000 species…' : 'Checking for 120 pests & diseases…') : (st.scan.mode === 'identify' ? 'camera · frame a few leaves' : 'camera · get close to the problem'),
+      scanHint: st.scan.mode === 'identify' ? 'Point at a few leaves in soft light. Tend identifies the plant and suggests a care plan.' : 'Get close to spots, webbing or discoloration. Underside of leaves helps most.',
+      scanBorder: st.scan.phase === 'analyzing' ? GREEN : 'rgba(46,62,38,0.45)', scanGlow: st.scan.phase === 'analyzing' ? 'rgba(74,124,63,0.14)' : 'transparent',
+      scanLine: st.scan.phase === 'analyzing' ? '76%' : '24%', scanLineOp: st.scan.phase === 'analyzing' ? 1 : 0,
+      captureLabel: st.scan.phase === 'analyzing' ? 'Analyzing…' : (st.scan.mode === 'identify' ? 'Identify plant' : 'Check health'),
+      capture: () => { if (st.scan.phase === 'analyzing') return; if (!st.premium && st.scansLeft <= 0) return this.push('premium', { bought: false, buying: false }); this.setState(s => ({ scan: { ...st.scan, phase: 'analyzing' }, scansLeft: s.premium ? s.scansLeft : Math.max(0, s.scansLeft - 1) })); setTimeout(() => { const m = this.state.scan.mode; this.setState({ scan: { mode: m, phase: 'aim' } }); this.push(m === 'identify' ? 'idResult' : 'diagnosis', { add: { pick: 0, nick: '', room: 'Living room', every: SUGG[0].every } }); }, 1600); },
+      pick, pickSpeciesLower: pick.species.toLowerCase(),
+      suggestions: SUGG.map((sg, i) => { const on = st.add.pick === i; return { ...sg, border: on ? GREEN : 'rgba(46,62,38,0.1)', bg: on ? 'rgba(74,124,63,0.14)' : '#FFFCF5', shadow: on ? '0 0 24px rgba(74,124,63,0.07)' : 'none', confColor: i === 0 ? GREEN : '#76826D', onPick: () => this.setState(s => ({ add: { ...s.add, pick: i, every: sg.every } })) }; }),
+      toAddDetails: () => this.push('addDetails', { add: { ...st.add, room: bestRoom } }),
+      addNick: st.add.nick, onNick: (ev) => { const v = ev.target.value; this.setState(s => ({ add: { ...s.add, nick: v } })); }, nickPlaceholder: `e.g. ${pick.species.split(' ')[0]}`,
+      addRooms: Object.keys(ROOMS).map(r => ({ label: r, ...sel3(st.add.room === r), best: r === bestRoom, bestColor: st.add.room === r ? '#2F5D2A' : GREEN, onPick: () => this.setState(s => ({ add: { ...s.add, room: r } })) })),
+      roomFit: (() => { const r = ROOMS[st.add.room]; return `${st.add.room}: ${r.h}% humidity, ${fmtLux(r.l)}, ${r.t}°C. ` + (roomBest(st.add.room) === 3 ? 'A great match.' : roomBest(st.add.room) === 2 ? 'A decent match. Tend will keep an eye on it.' : 'Not ideal for this plant.'); })(),
+      addEvery: st.add.every, addEveryHint: st.add.every === pick.every ? 'Recommended starting point' : `We suggest ${pick.every} days`,
+      addMinus: () => this.setState(s => ({ add: { ...s.add, every: Math.max(1, s.add.every - 1) } })), addPlus: () => this.setState(s => ({ add: { ...s.add, every: Math.min(45, s.add.every + 1) } })),
+      addConfirm: () => { const name = st.add.nick.trim() || pick.species; const np = { id: 'n' + Date.now(), name, species: pick.species, room: st.add.room, spot: st.add.room, every: st.add.every, last: 0, amount: pick.amount, hum: pick.humR, light: pick.lightR, temp: pick.tempR, fertEvery: 21, fertLast: 0, repot: 'Not needed this year', heights: [30, 30, 30, 30, 30, 30, 30, 30], leaves: 0, photos: 1 };
+        this.setState(s => ({ plants: [...s.plants, np], room: 'All', view: 'grid', stack: ['plants'] })); this.top(); this.showToast(`${name} joins the collection.`, null); },
+      // diagnosis
+      treatSteps: TREAT.map(([title, body], i) => { const on = !!st.treatDone[i]; return { title, body, mark: on ? '✓' : String(i + 1), ring: on ? '#3A6E33' : '#B8BDA9', fill: on ? '#3A6E33' : 'transparent', shadow: on ? '0 0 14px rgba(74,124,63,0.2)' : 'none', titleColor: on ? '#76826D' : '#1F2B1C', onToggle: () => this.setState(s => ({ treatDone: { ...s.treatDone, [i]: !s.treatDone[i] } })) }; }),
+      treatProgress: `${Object.values(st.treatDone).filter(Boolean).length} of 4 done`,
+      treatActive: st.treatActive, treatNotActive: !st.treatActive,
+      startTreatment: () => { this.setState({ treatActive: true }); this.showToast('Treatment plan added to Today.', null); },
+      // env
+      envSuggs: suggs,
+      envRooms: Object.keys(ROOMS).map((rn, i) => { const v = this.env(rn, i); const ps = st.plants.filter(p => p.room === rn); const issues = ps.filter(p => this.health(p).k !== 'good' && !p.pest);
+        return { name: rn, plants: ps.length ? ps.map(p => p.name).join(', ') : 'No plants yet',
+          metrics: [['Temp', v.t.toFixed(1) + '°', Math.min(100, v.t / 30 * 100), v.t < 12 ? CLAY : GREEN], ['Humidity', v.h + '%', v.h, v.h < 50 ? AMBER : GREEN], ['Light', fmtLux(v.l), Math.min(100, v.l / 250), v.l < 2000 ? AMBER : GREEN]].map(([label, value, w, color]) => ({ label, value, w: w + '%', color })),
+          note: issues.length ? `${listNames(issues.map(p => p.name))} ${issues.length > 1 ? 'are' : 'is'} outside their comfort range here.` : ps.length ? 'Everyone here is comfortable.' : (rn === 'Bathroom' ? 'Best humidity in your home, ideal for ferns and calatheas.' : ''),
+          noteColor: issues.length ? AMBER : '#67755F' }; }),
+      // guides
+      recGuides: [
+        { title: 'Feed Goldie', sub: 'Growing season · fertilizing, 4 steps', onOpen: () => this.openGuide('feed', 'Goldie') },
+        { title: 'Repot Big Monstera', sub: 'Roots at the drainage hole · 5 steps', onOpen: () => this.openGuide('repot', 'Big Monstera') },
+      ],
+      guideCards: Object.entries(GUIDES).map(([id, gd]) => ({ title: gd.title, meta: gd.meta, img: gd.img, onOpen: () => this.openGuide(id) })),
+      guide: { title: g.title, img: g.img, counter: `${st.guideStep + 1}/${g.steps.length}`, stepTitle: gs[0], stepBody: gs[1], hasCtx: !!st.guideCtx, ctx: st.guideCtx,
+        pips: g.steps.map((_, i) => ({ c: i <= st.guideStep ? GREEN : 'rgba(46,62,38,0.16)', s: i === st.guideStep ? '0 0 8px rgba(74,124,63,0.6)' : 'none' })),
+        prevOp: st.guideStep === 0 ? .35 : 1, nextLabel: st.guideStep === g.steps.length - 1 ? 'Done' : 'Next step' },
+      guidePrev: () => this.setState(s => ({ guideStep: Math.max(0, s.guideStep - 1) })),
+      guideNext: () => { if (st.guideStep < g.steps.length - 1) this.setState({ guideStep: st.guideStep + 1 }); else { this.back(); this.showToast(st.guideCtx ? `Nice work. Logged for ${st.guideCtx}.` : 'Guide complete.', null); } },
+      // away
+      ranges: RANGES.map(r => ({ ...r, bg: st.range === r.id ? '#1F2B1C' : '#FFFCF5', color: st.range === r.id ? '#F4F0E6' : '#1F2B1C', border: st.range === r.id ? '#1F2B1C' : 'rgba(46,62,38,0.13)', onPick: () => this.setState({ range: r.id }) })),
+      rangeDates: `${fmt(ap.r.start + 1)} – ${fmt(ap.r.start + ap.r.days)}`,
+      sitter: st.sitter, sitterName, onSitter: (ev) => this.setState({ sitter: ev.target.value }),
+      visits: ap.visits, visitSummary: `${ap.visits.length} visit${ap.visits.length === 1 ? '' : 's'}`, plantSummary: `${ap.need.length} of ${st.plants.length} plants need care`,
+      hasFine: ap.fine.length > 0, fineLine: listNames(ap.fine) + '.',
+      createHandoff: () => this.push('shared', { copied: false }),
+      letterBody: `${ap.visits.length} short visits between ${fmt(ap.r.start + 1)} and ${fmt(ap.r.start + ap.r.days)}. Room-temperature water, poured slowly at the base. Each plant's photo and spot are in the link.`,
+      copyLabel: st.copied ? '✓ Link copied' : 'Copy link to share', copyLink: () => this.setState({ copied: true }), openSitter: () => this.push('sitter'),
+      sitterProgress: `${sitterDoneN} of ${sitterTotal} done`, sitterPct: sitterTotal ? Math.round(sitterDoneN / sitterTotal * 100) + '%' : '0%',
+      sitterVisits: ap.visits.map(v => ({ date: v.date, items: v.plants.map(p => { const k = v.key + p.id; const on = !!st.sitterDone[k]; return { name: p.name, amount: p.amount, where: p.spot, nameColor: on ? '#76826D' : '#1F2B1C', ring: on ? '#3A6E33' : '#B8BDA9', fill: on ? '#3A6E33' : 'transparent', mark: on ? '✓' : '', shadow: on ? '0 0 14px rgba(74,124,63,0.2)' : 'none', onToggle: () => this.setState(s => ({ sitterDone: { ...s.sitterDone, [k]: !s.sitterDone[k] } })) }; }) })),
+      hasToast: !!st.toast, toastText: st.toast ? st.toast.text : '', toastUndo: !!(st.toast && st.toast.undo),
+      undo: () => { clearTimeout(this._t); this.setState({ ...st.toast.undo, toast: null }); },
+    };
+  }
+}
+</script>
+</body>
+</html>

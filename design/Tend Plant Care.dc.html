@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>body{margin:0;background:#ECE9E2;font-family:'Hanken Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:#3E6B4C}a:hover{color:#2C4F37}button{font-family:inherit;cursor:pointer}input{font-family:inherit}[data-om-starter] ::-webkit-scrollbar{display:none}.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 8px}.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font:600 13px/1.2 system-ui,sans-serif;color:#1a1a1a}.dv-opts{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:12px;scroll-margin-top:16px}.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 12px/1.4 system-ui,sans-serif;color:rgba(0,0,0,.6);max-width:402px}.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}.dv-next{margin:28px 0 0;font:12px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.5)}</style></helmet>
+<section class="dv-turn" id="t3">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Complete app, built from <a class="dv-oid" href="#2a">2a</a></span></div>
+<div class="dv-opts">
+<div class="dv-opt" id="3a">
+<div class="dv-olabel" style="max-width:760px"><a class="dv-oid" href="#3a">3a</a><span>Full prototype covering onboarding, Today, Plants (grid and moisture shelf from <a class="dv-oid" href="#1b">1b</a>), plant detail with schedule tuning, add a plant (photo ID, then name, room and schedule), the Away plan, the hand-off, and the sitter's own checklist. Open <a href="Tend App.dc.html">Tend App.dc.html</a> on its own for full size.</span></div>
+<div style="border-radius:16px;overflow:hidden"><dc-import name="Tend App" start-at="Onboarding" hint-size="760px,954px"></dc-import></div>
+</div>
+</div>
+<p class="dv-next">Try next: "add a settings / reminders screen" · "swap placeholders for my photos" · "light-mode variant of <a class="dv-oid" href="#3a">3a</a>"</p>
+</section>
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Moody greenhouse, as the prototype</span></div>
+<p style="margin:0 0 28px;max-width:760px;font:13px/1.55 system-ui,sans-serif;color:rgba(0,0,0,.6);text-wrap:pretty">Uses your direction: dark UI, deep green #3F6B4A, serif and sans. Green and clay glows show plant status. Photo slots are placeholders until you share real photos. <a class="dv-oid" href="#2a">2a</a> shares its state with <a class="dv-oid" href="#1a">1a</a>, so a plant watered in one is watered in both.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="2a">
+<div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a><span>Prototype · Moody greenhouse. Same flows as <a class="dv-oid" href="#1a">1a</a> in a dark UI: deep green accent, status colors that glow. Tap tasks, open plants, plan time away.</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+<div style="position:relative;height:100%;background:#0F120F;color:#ECEFE9;font-family:'Hanken Grotesk',sans-serif;overflow:hidden"><div style="position:absolute;top:-140px;right:-120px;width:440px;height:440px;border-radius:50%;background:radial-gradient(circle,rgba(110,170,120,.15),transparent 65%);pointer-events:none"></div>
+<div ref="{{ scrollRef2 }}" style="position:relative;height:100%;overflow-y:auto;scrollbar-width:none">
+
+<sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
+<div style="padding:70px 22px 150px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C">Wednesday, 28 October</div>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:42px;line-height:1.02;letter-spacing:-.01em;text-wrap:pretty">{{ headline }}</h1>
+<p style="margin:0;font-size:15px;line-height:1.45;color:#A3ACA3;text-wrap:pretty">{{ subline }}</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ dkTasks }}" as="t" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:14px;padding:12px 14px 12px 12px;background:#171C17;border:1px solid rgba(236,239,233,.07);border-radius:20px;box-shadow:0 1px 2px rgba(236,239,233,.04)">
+<button onClick="{{ t.onOpen }}" style="flex:none;width:56px;height:56px;border:none;padding:0;border-radius:14px;background:repeating-linear-gradient(135deg,#1C221C 0 6px,#171D17 6px 12px);display:flex;align-items:center;justify-content:center;font:500 8px/1.1 'JetBrains Mono',monospace;color:#5E685E;text-transform:uppercase">photo</button>
+<div onClick="{{ t.onOpen }}" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;cursor:pointer">
+<div style="font-family:'Instrument Serif',serif;font-size:22px;line-height:1.1">{{ t.title }}</div>
+<div style="font-size:13px;color:#8C968C">{{ t.meta }}</div>
+<div style="display:flex;gap:10px;align-items:center;font-size:12px;font-weight:600">
+<span style="color:{{ t.whenColor }}">{{ t.when }}</span>
+<span onClick="{{ t.onSnooze }}" style="color:#7D867D;font-weight:500;text-decoration:underline;text-underline-offset:3px" style-hover="color:#ECEFE9">{{ laterLabel }}</span>
+</div>
+</div>
+<button onClick="{{ t.onCheck }}" aria-label="Mark done" style="flex:none;width:44px;height:44px;border:none;background:transparent;padding:0;display:flex;align-items:center;justify-content:center">
+<sc-if value="{{ t.checking }}" hint-placeholder-val="{{ false }}"><span style="width:32px;height:32px;border-radius:50%;background:#3F6B4A;box-shadow:0 0 18px rgba(127,191,142,.45);display:flex;align-items:center;justify-content:center;color:#ECEFE9;font-size:16px;font-weight:700;transform:scale(1.08);transition:transform .2s">✓</span></sc-if>
+<sc-if value="{{ t.idle }}" hint-placeholder-val="{{ true }}"><span style="width:30px;height:30px;border-radius:50%;border:1.5px solid #4A544A;box-sizing:border-box" style-hover="border-color:#8FCB9C;background:rgba(143,203,156,.08)"></span></sc-if>
+</button>
+</div>
+</sc-for>
+<sc-if value="{{ allDone }}" hint-placeholder-val="{{ false }}">
+<div style="padding:28px 22px;border-radius:20px;border:1px dashed rgba(236,239,233,.18);text-align:center;display:flex;flex-direction:column;gap:6px">
+<div style="font-family:'Instrument Serif',serif;font-size:24px">{{ emptyTitle }}</div>
+<div style="font-size:14px;color:#8C968C">{{ tomorrowLine }}</div>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{ hasCompleted }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C;padding:0 4px 8px">{{ doneLabel }}</div>
+<sc-for list="{{ completed }}" as="c" hint-placeholder-count="1">
+<div style="display:flex;align-items:center;gap:12px;padding:10px 4px;border-top:1px solid rgba(236,239,233,.07)">
+<span style="width:22px;height:22px;border-radius:50%;background:rgba(143,203,156,.14);color:#8FCB9C;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</span>
+<span style="flex:1;font-size:15px;color:#7D867D;text-decoration:line-through;text-decoration-color:rgba(236,239,233,.25)">{{ c.title }}</span>
+<span style="font-size:12px;color:#7D867D">{{ c.label }}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ showTomorrow }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:16px 4px 0;border-top:1px solid rgba(236,239,233,.1);font-size:14px">
+<span style="font-weight:600">Tomorrow</span><span style="color:#8C968C;text-align:right">{{ tomorrowNames }}</span>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlants }}" hint-placeholder-val="{{ false }}">
+<div style="padding:70px 0 150px;display:flex;flex-direction:column;gap:18px">
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C">{{ plantCountLine }}</div>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:42px;line-height:1.02">{{ plantsTitle }}</h1>
+</div>
+<div style="display:flex;gap:8px;overflow-x:auto;padding:0 22px;scrollbar-width:none">
+<sc-for list="{{ dkRooms }}" as="r" hint-placeholder-count="5">
+<button onClick="{{ r.onPick }}" style="flex:none;height:36px;padding:0 15px;border-radius:999px;border:1px solid {{ r.border }};background:{{ r.bg }};color:{{ r.color }};font-size:14px;font-weight:500;white-space:nowrap">{{ r.label }}</button>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 22px">
+<sc-for list="{{ dkPlantCards }}" as="p" hint-placeholder-count="4">
+<div onClick="{{ p.onOpen }}" style="display:flex;flex-direction:column;gap:10px;padding:8px 8px 14px;background:#171C17;border:1px solid rgba(236,239,233,.07);border-radius:20px;cursor:pointer;transition:transform .15s" style-hover="transform:translateY(-2px)">
+<div style="height:150px;border-radius:14px;background:repeating-linear-gradient(135deg,#1C221C 0 6px,#171D17 6px 12px);display:flex;align-items:flex-end;padding:8px;box-sizing:border-box;font:500 8.5px/1.2 'JetBrains Mono',monospace;color:#5E685E;text-transform:uppercase">{{ p.species }}</div>
+<div style="padding:0 6px;display:flex;flex-direction:column;gap:6px">
+<div style="font-family:'Instrument Serif',serif;font-size:21px;line-height:1">{{ p.name }}</div>
+<div style="font-size:12px;font-weight:600;color:{{ p.statusColor }}">{{ p.status }}</div>
+<div style="height:3px;border-radius:2px;background:rgba(236,239,233,.08);overflow:hidden"><div style="height:100%;width:{{ p.fill }};background:{{ p.statusColor }};border-radius:2px;transition:width .6s"></div></div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+<div style="padding:62px 0 60px;display:flex;flex-direction:column;gap:20px">
+<div style="padding:0 16px"><button onClick="{{ goBack }}" style="height:40px;padding:0 16px 0 12px;border-radius:999px;border:1px solid rgba(236,239,233,.1);background:rgba(28,34,28,.9);font-size:15px;font-weight:500;color:#ECEFE9;display:flex;align-items:center;gap:6px"><span style="font-size:20px;line-height:1;margin-top:-2px">‹</span>{{ backLabel }}</button></div>
+<div style="margin:0 16px;height:300px;border-radius:26px;background:repeating-linear-gradient(135deg,#1C221C 0 7px,#171D17 7px 14px);display:flex;align-items:center;justify-content:center;font:500 10px/1.2 'JetBrains Mono',monospace;color:#5E685E;text-transform:uppercase;letter-spacing:.06em">photo · {{ sel.species }}</div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:4px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C">{{ sel.room }}</div>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:1">{{ sel.name }}</h1>
+<div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:19px;color:#8C968C">{{ sel.species }}</div>
+</div>
+<div style="margin:0 22px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid rgba(236,239,233,.1);border-bottom:1px solid rgba(236,239,233,.1)">
+<div style="padding:14px 10px 14px 0;display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#7D867D">Water</span><span style="font-size:15px;font-weight:500">{{ sel.everyText }}</span></div>
+<div style="padding:14px 10px;border-left:1px solid rgba(236,239,233,.1);display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#7D867D">Light</span><span style="font-size:15px;font-weight:500">{{ sel.light }}</span></div>
+<div style="padding:14px 0 14px 10px;border-left:1px solid rgba(236,239,233,.1);display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#7D867D">Last drink</span><span style="font-size:15px;font-weight:500;color:{{ dkLastColor }}">{{ sel.lastText }}</span></div>
+</div>
+<div style="padding:0 22px">
+<sc-if value="{{ sel.canWater }}" hint-placeholder-val="{{ true }}"><button onClick="{{ waterSel }}" style="width:100%;height:56px;border:none;border-radius:18px;background:#3F6B4A;color:#ECEFE9;font-size:16px;font-weight:600;letter-spacing:.01em" style-hover="background:#4A7D57" style-active="transform:scale(.98)">{{ sel.waterLabel }}</button></sc-if>
+<sc-if value="{{ sel.wateredToday }}" hint-placeholder-val="{{ false }}"><div style="height:56px;border-radius:18px;background:rgba(143,203,156,.1);color:#8FCB9C;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px">✓ {{ sel.nextText }}</div></sc-if>
+</div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C">Notes</div>
+<p style="margin:0;font-family:'Instrument Serif',serif;font-size:21px;line-height:1.3;text-wrap:pretty">{{ sel.note }}</p>
+</div>
+<div style="padding:0 22px;display:flex;flex-direction:column">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C;padding-bottom:8px">Care history</div>
+<sc-for list="{{ sel.log }}" as="l" hint-placeholder-count="3">
+<div style="display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(236,239,233,.08);font-size:14px"><span>{{ l.what }}</span><span style="color:#8C968C">{{ l.when }}</span></div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAwayPlan }}" hint-placeholder-val="{{ false }}">
+<div style="padding:70px 22px 150px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C">Plant-sitter hand-off</div>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:42px;line-height:1.02;text-wrap:pretty">{{ awayTitle }}</h1>
+<p style="margin:0;font-size:15px;line-height:1.45;color:#A3ACA3">{{ awaySub }}</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;font-weight:600">How long</div>
+<div style="display:flex;gap:8px">
+<sc-for list="{{ dkRanges }}" as="r" hint-placeholder-count="3">
+<button onClick="{{ r.onPick }}" style="flex:1;padding:12px 8px;border-radius:16px;border:1px solid {{ r.border }};background:{{ r.bg }};color:{{ r.color }};display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left"><span style="font-size:14px;font-weight:600">{{ r.label }}</span><span style="font-size:12px;opacity:.75">{{ r.sub }}</span></button>
+</sc-for>
+</div>
+<div style="font-size:13px;color:#8C968C">{{ rangeDates }}</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;font-weight:600">Who's looking after them</div>
+<input value="{{ sitter }}" onChange="{{ onSitter }}" placeholder="Sitter's name" style="height:52px;border-radius:16px;border:1px solid rgba(236,239,233,.14);background:#171C17;padding:0 16px;font-size:16px;color:#ECEFE9;outline:none" style-focus="border-color:#8FCB9C;box-shadow:0 0 0 3px rgba(143,203,156,.15)"></input>
+</div>
+<div style="display:flex;flex-direction:column;gap:0;background:#171C17;border:1px solid rgba(236,239,233,.07);border-radius:20px;padding:16px 16px 6px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px"><span style="font-family:'Instrument Serif',serif;font-size:22px">{{ visitSummary }}</span><span style="font-size:12px;color:#8C968C">{{ plantSummary }}</span></div>
+<sc-for list="{{ visits }}" as="v" hint-placeholder-count="3">
+<div style="display:flex;gap:12px;padding:10px 0;border-top:1px solid rgba(236,239,233,.07);font-size:14px"><span style="flex:none;width:88px;font-weight:600">{{ v.date }}</span><span style="color:#A3ACA3">{{ v.names }}</span></div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.45;color:#A3ACA3">
+<sc-if value="{{ hasBefore }}" hint-placeholder-val="{{ true }}"><div><span style="font-weight:600;color:#E0A27C">Before you go · </span>{{ beforeLine }}</div></sc-if>
+<sc-if value="{{ hasFine }}" hint-placeholder-val="{{ true }}"><div><span style="font-weight:600;color:#ECEFE9">Fine on their own · </span>{{ fineLine }}</div></sc-if>
+</div>
+<button onClick="{{ createHandoff }}" style="height:56px;border:none;border-radius:18px;background:#ECEFE9;color:#0F120F;font-size:16px;font-weight:600" style-hover="background:#D5DAD2" style-active="transform:scale(.98)">{{ createLabel }}</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAwayShared }}" hint-placeholder-val="{{ false }}">
+<div style="padding:70px 22px 150px;display:flex;flex-direction:column;gap:20px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8FCB9C">✓ Hand-off ready</div>
+<div style="background:#171C17;border-radius:24px;border:1px solid rgba(236,239,233,.08);box-shadow:0 20px 40px -24px rgba(236,239,233,.3);padding:26px 22px;display:flex;flex-direction:column;gap:16px">
+<div style="font-family:'Instrument Serif',serif;font-size:36px;line-height:1.02">{{ letterTitle }}</div>
+<div style="font-size:14px;color:#A3ACA3;line-height:1.45">{{ letterBody }}</div>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ visits }}" as="v" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;gap:3px;padding:12px 0;border-top:1px solid rgba(236,239,233,.08)"><span style="font-size:13px;font-weight:600">{{ v.date }}</span><span style="font-size:14px;color:#A3ACA3">{{ v.detail }}</span></div>
+</sc-for>
+</div>
+<div style="font-size:12px;color:#7D867D">Each plant has its photo, spot in the home and notes in the link.</div>
+</div>
+<button onClick="{{ copyLink }}" style="height:56px;border:none;border-radius:18px;background:#3F6B4A;color:#ECEFE9;font-size:16px;font-weight:600" style-hover="background:#4A7D57">{{ copyLabel }}</button>
+<button onClick="{{ editPlan }}" style="height:44px;border:none;background:transparent;color:#ECEFE9;font-size:15px;font-weight:500;text-decoration:underline;text-underline-offset:3px">Edit plan</button>
+</div>
+</sc-if>
+</div>
+
+<sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:5px;border-radius:999px;background:rgba(28,34,28,.82);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(236,239,233,.08);box-shadow:0 10px 30px -10px rgba(236,239,233,.3);z-index:20">
+<sc-for list="{{ dkTabs }}" as="tb" hint-placeholder-count="3">
+<button onClick="{{ tb.onPick }}" style="height:46px;padding:0 20px;border:none;border-radius:999px;background:{{ tb.bg }};color:{{ tb.color }};font-size:15px;font-weight:600;display:flex;align-items:center;gap:7px;transition:background .2s">{{ tb.label }}<sc-if value="{{ tb.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:9px;background:#E0A27C;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">{{ tb.badge }}</span></sc-if></button>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:16px;right:16px;bottom:104px;z-index:30;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:#ECEFE9;color:#0F120F;font-size:14px;box-shadow:0 12px 30px -10px rgba(0,0,0,.4)">
+<span style="flex:1">{{ toastText }}</span>
+<sc-if value="{{ toastUndo }}" hint-placeholder-val="{{ true }}"><button onClick="{{ undo }}" style="border:none;background:transparent;color:#3F6B4A;font-size:14px;font-weight:700;padding:4px">Undo</button></sc-if>
+</div>
+</sc-if>
+</div>
+</x-import>
+</div>
+
+</div>
+<p class="dv-next">Try next: "put the moisture stems from <a class="dv-oid" href="#1b">1b</a> on the Plants tab of <a class="dv-oid" href="#2a">2a</a>" · "add onboarding and add-a-plant" · "warmer clay accent for late tasks"</p>
+</section>
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Tend: houseplant care for iOS</span></div>
+<p style="margin:0 0 28px;max-width:760px;font:13px/1.55 system-ui,sans-serif;color:rgba(0,0,0,.6);text-wrap:pretty">Assumptions: 3–30 plants, care is mostly watering, travel needs a plant-sitter hand-off. <a class="dv-oid" href="#1a">1a</a> is the working prototype. Tick tasks, open plants, plan time away. <a class="dv-oid" href="#1b">1b</a>–<a class="dv-oid" href="#1d">1d</a> try out other layouts, styles and interactions for the Today screen. Photos are placeholders.</p>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a><span>Prototype · Editorial calm. Serif headlines, paper tones, floating tab pill.</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="position:relative;height:100%;background:#F6F4EF;color:#1E211D;font-family:'Hanken Grotesk',sans-serif">
+<div ref="{{ scrollRef }}" style="height:100%;overflow-y:auto;scrollbar-width:none">
+
+<sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
+<div style="padding:70px 22px 150px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6F746C">Wednesday, 28 October</div>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:42px;line-height:1.02;letter-spacing:-.01em;text-wrap:pretty">{{ headline }}</h1>
+<p style="margin:0;font-size:15px;line-height:1.45;color:#5B6058;text-wrap:pretty">{{ subline }}</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ tasks }}" as="t" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:14px;padding:12px 14px 12px 12px;background:#FCFBF8;border:1px solid rgba(30,33,29,.07);border-radius:20px;box-shadow:0 1px 2px rgba(30,33,29,.04)">
+<button onClick="{{ t.onOpen }}" style="flex:none;width:56px;height:56px;border:none;padding:0;border-radius:14px;background:repeating-linear-gradient(135deg,#E9E5DC 0 6px,#E1DCD1 6px 12px);display:flex;align-items:center;justify-content:center;font:500 8px/1.1 'JetBrains Mono',monospace;color:#8A8578;text-transform:uppercase">photo</button>
+<div onClick="{{ t.onOpen }}" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;cursor:pointer">
+<div style="font-family:'Instrument Serif',serif;font-size:22px;line-height:1.1">{{ t.title }}</div>
+<div style="font-size:13px;color:#6F746C">{{ t.meta }}</div>
+<div style="display:flex;gap:10px;align-items:center;font-size:12px;font-weight:600">
+<span style="color:{{ t.whenColor }}">{{ t.when }}</span>
+<span onClick="{{ t.onSnooze }}" style="color:#8A8F86;font-weight:500;text-decoration:underline;text-underline-offset:3px" style-hover="color:#1E211D">{{ laterLabel }}</span>
+</div>
+</div>
+<button onClick="{{ t.onCheck }}" aria-label="Mark done" style="flex:none;width:44px;height:44px;border:none;background:transparent;padding:0;display:flex;align-items:center;justify-content:center">
+<sc-if value="{{ t.checking }}" hint-placeholder-val="{{ false }}"><span style="width:32px;height:32px;border-radius:50%;background:#3E6B4C;display:flex;align-items:center;justify-content:center;color:#F6F4EF;font-size:16px;font-weight:700;transform:scale(1.08);transition:transform .2s">✓</span></sc-if>
+<sc-if value="{{ t.idle }}" hint-placeholder-val="{{ true }}"><span style="width:30px;height:30px;border-radius:50%;border:1.5px solid #B9BDB4;box-sizing:border-box" style-hover="border-color:#3E6B4C;background:rgba(62,107,76,.08)"></span></sc-if>
+</button>
+</div>
+</sc-for>
+<sc-if value="{{ allDone }}" hint-placeholder-val="{{ false }}">
+<div style="padding:28px 22px;border-radius:20px;border:1px dashed rgba(30,33,29,.18);text-align:center;display:flex;flex-direction:column;gap:6px">
+<div style="font-family:'Instrument Serif',serif;font-size:24px">{{ emptyTitle }}</div>
+<div style="font-size:14px;color:#6F746C">{{ tomorrowLine }}</div>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{ hasCompleted }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6F746C;padding:0 4px 8px">{{ doneLabel }}</div>
+<sc-for list="{{ completed }}" as="c" hint-placeholder-count="1">
+<div style="display:flex;align-items:center;gap:12px;padding:10px 4px;border-top:1px solid rgba(30,33,29,.07)">
+<span style="width:22px;height:22px;border-radius:50%;background:rgba(62,107,76,.14);color:#3E6B4C;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</span>
+<span style="flex:1;font-size:15px;color:#8A8F86;text-decoration:line-through;text-decoration-color:rgba(30,33,29,.25)">{{ c.title }}</span>
+<span style="font-size:12px;color:#8A8F86">{{ c.label }}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ showTomorrow }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:16px 4px 0;border-top:1px solid rgba(30,33,29,.1);font-size:14px">
+<span style="font-weight:600">Tomorrow</span><span style="color:#6F746C;text-align:right">{{ tomorrowNames }}</span>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlants }}" hint-placeholder-val="{{ false }}">
+<div style="padding:70px 0 150px;display:flex;flex-direction:column;gap:18px">
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6F746C">{{ plantCountLine }}</div>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:42px;line-height:1.02">{{ plantsTitle }}</h1>
+</div>
+<div style="display:flex;gap:8px;overflow-x:auto;padding:0 22px;scrollbar-width:none">
+<sc-for list="{{ rooms }}" as="r" hint-placeholder-count="5">
+<button onClick="{{ r.onPick }}" style="flex:none;height:36px;padding:0 15px;border-radius:999px;border:1px solid {{ r.border }};background:{{ r.bg }};color:{{ r.color }};font-size:14px;font-weight:500;white-space:nowrap">{{ r.label }}</button>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 22px">
+<sc-for list="{{ plantCards }}" as="p" hint-placeholder-count="4">
+<div onClick="{{ p.onOpen }}" style="display:flex;flex-direction:column;gap:10px;padding:8px 8px 14px;background:#FCFBF8;border:1px solid rgba(30,33,29,.07);border-radius:20px;cursor:pointer;transition:transform .15s" style-hover="transform:translateY(-2px)">
+<div style="height:150px;border-radius:14px;background:repeating-linear-gradient(135deg,#E9E5DC 0 6px,#E1DCD1 6px 12px);display:flex;align-items:flex-end;padding:8px;box-sizing:border-box;font:500 8.5px/1.2 'JetBrains Mono',monospace;color:#8A8578;text-transform:uppercase">{{ p.species }}</div>
+<div style="padding:0 6px;display:flex;flex-direction:column;gap:6px">
+<div style="font-family:'Instrument Serif',serif;font-size:21px;line-height:1">{{ p.name }}</div>
+<div style="font-size:12px;font-weight:600;color:{{ p.statusColor }}">{{ p.status }}</div>
+<div style="height:3px;border-radius:2px;background:rgba(30,33,29,.08);overflow:hidden"><div style="height:100%;width:{{ p.fill }};background:{{ p.statusColor }};border-radius:2px;transition:width .6s"></div></div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+<div style="padding:62px 0 60px;display:flex;flex-direction:column;gap:20px">
+<div style="padding:0 16px"><button onClick="{{ goBack }}" style="height:40px;padding:0 16px 0 12px;border-radius:999px;border:1px solid rgba(30,33,29,.1);background:rgba(252,251,248,.9);font-size:15px;font-weight:500;color:#1E211D;display:flex;align-items:center;gap:6px"><span style="font-size:20px;line-height:1;margin-top:-2px">‹</span>{{ backLabel }}</button></div>
+<div style="margin:0 16px;height:300px;border-radius:26px;background:repeating-linear-gradient(135deg,#E9E5DC 0 7px,#E1DCD1 7px 14px);display:flex;align-items:center;justify-content:center;font:500 10px/1.2 'JetBrains Mono',monospace;color:#8A8578;text-transform:uppercase;letter-spacing:.06em">photo · {{ sel.species }}</div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:4px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6F746C">{{ sel.room }}</div>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:1">{{ sel.name }}</h1>
+<div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:19px;color:#6F746C">{{ sel.species }}</div>
+</div>
+<div style="margin:0 22px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid rgba(30,33,29,.1);border-bottom:1px solid rgba(30,33,29,.1)">
+<div style="padding:14px 10px 14px 0;display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8A8F86">Water</span><span style="font-size:15px;font-weight:500">{{ sel.everyText }}</span></div>
+<div style="padding:14px 10px;border-left:1px solid rgba(30,33,29,.1);display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8A8F86">Light</span><span style="font-size:15px;font-weight:500">{{ sel.light }}</span></div>
+<div style="padding:14px 0 14px 10px;border-left:1px solid rgba(30,33,29,.1);display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8A8F86">Last drink</span><span style="font-size:15px;font-weight:500;color:{{ sel.lastColor }}">{{ sel.lastText }}</span></div>
+</div>
+<div style="padding:0 22px">
+<sc-if value="{{ sel.canWater }}" hint-placeholder-val="{{ true }}"><button onClick="{{ waterSel }}" style="width:100%;height:56px;border:none;border-radius:18px;background:#3E6B4C;color:#F6F4EF;font-size:16px;font-weight:600;letter-spacing:.01em" style-hover="background:#335A3F" style-active="transform:scale(.98)">{{ sel.waterLabel }}</button></sc-if>
+<sc-if value="{{ sel.wateredToday }}" hint-placeholder-val="{{ false }}"><div style="height:56px;border-radius:18px;background:rgba(62,107,76,.1);color:#3E6B4C;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px">✓ {{ sel.nextText }}</div></sc-if>
+</div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6F746C">Notes</div>
+<p style="margin:0;font-family:'Instrument Serif',serif;font-size:21px;line-height:1.3;text-wrap:pretty">{{ sel.note }}</p>
+</div>
+<div style="padding:0 22px;display:flex;flex-direction:column">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6F746C;padding-bottom:8px">Care history</div>
+<sc-for list="{{ sel.log }}" as="l" hint-placeholder-count="3">
+<div style="display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(30,33,29,.08);font-size:14px"><span>{{ l.what }}</span><span style="color:#6F746C">{{ l.when }}</span></div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAwayPlan }}" hint-placeholder-val="{{ false }}">
+<div style="padding:70px 22px 150px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6F746C">Plant-sitter hand-off</div>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:42px;line-height:1.02;text-wrap:pretty">{{ awayTitle }}</h1>
+<p style="margin:0;font-size:15px;line-height:1.45;color:#5B6058">{{ awaySub }}</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;font-weight:600">How long</div>
+<div style="display:flex;gap:8px">
+<sc-for list="{{ ranges }}" as="r" hint-placeholder-count="3">
+<button onClick="{{ r.onPick }}" style="flex:1;padding:12px 8px;border-radius:16px;border:1px solid {{ r.border }};background:{{ r.bg }};color:{{ r.color }};display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left"><span style="font-size:14px;font-weight:600">{{ r.label }}</span><span style="font-size:12px;opacity:.75">{{ r.sub }}</span></button>
+</sc-for>
+</div>
+<div style="font-size:13px;color:#6F746C">{{ rangeDates }}</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;font-weight:600">Who's looking after them</div>
+<input value="{{ sitter }}" onChange="{{ onSitter }}" placeholder="Sitter's name" style="height:52px;border-radius:16px;border:1px solid rgba(30,33,29,.14);background:#FCFBF8;padding:0 16px;font-size:16px;color:#1E211D;outline:none" style-focus="border-color:#3E6B4C;box-shadow:0 0 0 3px rgba(62,107,76,.15)"></input>
+</div>
+<div style="display:flex;flex-direction:column;gap:0;background:#FCFBF8;border:1px solid rgba(30,33,29,.07);border-radius:20px;padding:16px 16px 6px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px"><span style="font-family:'Instrument Serif',serif;font-size:22px">{{ visitSummary }}</span><span style="font-size:12px;color:#6F746C">{{ plantSummary }}</span></div>
+<sc-for list="{{ visits }}" as="v" hint-placeholder-count="3">
+<div style="display:flex;gap:12px;padding:10px 0;border-top:1px solid rgba(30,33,29,.07);font-size:14px"><span style="flex:none;width:88px;font-weight:600">{{ v.date }}</span><span style="color:#5B6058">{{ v.names }}</span></div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.45;color:#5B6058">
+<sc-if value="{{ hasBefore }}" hint-placeholder-val="{{ true }}"><div><span style="font-weight:600;color:#B5683F">Before you go · </span>{{ beforeLine }}</div></sc-if>
+<sc-if value="{{ hasFine }}" hint-placeholder-val="{{ true }}"><div><span style="font-weight:600;color:#1E211D">Fine on their own · </span>{{ fineLine }}</div></sc-if>
+</div>
+<button onClick="{{ createHandoff }}" style="height:56px;border:none;border-radius:18px;background:#1E211D;color:#F6F4EF;font-size:16px;font-weight:600" style-hover="background:#333830" style-active="transform:scale(.98)">{{ createLabel }}</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAwayShared }}" hint-placeholder-val="{{ false }}">
+<div style="padding:70px 22px 150px;display:flex;flex-direction:column;gap:20px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#3E6B4C">✓ Hand-off ready</div>
+<div style="background:#FCFBF8;border-radius:24px;border:1px solid rgba(30,33,29,.08);box-shadow:0 20px 40px -24px rgba(30,33,29,.3);padding:26px 22px;display:flex;flex-direction:column;gap:16px">
+<div style="font-family:'Instrument Serif',serif;font-size:36px;line-height:1.02">{{ letterTitle }}</div>
+<div style="font-size:14px;color:#5B6058;line-height:1.45">{{ letterBody }}</div>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ visits }}" as="v" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;gap:3px;padding:12px 0;border-top:1px solid rgba(30,33,29,.08)"><span style="font-size:13px;font-weight:600">{{ v.date }}</span><span style="font-size:14px;color:#5B6058">{{ v.detail }}</span></div>
+</sc-for>
+</div>
+<div style="font-size:12px;color:#8A8F86">Each plant has its photo, spot in the home and notes in the link.</div>
+</div>
+<button onClick="{{ copyLink }}" style="height:56px;border:none;border-radius:18px;background:#3E6B4C;color:#F6F4EF;font-size:16px;font-weight:600" style-hover="background:#335A3F">{{ copyLabel }}</button>
+<button onClick="{{ editPlan }}" style="height:44px;border:none;background:transparent;color:#1E211D;font-size:15px;font-weight:500;text-decoration:underline;text-underline-offset:3px">Edit plan</button>
+</div>
+</sc-if>
+</div>
+
+<sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:5px;border-radius:999px;background:rgba(252,251,248,.82);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(30,33,29,.08);box-shadow:0 10px 30px -10px rgba(30,33,29,.3);z-index:20">
+<sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="3">
+<button onClick="{{ tb.onPick }}" style="height:46px;padding:0 20px;border:none;border-radius:999px;background:{{ tb.bg }};color:{{ tb.color }};font-size:15px;font-weight:600;display:flex;align-items:center;gap:7px;transition:background .2s">{{ tb.label }}<sc-if value="{{ tb.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:9px;background:#B5683F;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">{{ tb.badge }}</span></sc-if></button>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:16px;right:16px;bottom:104px;z-index:30;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:#1E211D;color:#F6F4EF;font-size:14px;box-shadow:0 12px 30px -10px rgba(0,0,0,.4)">
+<span style="flex:1">{{ toastText }}</span>
+<sc-if value="{{ toastUndo }}" hint-placeholder-val="{{ true }}"><button onClick="{{ undo }}" style="border:none;background:transparent;color:#A9CBB2;font-size:14px;font-weight:700;padding:4px">Undo</button></sc-if>
+</div>
+</sc-if>
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a><span>Moisture shelf · Dark greenhouse. Each plant is a stem showing estimated soil moisture. Tap a stem to water it.</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+<div style="position:relative;height:100%;background:#0F120F;color:#ECEFE9;font-family:'Hanken Grotesk',sans-serif;overflow:hidden">
+<div style="position:absolute;top:-120px;left:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(110,170,120,.16),transparent 65%);pointer-events:none"></div>
+<div style="position:relative;padding:72px 22px 140px;display:flex;flex-direction:column;gap:26px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.08em;color:#8C968C">TONIGHT · 21:40 · 19°C INDOORS</div>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:44px;line-height:1">{{ bHeadline }}</h1>
+<p style="margin:0;font-size:15px;color:#9AA39A">Estimated from each plant's schedule and the room. Tap a stem once you've watered it.</p>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:flex-end;padding:8px 2px 0">
+<sc-for list="{{ bStems }}" as="s" hint-placeholder-count="5">
+<div onClick="{{ s.onTap }}" style="display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer">
+<div style="font:500 11px 'JetBrains Mono',monospace;color:{{ s.color }}">{{ s.pct }}</div>
+<div style="position:relative;width:46px;height:250px;border-radius:23px;background:#181D18;border:1px solid rgba(255,255,255,.06);overflow:hidden">
+<div style="position:absolute;left:4px;right:4px;bottom:4px;height:{{ s.h }};border-radius:19px;background:linear-gradient(to top,{{ s.color }},{{ s.color2 }});box-shadow:0 0 24px {{ s.glow }};transition:height 1s cubic-bezier(.2,.8,.2,1)"></div>
+</div>
+<div style="font-family:'Instrument Serif',serif;font-size:16px;text-align:center;width:64px;line-height:1.05">{{ s.name }}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(255,255,255,.08)">
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:14px"><span>Mist Pinstripe before bed</span><span style="font:500 11px 'JetBrains Mono',monospace;color:#8C968C">BEDROOM</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;font-size:14px"><span>Bring Rosemary in, 4°C tonight</span><span style="font:500 11px 'JetBrains Mono',monospace;color:#D9946B">BALCONY</span></div>
+</div>
+</div>
+<div style="position:absolute;bottom:30px;left:22px;right:22px;display:flex;justify-content:space-between;align-items:center;padding:6px;border-radius:999px;background:rgba(30,36,30,.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.07)">
+<span style="flex:1;text-align:center;height:44px;line-height:44px;border-radius:999px;background:#ECEFE9;color:#0F120F;font-size:14px;font-weight:600">Shelf</span>
+<span style="flex:1;text-align:center;font-size:14px;color:#9AA39A">Rooms</span>
+<span style="flex:1;text-align:center;font-size:14px;color:#9AA39A">Away</span>
+</div>
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="1c">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a><span>Week ribbon · Crisp utility. Top tabs, a 7-day strip, dense rows with mono details. Built for owners who like control.</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;background:#FAFAF8;color:#141414;font-family:'Hanken Grotesk',sans-serif">
+<div style="padding:64px 20px 0;display:flex;justify-content:space-between;align-items:baseline">
+<span style="font-size:26px;font-weight:700;letter-spacing:-.02em">Schedule</span>
+<span style="font:500 12px 'JetBrains Mono',monospace;color:#6E6E6A">OCT 2026</span>
+</div>
+<div style="display:flex;gap:22px;padding:14px 20px 0;border-bottom:1px solid #E6E6E2;font-size:14px;font-weight:600">
+<span style="padding-bottom:10px;border-bottom:2px solid #141414">Week</span><span style="color:#8E8E89">Plants</span><span style="color:#8E8E89">Away</span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;padding:14px 14px">
+<sc-for list="{{ cDays }}" as="d" hint-placeholder-count="7">
+<button onClick="{{ d.onPick }}" style="height:72px;border-radius:12px;border:1px solid {{ d.border }};background:{{ d.bg }};color:{{ d.color }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0">
+<span style="font:500 10px 'JetBrains Mono',monospace;opacity:.7">{{ d.letter }}</span>
+<span style="font-size:17px;font-weight:700">{{ d.num }}</span>
+<span style="display:flex;gap:3px;height:5px"><sc-for list="{{ d.dots }}" as="x" hint-placeholder-count="1"><span style="width:5px;height:5px;border-radius:50%;background:{{ x.c }}"></span></sc-for></span>
+</button>
+</sc-for>
+</div>
+<div style="padding:6px 20px 10px;display:flex;justify-content:space-between;font:500 11px 'JetBrains Mono',monospace;color:#6E6E6A;letter-spacing:.04em"><span>{{ cDayLabel }}</span><span>{{ cCount }}</span></div>
+<div style="display:flex;flex-direction:column;border-top:1px solid #E6E6E2">
+<sc-for list="{{ cRows }}" as="r" hint-placeholder-count="3">
+<div onClick="{{ r.onToggle }}" style="display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 20px;border-bottom:1px solid #E6E6E2;cursor:pointer" style-hover="background:#F2F2EE">
+<span style="width:20px;height:20px;border-radius:5px;border:1.5px solid {{ r.boxBorder }};background:{{ r.boxBg }};color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;box-sizing:border-box">{{ r.mark }}</span>
+<span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;color:{{ r.nameColor }}">{{ r.kind }} {{ r.name }}</span><span style="font:400 11px 'JetBrains Mono',monospace;color:#6E6E6A;text-transform:uppercase">{{ r.room }} · {{ r.light }}</span></span>
+<span style="font:500 12px 'JetBrains Mono',monospace;color:{{ r.amtColor }}">{{ r.amount }}</span>
+</div>
+</sc-for>
+<sc-if value="{{ cEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:28px 20px;font:500 12px 'JetBrains Mono',monospace;color:#8E8E89">NOTHING SCHEDULED</div></sc-if>
+</div>
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="1d">
+<div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a><span>One at a time · Warm and conversational. Today is a stack of cards with a plain-language instruction on each. Good for beginners.</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;background:#F1ECE3;color:#2B2622;font-family:'Hanken Grotesk',sans-serif;padding:70px 20px 0;box-sizing:border-box;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#7A7067"><span>Wednesday evening</span><span>{{ dProgress }}</span></div>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:40px;line-height:1.02;text-wrap:pretty">{{ dHeadline }}</h1>
+</div>
+<div style="position:relative;height:560px">
+<sc-for list="{{ dCards }}" as="k" hint-placeholder-count="3">
+<div style="position:absolute;inset:0;z-index:{{ k.z }};transform:{{ k.transform }};opacity:{{ k.opacity }};transition:transform .42s cubic-bezier(.3,.7,.2,1),opacity .42s;background:#FBF8F2;border-radius:30px;border:1px solid rgba(43,38,34,.08);box-shadow:0 24px 50px -30px rgba(43,38,34,.45);padding:12px;box-sizing:border-box;display:flex;flex-direction:column;gap:18px">
+<div style="height:280px;flex:none;border-radius:22px;background:repeating-linear-gradient(135deg,#EAE2D5 0 7px,#E2D9CA 7px 14px);display:flex;align-items:flex-end;padding:12px;box-sizing:border-box;font:500 9px 'JetBrains Mono',monospace;color:#8D8274;text-transform:uppercase">photo · {{ k.species }}</div>
+<div style="padding:0 10px;display:flex;flex-direction:column;gap:8px;flex:1">
+<div style="font-family:'Instrument Serif',serif;font-size:32px;line-height:1">{{ k.name }}</div>
+<p style="margin:0;font-size:15px;line-height:1.5;color:#5E554D;text-wrap:pretty">{{ k.msg }}</p>
+</div>
+<sc-if value="{{ k.isTop }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:10px;padding:0 4px 4px">
+<button onClick="{{ dSkip }}" style="flex:1;height:54px;border-radius:18px;border:1px solid rgba(43,38,34,.16);background:transparent;color:#2B2622;font-size:15px;font-weight:600" style-hover="background:rgba(43,38,34,.04)">Not today</button>
+<button onClick="{{ dDone }}" style="flex:1.4;height:54px;border-radius:18px;border:none;background:#A85F3A;color:#FBF8F2;font-size:15px;font-weight:600" style-hover="background:#94512F">Watered</button>
+</div>
+</sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ dFinished }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;border-radius:30px;border:1px dashed rgba(43,38,34,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:30px">
+<div style="font-family:'Instrument Serif',serif;font-size:34px;line-height:1.05">That's everyone.</div>
+<div style="font-size:15px;color:#7A7067">Next up: Rosemary on Friday.</div>
+<button onClick="{{ dReset }}" style="margin-top:8px;border:none;background:transparent;color:#A85F3A;font-size:14px;font-weight:600;text-decoration:underline;text-underline-offset:3px">Start over</button>
+</div>
+</sc-if>
+</div>
+</div>
+</x-import>
+</div>
+
+</div>
+<p class="dv-next">Try next: "build out <a class="dv-oid" href="#1b">1b</a> as the full prototype" · "use the card stack from <a class="dv-oid" href="#1d">1d</a> inside <a class="dv-oid" href="#1a">1a</a>'s Today" · "add onboarding and an add-a-plant flow"</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;tone&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Premium&quot;,&quot;Plain&quot;],&quot;default&quot;:&quot;Premium&quot;,&quot;tsType&quot;:&quot;'Premium'|'Plain'&quot;,&quot;section&quot;:&quot;Prototype 1a&quot;},&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Today&quot;,&quot;Plants&quot;,&quot;Away&quot;],&quot;default&quot;:&quot;Today&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype 1a&quot;}}">
+const BASE = new Date(2026, 9, 28);
+const fmt = (o) => { const d = new Date(BASE); d.setDate(d.getDate() + o); return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }); };
+const PLANTS = [
+  { id: 'ott', name: 'Ottoline', species: 'Boston fern', room: 'Bedroom', every: 3, last: 4, amount: '200 ml', light: 'Medium', note: 'Likes the bathroom on shower days. Keep soil lightly moist, never soggy.' },
+  { id: 'mon', name: 'Big Monstera', species: 'Monstera deliciosa', room: 'Living room', every: 7, last: 7, amount: '400 ml', light: 'Bright', note: 'Wipe the leaves monthly. A new leaf is unfurling. Leave it be.' },
+  { id: 'fig', name: 'Figgy', species: 'Fiddle-leaf fig', room: 'Living room', every: 9, last: 10, amount: '350 ml', light: 'Bright', note: 'Dislikes being moved. Give a quarter turn toward the window each watering.' },
+  { id: 'gol', name: 'Goldie', species: 'Golden pothos', room: 'Kitchen', every: 7, last: 3, amount: '250 ml', light: 'Any', note: 'Trailing past the shelf now. Cuttings root easily in a glass of water.' },
+  { id: 'pin', name: 'Pinstripe', species: 'Calathea ornata', room: 'Bedroom', every: 5, last: 2, amount: '200 ml', light: 'Medium', note: 'Filtered water only. Tap water browns the leaf tips.' },
+  { id: 'ros', name: 'Rosemary', species: 'Salvia rosmarinus', room: 'Balcony', every: 4, last: 2, amount: '300 ml', light: 'Full sun', note: 'Let the top inch dry out between drinks. Bring indoors below 5°C.' },
+  { id: 'sgt', name: 'Sergeant', species: 'Snake plant', room: 'Living room', every: 21, last: 6, amount: '200 ml', light: 'Any', note: 'Thrives on neglect. Water only when the soil is fully dry.' },
+  { id: 'zed', name: 'Zed', species: 'ZZ plant', room: 'Bedroom', every: 18, last: 12, amount: '250 ml', light: 'Low', note: 'Its rhizomes store water. When unsure, wait a week.' },
+];
+const NUM = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight'];
+const RANGES = [
+  { id: 'wkd', label: 'Weekend', sub: '4 days', start: 2, days: 4 },
+  { id: '1w', label: 'A week', sub: '7 days', start: 3, days: 7 },
+  { id: '2w', label: 'Two weeks', sub: '14 days', start: 3, days: 14 },
+];
+const D_QUEUE = [
+  { id: 'ott', msg: "She's a day past her usual. Water slowly at the base until it runs through the drainage hole, about 200 ml." },
+  { id: 'fig', msg: "Figgy has been waiting since yesterday. Give 350 ml, then a quarter turn toward the window." },
+  { id: 'mon', msg: "Right on schedule. A generous 400 ml, then let the excess drain before it goes back on the saucer." },
+];
+const DKMAP = { '#1E211D': '#ECEFE9', '#F6F4EF': '#0F120F', '#FCFBF8': '#171C17', 'rgba(30,33,29,.14)': 'rgba(236,239,233,.14)', 'rgba(30,33,29,.1)': 'rgba(236,239,233,.1)', '#B5683F': '#E0A27C', '#3E6B4C': '#8FCB9C' };
+const dk = (v) => typeof v === 'string' ? (DKMAP[v] || v) : Array.isArray(v) ? v.map(dk) : (v && typeof v === 'object' && !React.isValidElement(v)) ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, typeof x === 'function' ? x : dk(x)])) : v;
+const listNames = (a) => a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+
+class Component extends DCLogic {
+  state = {
+    screen: 'today', plants: PLANTS.map(p => ({ ...p })), completed: [], completing: null, snoozed: [], mistDone: false,
+    toast: null, selId: null, from: 'today', room: 'All', range: '1w', sitter: 'Sam', awayStep: 'plan', copied: false,
+    bLevels: { ott: .08, mon: .18, fig: .12, gol: .58, pin: .7 }, cDay: 2, cDone: {}, dIdx: 0, dLeaving: null,
+  };
+  scrollRef = React.createRef(); scrollRef2 = React.createRef();
+  componentDidMount() { this.applyStart(); }
+  componentDidUpdate(prev) { if (prev.startScreen !== this.props.startScreen) this.applyStart(); }
+  applyStart() { const s = { Today: 'today', Plants: 'plants', Away: 'away' }[this.props.startScreen]; if (s) this.go(s); }
+  go(screen, extra) { this.setState({ screen, ...(extra || {}) }); [this.scrollRef, this.scrollRef2].forEach(r => r.current && (r.current.scrollTop = 0)); }
+  premium() { return (this.props.tone ?? 'Premium') === 'Premium'; }
+  showToast(text, undo) {
+    clearTimeout(this._t);
+    this.setState({ toast: { text, undo } });
+    this._t = setTimeout(() => this.setState({ toast: null }), 4000);
+  }
+  snapshot() { const { plants, completed, mistDone, snoozed } = this.state; return { plants, completed, mistDone, snoozed }; }
+  water(id, viaTask) {
+    const snap = this.snapshot();
+    const p = this.state.plants.find(x => x.id === id);
+    this.setState(s => ({
+      plants: s.plants.map(x => x.id === id ? { ...x, last: 0 } : x),
+      completed: s.completed.some(c => c.id === 'w-' + id) ? s.completed : [...s.completed, { id: 'w-' + id, title: (this.premium() ? 'Watered ' : 'Water ') + p.name, label: 'Just now' }],
+    }));
+    this.showToast(this.premium() ? `${p.name} is watered. Next drink ${fmt(p.every)}.` : `Done. Next: ${fmt(p.every)}.`, snap);
+  }
+  tasks() {
+    const { plants, snoozed, mistDone, completing } = this.state;
+    const t = plants.filter(p => p.last >= p.every && !snoozed.includes(p.id)).map(p => {
+      const late = p.last - p.every;
+      return { id: 'w-' + p.id, plantId: p.id, kind: 'water', title: p.name, meta: `Water · ${p.amount} · ${p.room}`, when: late <= 0 ? 'Due today' : `${late} day${late > 1 ? 's' : ''} late`, late: late > 0 };
+    });
+    if (!mistDone && !snoozed.includes('mist')) t.push({ id: 'm-pin', plantId: 'pin', kind: 'mist', title: 'Pinstripe', meta: 'Mist the leaves · Bedroom', when: 'This evening', late: false });
+    t.sort((a, b) => b.late - a.late);
+    return t.map(x => ({
+      ...x, whenColor: x.late ? '#B5683F' : '#3E6B4C', checking: completing === x.id, idle: completing !== x.id,
+      onOpen: () => this.go('detail', { selId: x.plantId, from: 'today' }),
+      onSnooze: (e) => { e.stopPropagation(); const snap = this.snapshot(); this.setState(s => ({ snoozed: [...s.snoozed, x.kind === 'mist' ? 'mist' : x.plantId] })); this.showToast(this.premium() ? `${x.title} can wait until tomorrow.` : 'Moved to tomorrow.', snap); },
+      onCheck: () => {
+        if (this.state.completing) return;
+        this.setState({ completing: x.id });
+        setTimeout(() => {
+          this.setState({ completing: null });
+          if (x.kind === 'water') this.water(x.plantId, true);
+          else { const snap = this.snapshot(); this.setState(s => ({ mistDone: true, completed: [...s.completed, { id: x.id, title: 'Misted Pinstripe', label: 'Just now' }] })); this.showToast(this.premium() ? 'Pinstripe is misted. Lovely.' : 'Done.', snap); }
+        }, 450);
+      },
+    }));
+  }
+  awayPlan() {
+    const r = RANGES.find(x => x.id === this.state.range);
+    const byDay = {}; const need = [], fine = [], before = [];
+    this.state.plants.forEach(p => {
+      if (p.last + r.start >= p.every) before.push(p.name);
+      const atDep = (p.last + r.start) >= p.every ? 0 : p.last + r.start;
+      let any = false;
+      for (let i = 1; i <= r.days; i++) if ((atDep + i) % p.every === 0) { (byDay[i] = byDay[i] || []).push(p); any = true; }
+      (any ? need : fine).push(p.name);
+    });
+    const visits = Object.keys(byDay).map(Number).sort((a, b) => a - b).map(i => ({
+      date: fmt(r.start + i), names: byDay[i].map(p => p.name).join(', '),
+      detail: byDay[i].map(p => `${p.name} ${p.amount}`).join(' · '),
+    }));
+    return { r, visits, need, fine, before };
+  }
+  renderVals() {
+    const v = this.renderBase();
+    return { ...v, dkTabs: dk(v.tabs), dkRooms: dk(v.rooms), dkRanges: dk(v.ranges), dkTasks: dk(v.tasks), dkPlantCards: dk(v.plantCards), dkLastColor: dk(v.sel.lastColor) };
+  }
+  renderBase() {
+    const st = this.state, P = this.premium();
+    const tasks = this.tasks();
+    const lateOne = tasks.find(t => t.late);
+    const tomorrow = st.plants.filter(p => p.every - p.last === 1 || st.snoozed.includes(p.id)).map(p => p.name);
+    if (st.snoozed.includes('mist')) tomorrow.push('Pinstripe (mist)');
+    const sel = st.plants.find(p => p.id === st.selId) || st.plants[0];
+    const left = sel.every - sel.last;
+    const rooms = ['All', 'Living room', 'Bedroom', 'Kitchen', 'Balcony'];
+    const plantList = st.plants.filter(p => st.room === 'All' || p.room === st.room);
+    const ap = this.awayPlan();
+    const dueCount = tasks.length;
+    // 1b
+    const bOrder = ['ott', 'fig', 'mon', 'gol', 'pin'];
+    const bLow = bOrder.filter(k => st.bLevels[k] < .25).length;
+    // 1c
+    const dayTasks = (o) => st.plants.flatMap(p => {
+      if (o < 0) return p.last === -o ? [{ p, past: true }] : [];
+      const n = Math.max(0, p.every - p.last);
+      return (o >= n && (o - n) % p.every === 0) ? [{ p, past: false }] : [];
+    });
+    const cDays = [-2, -1, 0, 1, 2, 3, 4].map((o, i) => {
+      const ts = dayTasks(o); const selD = st.cDay === i; const isToday = o === 0;
+      return {
+        letter: 'MTWTFSS'[i], num: 26 + i > 31 ? 26 + i - 31 : 26 + i,
+        dots: ts.slice(0, 3).map(() => ({ c: selD ? '#FAFAF8' : (o < 0 ? '#BDBDB8' : '#2F9E5B') })),
+        bg: selD ? '#141414' : 'transparent', color: selD ? '#FAFAF8' : '#141414', border: isToday && !selD ? '#141414' : (selD ? '#141414' : '#E6E6E2'),
+        onPick: () => this.setState({ cDay: i }),
+      };
+    });
+    const cOff = st.cDay - 2;
+    const cRows = dayTasks(cOff).map(({ p, past }) => {
+      const key = cOff + p.id; const done = past || !!st.cDone[key];
+      return {
+        kind: 'Water', name: p.name, room: p.room, light: p.light, amount: p.amount.replace(' ', '').toUpperCase(),
+        mark: done ? '✓' : '', boxBg: done ? '#2F9E5B' : 'transparent', boxBorder: done ? '#2F9E5B' : '#BDBDB8',
+        nameColor: done ? '#8E8E89' : '#141414', amtColor: done ? '#BDBDB8' : '#141414',
+        onToggle: () => !past && this.setState(s => ({ cDone: { ...s.cDone, [key]: !s.cDone[key] } })),
+      };
+    });
+    // 1d
+    const dCards = D_QUEUE.map((q, i) => ({ q, i })).filter(({ i }) => i >= st.dIdx && i < st.dIdx + 3).map(({ q, i }) => {
+      const p = PLANTS.find(x => x.id === q.id); const depth = i - st.dIdx; const leaving = depth === 0 && st.dLeaving;
+      return {
+        name: p.name, species: p.species, msg: q.msg, isTop: depth === 0 && !st.dLeaving, z: 10 - depth,
+        transform: leaving ? (st.dLeaving === 'done' ? 'translate(115%, -20px) rotate(10deg)' : 'translate(-115%, -20px) rotate(-10deg)') : `translateY(${depth * -14}px) scale(${1 - depth * .05})`,
+        opacity: leaving ? 0 : (depth > 1 ? .6 : 1),
+      };
+    }).reverse();
+    const dAdvance = (how) => { this.setState({ dLeaving: how }); setTimeout(() => this.setState(s => ({ dIdx: s.dIdx + 1, dLeaving: null })), 380); };
+    const dLeft = D_QUEUE.length - st.dIdx;
+
+    return {
+      scrollRef: this.scrollRef, scrollRef2: this.scrollRef2,
+      isToday: st.screen === 'today', isPlants: st.screen === 'plants', isDetail: st.screen === 'detail',
+      isAwayPlan: st.screen === 'away' && st.awayStep === 'plan', isAwayShared: st.screen === 'away' && st.awayStep === 'shared',
+      showTabs: st.screen !== 'detail',
+      tabs: [['today', 'Today'], ['plants', 'Plants'], ['away', 'Away']].map(([k, l]) => {
+        const on = st.screen === k || (st.screen === 'detail' && k === st.from);
+        return { label: l, bg: on ? '#1E211D' : 'transparent', color: on ? '#F6F4EF' : '#1E211D', hasBadge: k === 'today' && dueCount > 0 && !on, badge: dueCount, onPick: () => this.go(k) };
+      }),
+      headline: dueCount === 0 ? (P ? 'All tended.' : 'All done') : P ? `${NUM[dueCount]} ${dueCount === 1 ? 'plant would' : 'plants would'} like your attention.` : `${dueCount} task${dueCount > 1 ? 's' : ''} today`,
+      subline: dueCount === 0 ? (P ? 'Nothing else needs you today.' : 'No tasks left.') : lateOne ? (P ? `${lateOne.title} has waited longest. Start there.` : `${lateOne.title} is overdue.`) : (P ? 'Everything is on schedule.' : 'All on schedule.'),
+      tasks, allDone: dueCount === 0, emptyTitle: P ? 'Enjoy the quiet.' : 'Nothing due',
+      laterLabel: P ? 'Later' : 'Snooze',
+      completed: st.completed, hasCompleted: st.completed.length > 0, doneLabel: P ? 'Tended today' : 'Done',
+      showTomorrow: tomorrow.length > 0, tomorrowNames: tomorrow.join(', '), tomorrowLine: tomorrow.length ? `Tomorrow: ${tomorrow.join(', ')}` : 'Nothing due tomorrow either.',
+      plantsTitle: P ? 'Your collection' : 'Plants', plantCountLine: `${st.plants.length} plants · 4 rooms`,
+      rooms: rooms.map(r => ({ label: r, bg: st.room === r ? '#1E211D' : 'transparent', color: st.room === r ? '#F6F4EF' : '#1E211D', border: st.room === r ? '#1E211D' : 'rgba(30,33,29,.14)', onPick: () => this.setState({ room: r }) })),
+      plantCards: plantList.map(p => {
+        const d = p.every - p.last;
+        return {
+          name: p.name, species: p.species,
+          status: d <= 0 ? (P ? 'Thirsty now' : 'Water now') : d === 1 ? 'Water tomorrow' : `Water in ${d} days`,
+          statusColor: d <= 0 ? '#B5683F' : '#3E6B4C', fill: Math.max(4, Math.round((1 - p.last / p.every) * 100)) + '%',
+          onOpen: () => this.go('detail', { selId: p.id, from: 'plants' }),
+        };
+      }),
+      sel: {
+        ...sel, everyText: `Every ${sel.every} days`,
+        lastText: sel.last === 0 ? 'Today' : sel.last === 1 ? 'Yesterday' : `${sel.last} days ago`, lastColor: left <= 0 ? '#B5683F' : '#1E211D',
+        canWater: sel.last > 0, wateredToday: sel.last === 0,
+        waterLabel: left <= 0 ? (P ? `Water ${sel.name} now` : 'Mark watered') : (P ? `Watered early? Log it` : 'Mark watered'),
+        nextText: `Watered. Next drink ${fmt(sel.every)}`,
+        log: [0, 1, 2].map(k => ({ what: k === 1 && sel.id === 'mon' ? 'Watered · leaves wiped' : `Watered · ${sel.amount}`, when: fmt(-(sel.last + k * sel.every)) })),
+      },
+      backLabel: st.from === 'today' ? 'Today' : 'Plants', goBack: () => this.go(st.from),
+      waterSel: () => this.water(sel.id),
+      awayTitle: P ? 'Leave them in good hands.' : 'Going away?', awaySub: P ? "Tell us how long. We'll write your sitter a plan for each visit." : 'Pick dates and share a care plan.',
+      ranges: RANGES.map(r => ({ ...r, bg: st.range === r.id ? '#1E211D' : '#FCFBF8', color: st.range === r.id ? '#F6F4EF' : '#1E211D', border: st.range === r.id ? '#1E211D' : 'rgba(30,33,29,.1)', onPick: () => this.setState({ range: r.id }) })),
+      rangeDates: `${fmt(ap.r.start + 1)} – ${fmt(ap.r.start + ap.r.days)}`,
+      sitter: st.sitter, onSitter: (e) => this.setState({ sitter: e.target.value }),
+      visits: ap.visits, visitSummary: `${ap.visits.length} visit${ap.visits.length === 1 ? '' : 's'}`, plantSummary: `${ap.need.length} of ${st.plants.length} plants need care`,
+      hasBefore: ap.before.length > 0, beforeLine: `water ${listNames(ap.before)} the evening before.`,
+      hasFine: ap.fine.length > 0, fineLine: listNames(ap.fine) + '.',
+      createLabel: `Create plan for ${st.sitter.trim() || 'your sitter'}`,
+      createHandoff: () => this.go('away', { awayStep: 'shared', copied: false }),
+      letterTitle: P ? `${st.sitter.trim() || 'Hello'}, thank you.` : `Plan for ${st.sitter.trim() || 'sitter'}`,
+      letterBody: `${ap.visits.length} short visits between ${fmt(ap.r.start + 1)} and ${fmt(ap.r.start + ap.r.days)}. Room-temperature water, poured slowly at the base.`,
+      copyLabel: st.copied ? '✓ Link copied' : 'Copy link to share', copyLink: () => this.setState({ copied: true }),
+      editPlan: () => this.go('away', { awayStep: 'plan' }),
+      hasToast: !!st.toast, toastText: st.toast ? st.toast.text : '', toastUndo: !!(st.toast && st.toast.undo),
+      undo: () => { clearTimeout(this._t); this.setState({ ...st.toast.undo, toast: null }); },
+      // 1b
+      bHeadline: bLow === 0 ? 'Everyone is drinking well.' : `${NUM[bLow]} ${bLow === 1 ? 'is' : 'are'} running dry.`,
+      bStems: bOrder.map(k => {
+        const l = st.bLevels[k]; const low = l < .25; const p = PLANTS.find(x => x.id === k);
+        return { name: p.name.replace('Big ', ''), pct: Math.round(l * 100) + '%', h: `calc(${Math.max(6, l * 100)}% - 8px)`, color: low ? '#D9946B' : '#7FBF8E', color2: low ? '#F0B990' : '#B4E3BF', glow: low ? 'rgba(217,148,107,.35)' : 'rgba(127,191,142,.3)', onTap: () => this.setState(s => ({ bLevels: { ...s.bLevels, [k]: s.bLevels[k] > .95 ? .1 : 1 } })) };
+      }),
+      // 1c
+      cDays, cRows, cEmpty: cRows.length === 0,
+      cDayLabel: fmt(cOff).toUpperCase() + (cOff === 0 ? ' · TODAY' : ''), cCount: `${cRows.length} TASK${cRows.length === 1 ? '' : 'S'}`,
+      // 1d
+      dCards, dFinished: st.dIdx >= D_QUEUE.length,
+      dProgress: st.dIdx >= D_QUEUE.length ? 'Done' : `${st.dIdx + 1} of ${D_QUEUE.length}`,
+      dHeadline: dLeft === 0 ? 'All tended. Rest easy.' : dLeft === 3 ? 'Three to tend, one at a time.' : `${NUM[dLeft]} more to go.`,
+      dDone: () => dAdvance('done'), dSkip: () => dAdvance('skip'), dReset: () => this.setState({ dIdx: 0, dLeaving: null }),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>body{margin:0;background:#0A0C0A;font-family:'Geist',system-ui,sans-serif;-webkit-font-smoothing:antialiased}a{color:#8FCB9C}a:hover{color:#B4E3BF}button{font-family:inherit;cursor:pointer}input{font-family:inherit}[data-om-starter] ::-webkit-scrollbar{display:none}</style></helmet>
+<div style="min-height:100vh;box-sizing:border-box;background:#0A0C0A;color:#ECEFE9;font-family:'Geist',sans-serif;padding:40px 32px;display:flex;flex-wrap:wrap;gap:40px;justify-content:center;align-items:flex-start">
+<div style="width:220px;display:flex;flex-direction:column;gap:18px;padding-top:12px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-family:'Newsreader',serif;font-size:34px;line-height:1">Tend</div>
+<div style="font-size:13px;line-height:1.5;color:#8C968C">Full iOS prototype. Everything is tappable. Use these to jump straight to a screen.</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px">
+<sc-for list="{{ jumps }}" as="j" hint-placeholder-count="7">
+<button onClick="{{ j.onGo }}" style="text-align:left;height:38px;padding:0 12px;border-radius:10px;border:1px solid {{ j.border }};background:{{ j.bg }};color:{{ j.color }};font-size:14px;font-weight:500" style-hover="border-color:rgba(236,239,233,.2)">{{ j.label }}</button>
+</sc-for>
+</div>
+<div style="font:500 10px/1.6 'JetBrains Mono',monospace;color:#5E685E;letter-spacing:.04em">PHOTOS ARE PLACEHOLDERS: DROP IN REAL PLANT SHOTS</div>
+</div>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+<div style="position:relative;height:100%;background:#0F120F;color:#ECEFE9;font-family:'Geist',sans-serif;overflow:hidden">
+<div style="position:absolute;top:-140px;right:-120px;width:440px;height:440px;border-radius:50%;background:radial-gradient(circle,rgba(110,170,120,.15),transparent 65%);pointer-events:none"></div>
+<div ref="{{ scrollRef }}" style="position:relative;height:100%;overflow-y:auto;scrollbar-width:none">
+
+<sc-if value="{{ isOb0 }}" hint-placeholder-val="{{ false }}">
+<div style="min-height:874px;box-sizing:border-box;padding:64px 22px 56px;display:flex;flex-direction:column;gap:26px">
+<div style="height:430px;border-radius:30px;background:repeating-linear-gradient(135deg,#1C221C 0 7px,#171D17 7px 14px);display:flex;align-items:flex-end;padding:16px;box-sizing:border-box;font:500 10px 'JetBrains Mono',monospace;color:#5E685E;text-transform:uppercase;letter-spacing:.06em;box-shadow:inset 0 -120px 80px -40px #0F120F">photo · lush windowsill at dusk</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:50px;line-height:.98">Plants, kept well.</h1>
+<p style="margin:0;font-size:16px;line-height:1.5;color:#A3ACA3;text-wrap:pretty">Tend learns each plant's rhythm and only tells you what matters today. It also briefs whoever minds them while you're away.</p>
+</div>
+<div style="margin-top:auto;display:flex;flex-direction:column;gap:6px">
+<button onClick="{{ obNext }}" style="height:56px;border:none;border-radius:18px;background:#3F6B4A;color:#ECEFE9;font-size:16px;font-weight:600;box-shadow:0 0 30px rgba(127,191,142,.25)" style-hover="background:#4A7D57">Get started</button>
+<button onClick="{{ obFinish }}" style="height:44px;border:none;background:transparent;color:#A3ACA3;font-size:15px;font-weight:500">I already have an account</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isOb1 }}" hint-placeholder-val="{{ false }}">
+<div style="min-height:874px;box-sizing:border-box;padding:70px 22px 56px;display:flex;flex-direction:column;gap:26px">
+<div style="display:flex;gap:6px"><span style="width:22px;height:4px;border-radius:2px;background:#8FCB9C"></span><span style="width:22px;height:4px;border-radius:2px;background:rgba(236,239,233,.15)"></span></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:42px;line-height:1.02">How at home are you with plants?</h1>
+<p style="margin:0;font-size:15px;color:#A3ACA3">This changes how much we explain. You can change it later.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ levels }}" as="l" hint-placeholder-count="2">
+<button onClick="{{ l.onPick }}" style="text-align:left;padding:20px;border-radius:22px;border:1.5px solid {{ l.border }};background:{{ l.bg }};color:#ECEFE9;display:flex;flex-direction:column;gap:6px;box-shadow:{{ l.shadow }};transition:all .2s">
+<span style="font-family:'Newsreader',serif;font-size:26px">{{ l.title }}</span>
+<span style="font-size:14px;line-height:1.45;color:#A3ACA3">{{ l.body }}</span>
+</button>
+</sc-for>
+</div>
+<button onClick="{{ obNext }}" style="margin-top:auto;height:56px;border:none;border-radius:18px;background:#3F6B4A;color:#ECEFE9;font-size:16px;font-weight:600" style-hover="background:#4A7D57">Continue</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isOb2 }}" hint-placeholder-val="{{ false }}">
+<div style="min-height:874px;box-sizing:border-box;padding:70px 22px 56px;display:flex;flex-direction:column;gap:26px">
+<div style="display:flex;gap:6px"><span style="width:22px;height:4px;border-radius:2px;background:#8FCB9C"></span><span style="width:22px;height:4px;border-radius:2px;background:#8FCB9C"></span></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:42px;line-height:1.02">When should we nudge you?</h1>
+<p style="margin:0;font-size:15px;line-height:1.45;color:#A3ACA3">One quiet notification a day, and only when something's due.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ remindOpts }}" as="r" hint-placeholder-count="3">
+<button onClick="{{ r.onPick }}" style="display:flex;justify-content:space-between;align-items:center;height:60px;padding:0 20px;border-radius:18px;border:1.5px solid {{ r.border }};background:{{ r.bg }};color:#ECEFE9;font-size:16px;font-weight:600"><span>{{ r.label }}</span><span style="font:500 13px 'JetBrains Mono',monospace;color:{{ r.timeColor }}">{{ r.time }}</span></button>
+</sc-for>
+</div>
+<div style="padding:16px;border-radius:18px;background:#171C17;border:1px solid rgba(236,239,233,.07);display:flex;gap:12px;align-items:flex-start">
+<span style="flex:none;width:36px;height:36px;border-radius:9px;background:#3F6B4A;display:flex;align-items:center;justify-content:center;font-family:'Newsreader',serif;font-size:20px">T</span>
+<div style="display:flex;flex-direction:column;gap:2px;font-size:14px"><span style="font-weight:600">Tend · {{ remindTime }}</span><span style="color:#A3ACA3">Ottoline and Figgy would like a drink.</span></div>
+</div>
+<div style="margin-top:auto;display:flex;flex-direction:column;gap:6px">
+<button onClick="{{ obFinish }}" style="height:56px;border:none;border-radius:18px;background:#3F6B4A;color:#ECEFE9;font-size:16px;font-weight:600" style-hover="background:#4A7D57">Allow reminders</button>
+<button onClick="{{ obFinish }}" style="height:44px;border:none;background:transparent;color:#A3ACA3;font-size:15px;font-weight:500">Not now</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
+<div style="padding:70px 22px 150px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C">Wednesday, 28 October</div>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:42px;line-height:1.02;text-wrap:pretty">{{ headline }}</h1>
+<p style="margin:0;font-size:15px;line-height:1.45;color:#A3ACA3;text-wrap:pretty">{{ subline }}</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ tasks }}" as="t" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:14px;padding:12px 14px 12px 12px;background:#171C17;border:1px solid rgba(236,239,233,.07);border-radius:20px">
+<button onClick="{{ t.onOpen }}" style="flex:none;width:56px;height:56px;border:none;padding:0;border-radius:14px;background:repeating-linear-gradient(135deg,#1C221C 0 6px,#222A22 6px 12px);font:500 8px 'JetBrains Mono',monospace;color:#5E685E;text-transform:uppercase">photo</button>
+<div onClick="{{ t.onOpen }}" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;cursor:pointer">
+<div style="font-family:'Newsreader',serif;font-size:22px;line-height:1.1">{{ t.title }}</div>
+<div style="font-size:13px;color:#8C968C">{{ t.meta }}</div>
+<div style="display:flex;gap:10px;align-items:center;font-size:12px;font-weight:600">
+<span style="display:flex;align-items:center;gap:6px;color:{{ t.whenColor }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ t.whenColor }};box-shadow:0 0 8px {{ t.whenColor }}"></span>{{ t.when }}</span>
+<span onClick="{{ t.onSnooze }}" style="color:#7D867D;font-weight:500;text-decoration:underline;text-underline-offset:3px" style-hover="color:#ECEFE9">Later</span>
+</div>
+</div>
+<button onClick="{{ t.onCheck }}" aria-label="Mark done" style="flex:none;width:44px;height:44px;border:none;background:transparent;padding:0;display:flex;align-items:center;justify-content:center">
+<sc-if value="{{ t.checking }}" hint-placeholder-val="{{ false }}"><span style="width:32px;height:32px;border-radius:50%;background:#3F6B4A;box-shadow:0 0 18px rgba(127,191,142,.5);display:flex;align-items:center;justify-content:center;color:#ECEFE9;font-size:16px;font-weight:700">✓</span></sc-if>
+<sc-if value="{{ t.idle }}" hint-placeholder-val="{{ true }}"><span style="width:30px;height:30px;border-radius:50%;border:1.5px solid #4A544A;box-sizing:border-box" style-hover="border-color:#8FCB9C;background:rgba(143,203,156,.08)"></span></sc-if>
+</button>
+</div>
+</sc-for>
+<sc-if value="{{ allDone }}" hint-placeholder-val="{{ false }}">
+<div style="padding:30px 22px;border-radius:20px;border:1px dashed rgba(236,239,233,.16);text-align:center;display:flex;flex-direction:column;gap:6px">
+<div style="font-family:'Newsreader',serif;font-size:26px">Enjoy the quiet.</div>
+<div style="font-size:14px;color:#8C968C">{{ tomorrowLine }}</div>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{ showTip }}" hint-placeholder-val="{{ true }}">
+<div style="padding:16px 18px;border-radius:20px;background:linear-gradient(180deg,rgba(63,107,74,.28),rgba(63,107,74,.12));border:1px solid rgba(143,203,156,.18);display:flex;flex-direction:column;gap:6px">
+<div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8FCB9C">Beginner's tip</div>
+<div style="font-size:14px;line-height:1.5;color:#D5DAD2;text-wrap:pretty">Not sure? Push a finger 2 cm into the soil. Dry means water. Damp means wait a day.</div>
+</div>
+</sc-if>
+<sc-if value="{{ hasCompleted }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C;padding:0 4px 8px">Tended today</div>
+<sc-for list="{{ completed }}" as="c" hint-placeholder-count="1">
+<div style="display:flex;align-items:center;gap:12px;padding:10px 4px;border-top:1px solid rgba(236,239,233,.07)">
+<span style="width:22px;height:22px;border-radius:50%;background:rgba(143,203,156,.14);color:#8FCB9C;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</span>
+<span style="flex:1;font-size:15px;color:#7D867D;text-decoration:line-through;text-decoration-color:rgba(236,239,233,.25)">{{ c.title }}</span>
+<span style="font-size:12px;color:#7D867D">Just now</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ showTomorrow }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:16px 4px 0;border-top:1px solid rgba(236,239,233,.1);font-size:14px"><span style="font-weight:600">Tomorrow</span><span style="color:#8C968C;text-align:right">{{ tomorrowNames }}</span></div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlants }}" hint-placeholder-val="{{ false }}">
+<div style="padding:70px 0 150px;display:flex;flex-direction:column;gap:18px">
+<div style="padding:0 22px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C">{{ plantCountLine }}</div>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:42px;line-height:1.02">Your collection</h1>
+</div>
+<div style="display:flex;padding:3px;border-radius:999px;background:#171C17;border:1px solid rgba(236,239,233,.08)">
+<sc-for list="{{ views }}" as="vw" hint-placeholder-count="2">
+<button onClick="{{ vw.onPick }}" style="height:32px;padding:0 12px;border:none;border-radius:999px;background:{{ vw.bg }};color:{{ vw.color }};font-size:13px;font-weight:600">{{ vw.label }}</button>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;gap:8px;overflow-x:auto;padding:0 22px;scrollbar-width:none">
+<sc-for list="{{ rooms }}" as="r" hint-placeholder-count="5">
+<button onClick="{{ r.onPick }}" style="flex:none;height:36px;padding:0 15px;border-radius:999px;border:1px solid {{ r.border }};background:{{ r.bg }};color:{{ r.color }};font-size:14px;font-weight:500;white-space:nowrap">{{ r.label }}</button>
+</sc-for>
+</div>
+<sc-if value="{{ isGrid }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 22px">
+<sc-for list="{{ plantCards }}" as="p" hint-placeholder-count="4">
+<div onClick="{{ p.onOpen }}" style="display:flex;flex-direction:column;gap:10px;padding:8px 8px 14px;background:#171C17;border:1px solid rgba(236,239,233,.07);border-radius:20px;cursor:pointer;transition:transform .15s" style-hover="transform:translateY(-2px)">
+<div style="height:150px;border-radius:14px;background:repeating-linear-gradient(135deg,#1C221C 0 6px,#222A22 6px 12px);display:flex;align-items:flex-end;padding:8px;box-sizing:border-box;font:500 8.5px/1.2 'JetBrains Mono',monospace;color:#5E685E;text-transform:uppercase">{{ p.species }}</div>
+<div style="padding:0 6px;display:flex;flex-direction:column;gap:6px">
+<div style="font-family:'Newsreader',serif;font-size:21px;line-height:1">{{ p.name }}</div>
+<div style="font-size:12px;font-weight:600;color:{{ p.statusColor }}">{{ p.status }}</div>
+<div style="height:3px;border-radius:2px;background:rgba(236,239,233,.08)"><div style="height:100%;width:{{ p.fill }};background:{{ p.statusColor }};border-radius:2px;box-shadow:0 0 8px {{ p.glow }};transition:width .6s"></div></div>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ isShelf }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;gap:18px;overflow-x:auto;padding:10px 22px 4px;scrollbar-width:none">
+<sc-for list="{{ plantCards }}" as="s" hint-placeholder-count="5">
+<div onClick="{{ s.onOpen }}" style="flex:none;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;width:62px">
+<div style="font:500 11px 'JetBrains Mono',monospace;color:{{ s.statusColor }}">{{ s.pct }}</div>
+<div style="position:relative;width:46px;height:260px;border-radius:23px;background:#181D18;border:1px solid rgba(236,239,233,.06);overflow:hidden">
+<div style="position:absolute;left:4px;right:4px;bottom:4px;height:{{ s.h }};border-radius:19px;background:linear-gradient(to top,{{ s.statusColor }},{{ s.color2 }});box-shadow:0 0 24px {{ s.glow }};transition:height 1s cubic-bezier(.2,.8,.2,1)"></div>
+</div>
+<div style="font-family:'Newsreader',serif;font-size:16px;text-align:center;line-height:1.05">{{ s.short }}</div>
+</div>
+</sc-for>
+</div>
+<div style="margin:0 22px;font-size:13px;line-height:1.5;color:#8C968C">Soil moisture is estimated from each plant's schedule and room. Tap a stem for details.</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+<div style="padding:62px 0 60px;display:flex;flex-direction:column;gap:20px">
+<div style="padding:0 16px"><button onClick="{{ goBack }}" style="height:40px;padding:0 16px 0 12px;border-radius:999px;border:1px solid rgba(236,239,233,.1);background:rgba(28,34,28,.9);font-size:15px;font-weight:500;color:#ECEFE9;display:flex;align-items:center;gap:6px"><span style="font-size:20px;line-height:1;margin-top:-2px">‹</span>{{ backLabel }}</button></div>
+<div style="margin:0 16px;height:300px;border-radius:26px;background:repeating-linear-gradient(135deg,#1C221C 0 7px,#171D17 7px 14px);display:flex;align-items:center;justify-content:center;font:500 10px 'JetBrains Mono',monospace;color:#5E685E;text-transform:uppercase;letter-spacing:.06em">photo · {{ sel.species }}</div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:4px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C">{{ sel.room }}</div>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:46px;line-height:1">{{ sel.name }}</h1>
+<div style="font-family:'Newsreader',serif;font-style:italic;font-size:19px;color:#8C968C">{{ sel.species }}</div>
+</div>
+<div style="margin:0 22px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#A3ACA3">Estimated soil moisture</span><span style="font:500 12px 'JetBrains Mono',monospace;color:{{ sel.color }}">{{ sel.pct }}</span></div>
+<div style="height:8px;border-radius:4px;background:#181D18;border:1px solid rgba(236,239,233,.06)"><div style="height:100%;width:{{ sel.pct }};border-radius:4px;background:{{ sel.color }};box-shadow:0 0 14px {{ sel.glow }};transition:width .8s cubic-bezier(.2,.8,.2,1)"></div></div>
+</div>
+<div style="margin:0 22px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid rgba(236,239,233,.1);border-bottom:1px solid rgba(236,239,233,.1)">
+<div style="padding:14px 10px 14px 0;display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#7D867D">Amount</span><span style="font-size:15px;font-weight:500">{{ sel.amount }}</span></div>
+<div style="padding:14px 10px;border-left:1px solid rgba(236,239,233,.1);display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#7D867D">Light</span><span style="font-size:15px;font-weight:500">{{ sel.light }}</span></div>
+<div style="padding:14px 0 14px 10px;border-left:1px solid rgba(236,239,233,.1);display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#7D867D">Last drink</span><span style="font-size:15px;font-weight:500;color:{{ sel.lastColor }}">{{ sel.lastText }}</span></div>
+</div>
+<div style="padding:0 22px">
+<sc-if value="{{ sel.canWater }}" hint-placeholder-val="{{ true }}"><button onClick="{{ waterSel }}" style="width:100%;height:56px;border:none;border-radius:18px;background:#3F6B4A;color:#ECEFE9;font-size:16px;font-weight:600;box-shadow:0 0 30px rgba(127,191,142,.2)" style-hover="background:#4A7D57" style-active="transform:scale(.98)">{{ sel.waterLabel }}</button></sc-if>
+<sc-if value="{{ sel.wateredToday }}" hint-placeholder-val="{{ false }}"><div style="height:56px;border-radius:18px;background:rgba(143,203,156,.1);color:#8FCB9C;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center">✓ {{ sel.nextText }}</div></sc-if>
+</div>
+<div style="margin:0 22px;padding:16px 18px;border-radius:20px;background:#171C17;border:1px solid rgba(236,239,233,.07);display:flex;align-items:center;justify-content:space-between;gap:12px">
+<div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:600">Water every {{ sel.every }} days</span><span style="font-size:12px;color:#8C968C">{{ sel.scheduleHint }}</span></div>
+<div style="display:flex;align-items:center;gap:4px">
+<button onClick="{{ everyMinus }}" aria-label="Fewer days" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(236,239,233,.12);background:transparent;color:#ECEFE9;font-size:20px" style-hover="background:rgba(236,239,233,.06)">−</button>
+<button onClick="{{ everyPlus }}" aria-label="More days" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(236,239,233,.12);background:transparent;color:#ECEFE9;font-size:20px" style-hover="background:rgba(236,239,233,.06)">+</button>
+</div>
+</div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C">Notes</div>
+<p style="margin:0;font-family:'Newsreader',serif;font-size:21px;line-height:1.3;text-wrap:pretty">{{ sel.note }}</p>
+</div>
+<div style="padding:0 22px;display:flex;flex-direction:column">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C;padding-bottom:8px">Care history</div>
+<sc-for list="{{ sel.log }}" as="l" hint-placeholder-count="3">
+<div style="display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid rgba(236,239,233,.08);font-size:14px"><span>{{ l.what }}</span><span style="color:#8C968C">{{ l.when }}</span></div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAwayPlan }}" hint-placeholder-val="{{ false }}">
+<div style="padding:70px 22px 150px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C">Plant-sitter hand-off</div>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:42px;line-height:1.02;text-wrap:pretty">Leave them in good hands.</h1>
+<p style="margin:0;font-size:15px;line-height:1.45;color:#A3ACA3">Tell us how long you're away. We'll write your sitter a plan for each visit.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;font-weight:600">How long</div>
+<div style="display:flex;gap:8px">
+<sc-for list="{{ ranges }}" as="r" hint-placeholder-count="3">
+<button onClick="{{ r.onPick }}" style="flex:1;padding:12px 8px;border-radius:16px;border:1px solid {{ r.border }};background:{{ r.bg }};color:{{ r.color }};display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:left"><span style="font-size:14px;font-weight:600">{{ r.label }}</span><span style="font-size:12px;opacity:.75">{{ r.sub }}</span></button>
+</sc-for>
+</div>
+<div style="font-size:13px;color:#8C968C">{{ rangeDates }}</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;font-weight:600">Who's looking after them</div>
+<input value="{{ sitter }}" onChange="{{ onSitter }}" placeholder="Sitter's name" style="height:52px;border-radius:16px;border:1px solid rgba(236,239,233,.14);background:#171C17;padding:0 16px;font-size:16px;color:#ECEFE9;outline:none" style-focus="border-color:#8FCB9C;box-shadow:0 0 0 3px rgba(143,203,156,.15)"></input>
+</div>
+<div style="display:flex;flex-direction:column;background:#171C17;border:1px solid rgba(236,239,233,.07);border-radius:20px;padding:16px 16px 6px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px"><span style="font-family:'Newsreader',serif;font-size:22px">{{ visitSummary }}</span><span style="font-size:12px;color:#8C968C">{{ plantSummary }}</span></div>
+<sc-for list="{{ visits }}" as="v" hint-placeholder-count="3">
+<div style="display:flex;gap:12px;padding:10px 0;border-top:1px solid rgba(236,239,233,.07);font-size:14px"><span style="flex:none;width:88px;font-weight:600">{{ v.date }}</span><span style="color:#A3ACA3">{{ v.names }}</span></div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.45;color:#A3ACA3">
+<sc-if value="{{ hasBefore }}" hint-placeholder-val="{{ true }}"><div><span style="font-weight:600;color:#E0A27C">Before you go · </span>{{ beforeLine }}</div></sc-if>
+<sc-if value="{{ hasFine }}" hint-placeholder-val="{{ true }}"><div><span style="font-weight:600;color:#ECEFE9">Fine on their own · </span>{{ fineLine }}</div></sc-if>
+</div>
+<button onClick="{{ createHandoff }}" style="height:56px;border:none;border-radius:18px;background:#ECEFE9;color:#0F120F;font-size:16px;font-weight:600" style-hover="background:#D5DAD2" style-active="transform:scale(.98)">{{ createLabel }}</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAwayShared }}" hint-placeholder-val="{{ false }}">
+<div style="padding:70px 22px 150px;display:flex;flex-direction:column;gap:20px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8FCB9C">✓ Hand-off ready</div>
+<div style="background:#171C17;border-radius:24px;border:1px solid rgba(236,239,233,.08);box-shadow:0 20px 40px -24px rgba(0,0,0,.6);padding:26px 22px;display:flex;flex-direction:column;gap:16px">
+<div style="font-family:'Newsreader',serif;font-size:36px;line-height:1.02">{{ letterTitle }}</div>
+<div style="font-size:14px;color:#A3ACA3;line-height:1.45">{{ letterBody }}</div>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ visits }}" as="v" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;gap:3px;padding:12px 0;border-top:1px solid rgba(236,239,233,.08)"><span style="font-size:13px;font-weight:600">{{ v.date }}</span><span style="font-size:14px;color:#A3ACA3">{{ v.detail }}</span></div>
+</sc-for>
+</div>
+</div>
+<button onClick="{{ copyLink }}" style="height:56px;border:none;border-radius:18px;background:#3F6B4A;color:#ECEFE9;font-size:16px;font-weight:600" style-hover="background:#4A7D57">{{ copyLabel }}</button>
+<div style="display:flex;justify-content:center;gap:24px">
+<button onClick="{{ openSitter }}" style="height:44px;border:none;background:transparent;color:#8FCB9C;font-size:15px;font-weight:600">Preview as {{ sitterName }}</button>
+<button onClick="{{ editPlan }}" style="height:44px;border:none;background:transparent;color:#A3ACA3;font-size:15px;font-weight:500">Edit plan</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSitter }}" hint-placeholder-val="{{ false }}">
+<div style="padding:58px 0 60px;display:flex;flex-direction:column;gap:20px">
+<div style="margin:0 16px;padding:10px 12px 10px 16px;border-radius:14px;background:rgba(224,162,124,.12);border:1px solid rgba(224,162,124,.25);display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#E0A27C"><span>Previewing {{ sitterName }}'s link</span><button onClick="{{ closeSitter }}" style="height:32px;padding:0 12px;border-radius:999px;border:none;background:#E0A27C;color:#0F120F;font-size:13px;font-weight:700">Done</button></div>
+<div style="padding:0 22px;display:flex;flex-direction:column;gap:10px">
+<div style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8C968C">{{ rangeDates }}</div>
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:42px;line-height:1.02">Hi {{ sitterName }}. Here's everything.</h1>
+<p style="margin:0;font-size:15px;line-height:1.45;color:#A3ACA3">Tick plants off as you go so Alex knows they're looked after. No app needed.</p>
+</div>
+<div style="margin:0 22px;display:flex;justify-content:space-between;align-items:center;font-size:13px"><span style="color:#A3ACA3">{{ sitterProgress }}</span><span style="flex:1;margin-left:14px;height:4px;border-radius:2px;background:#181D18"><span style="display:block;height:100%;width:{{ sitterPct }};border-radius:2px;background:#8FCB9C;box-shadow:0 0 10px rgba(127,191,142,.5);transition:width .5s"></span></span></div>
+<sc-for list="{{ sitterVisits }}" as="v" hint-placeholder-count="3">
+<div style="margin:0 16px;background:#171C17;border:1px solid rgba(236,239,233,.07);border-radius:22px;padding:16px 16px 6px;display:flex;flex-direction:column">
+<div style="font-family:'Newsreader',serif;font-size:22px;padding-bottom:8px">{{ v.date }}</div>
+<sc-for list="{{ v.items }}" as="it" hint-placeholder-count="2">
+<div onClick="{{ it.onToggle }}" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid rgba(236,239,233,.07);cursor:pointer">
+<span style="flex:none;width:44px;height:44px;border-radius:12px;background:repeating-linear-gradient(135deg,#1C221C 0 5px,#222A22 5px 10px);font:500 7px 'JetBrains Mono',monospace;color:#5E685E;display:flex;align-items:center;justify-content:center">PHOTO</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:600;color:{{ it.nameColor }}">{{ it.name }} · {{ it.amount }}</span><span style="font-size:12px;color:#8C968C">{{ it.where }}</span></span>
+<span style="flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid {{ it.ring }};background:{{ it.fill }};color:#ECEFE9;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;box-sizing:border-box;box-shadow:{{ it.shadow }}">{{ it.mark }}</span>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAdd }}" hint-placeholder-val="{{ false }}">
+<div style="min-height:874px;box-sizing:border-box;padding:60px 22px 50px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<button onClick="{{ addCancel }}" style="height:40px;padding:0 4px;border:none;background:transparent;color:#A3ACA3;font-size:15px;font-weight:500">{{ addBackLabel }}</button>
+<span style="font-size:15px;font-weight:600">Add a plant</span>
+<span style="width:56px;text-align:right;font:500 11px 'JetBrains Mono',monospace;color:#7D867D">{{ addStepLabel }}</span>
+</div>
+
+<sc-if value="{{ isAddPhoto }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:20px;flex:1">
+<div style="position:relative;height:480px;border-radius:30px;background:repeating-linear-gradient(135deg,#1C221C 0 7px,#171D17 7px 14px);display:flex;align-items:center;justify-content:center;overflow:hidden">
+<div style="position:absolute;inset:60px 50px;border-radius:24px;border:1.5px solid {{ scanBorder }};box-shadow:0 0 40px {{ scanGlow }};transition:all .4s"></div>
+<div style="font:500 10px 'JetBrains Mono',monospace;color:#7D867D;text-transform:uppercase;letter-spacing:.06em;text-align:center">{{ scanText }}</div>
+</div>
+<div style="font-size:14px;line-height:1.5;color:#A3ACA3;text-align:center;text-wrap:pretty">Frame a few leaves in soft light. We'll suggest a species and a starting schedule.</div>
+<button onClick="{{ takePhoto }}" style="margin-top:auto;height:56px;border:none;border-radius:18px;background:#3F6B4A;color:#ECEFE9;font-size:16px;font-weight:600;box-shadow:0 0 30px rgba(127,191,142,.2)" style-hover="background:#4A7D57">{{ photoLabel }}</button>
+<button onClick="{{ skipPhoto }}" style="height:40px;border:none;background:transparent;color:#A3ACA3;font-size:15px;font-weight:500">Search by name instead</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAddId }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:18px;flex:1">
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02">{{ idHeadline }}</h1>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ suggestions }}" as="sg" hint-placeholder-count="3">
+<button onClick="{{ sg.onPick }}" style="display:flex;align-items:center;gap:14px;padding:10px 16px 10px 10px;border-radius:20px;border:1.5px solid {{ sg.border }};background:{{ sg.bg }};color:#ECEFE9;text-align:left;box-shadow:{{ sg.shadow }};transition:all .2s">
+<span style="flex:none;width:64px;height:64px;border-radius:14px;background:repeating-linear-gradient(135deg,#1C221C 0 6px,#222A22 6px 12px);font:500 7px 'JetBrains Mono',monospace;color:#5E685E;display:flex;align-items:center;justify-content:center">PHOTO</span>
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-family:'Newsreader',serif;font-size:22px">{{ sg.species }}</span><span style="font-family:'Newsreader',serif;font-style:italic;font-size:15px;color:#8C968C">{{ sg.latin }}</span></span>
+<span style="font:500 12px 'JetBrains Mono',monospace;color:{{ sg.confColor }}">{{ sg.conf }}</span>
+</button>
+</sc-for>
+</div>
+<button onClick="{{ toDetails }}" style="margin-top:auto;height:56px;border:none;border-radius:18px;background:#3F6B4A;color:#ECEFE9;font-size:16px;font-weight:600" style-hover="background:#4A7D57">Continue with {{ pickSpecies }}</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAddDetails }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:22px;flex:1">
+<h1 style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:40px;line-height:1.02">Make it yours.</h1>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;font-weight:600">Name</div>
+<input value="{{ addNick }}" onChange="{{ onNick }}" placeholder="{{ nickPlaceholder }}" style="height:52px;border-radius:16px;border:1px solid rgba(236,239,233,.14);background:#171C17;padding:0 16px;font-size:16px;color:#ECEFE9;outline:none" style-focus="border-color:#8FCB9C;box-shadow:0 0 0 3px rgba(143,203,156,.15)"></input>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;font-weight:600">Where it lives</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{ addRooms }}" as="r" hint-placeholder-count="4">
+<button onClick="{{ r.onPick }}" style="height:38px;padding:0 15px;border-radius:999px;border:1px solid {{ r.border }};background:{{ r.bg }};color:{{ r.color }};font-size:14px;font-weight:500">{{ r.label }}</button>
+</sc-for>
+</div>
+</div>
+<div style="padding:16px 18px;border-radius:20px;background:#171C17;border:1px solid rgba(236,239,233,.07);display:flex;align-items:center;justify-content:space-between;gap:12px">
+<div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:600">Water every {{ addEvery }} days</span><span style="font-size:12px;color:#8C968C">{{ addEveryHint }}</span></div>
+<div style="display:flex;gap:4px">
+<button onClick="{{ addMinus }}" aria-label="Fewer days" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(236,239,233,.12);background:transparent;color:#ECEFE9;font-size:20px">−</button>
+<button onClick="{{ addPlus }}" aria-label="More days" style="width:40px;height:40px;border-radius:12px;border:1px solid rgba(236,239,233,.12);background:transparent;color:#ECEFE9;font-size:20px">+</button>
+</div>
+</div>
+<div style="font-size:13px;line-height:1.5;color:#8C968C">{{ addCareLine }}</div>
+<button onClick="{{ addConfirm }}" style="margin-top:auto;height:56px;border:none;border-radius:18px;background:#3F6B4A;color:#ECEFE9;font-size:16px;font-weight:600;box-shadow:0 0 30px rgba(127,191,142,.2)" style-hover="background:#4A7D57">Add to collection</button>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+
+<sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;bottom:30px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:10px;z-index:20;pointer-events:none">
+<div style="display:flex;gap:4px;padding:5px;border-radius:999px;background:rgba(28,34,28,.82);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(236,239,233,.08);box-shadow:0 10px 30px -10px rgba(0,0,0,.6);pointer-events:auto">
+<sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="3">
+<button onClick="{{ tb.onPick }}" style="height:46px;padding:0 18px;border:none;border-radius:999px;background:{{ tb.bg }};color:{{ tb.color }};font-size:15px;font-weight:600;display:flex;align-items:center;gap:7px;transition:background .2s">{{ tb.label }}<sc-if value="{{ tb.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:9px;background:#E0A27C;color:#0F120F;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ tb.badge }}</span></sc-if></button>
+</sc-for>
+</div>
+<button onClick="{{ openAdd }}" aria-label="Add a plant" style="pointer-events:auto;width:58px;height:58px;border-radius:50%;border:none;background:#3F6B4A;color:#ECEFE9;font-size:28px;font-weight:300;line-height:1;box-shadow:0 0 24px rgba(127,191,142,.35),0 10px 30px -10px rgba(0,0,0,.6)" style-hover="background:#4A7D57">+</button>
+</div>
+</sc-if>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:16px;right:16px;bottom:104px;z-index:30;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:#ECEFE9;color:#0F120F;font-size:14px;box-shadow:0 12px 30px -10px rgba(0,0,0,.5)">
+<span style="flex:1">{{ toastText }}</span>
+<sc-if value="{{ toastUndo }}" hint-placeholder-val="{{ true }}"><button onClick="{{ undo }}" style="border:none;background:transparent;color:#3F6B4A;font-size:14px;font-weight:700;padding:4px">Undo</button></sc-if>
+</div>
+</sc-if>
+</div>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startAt&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Onboarding&quot;,&quot;Today&quot;],&quot;default&quot;:&quot;Onboarding&quot;,&quot;tsType&quot;:&quot;'Onboarding'|'Today'&quot;},&quot;plantsView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Grid&quot;,&quot;Shelf&quot;],&quot;default&quot;:&quot;Grid&quot;,&quot;tsType&quot;:&quot;'Grid'|'Shelf'&quot;}}">
+const BASE = new Date(2026, 9, 28);
+const fmt = (o) => { const d = new Date(BASE); d.setDate(d.getDate() + o); return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }); };
+const PLANTS = [
+  { id: 'ott', name: 'Ottoline', species: 'Boston fern', room: 'Bedroom', spot: 'Bedroom, on the dresser', every: 3, last: 4, amount: '200 ml', light: 'Medium', note: 'Likes the bathroom on shower days. Keep soil lightly moist, never soggy.' },
+  { id: 'mon', name: 'Big Monstera', species: 'Monstera deliciosa', room: 'Living room', spot: 'Living room, by the big window', every: 7, last: 7, amount: '400 ml', light: 'Bright', note: 'Wipe the leaves monthly. A new leaf is unfurling. Leave it be.' },
+  { id: 'fig', name: 'Figgy', species: 'Fiddle-leaf fig', room: 'Living room', spot: 'Living room, corner by the sofa', every: 9, last: 10, amount: '350 ml', light: 'Bright', note: 'Dislikes being moved. Give a quarter turn toward the window each watering.' },
+  { id: 'gol', name: 'Goldie', species: 'Golden pothos', room: 'Kitchen', spot: 'Kitchen, top shelf', every: 7, last: 3, amount: '250 ml', light: 'Any', note: 'Trailing past the shelf now. Cuttings root easily in a glass of water.' },
+  { id: 'pin', name: 'Pinstripe', species: 'Calathea ornata', room: 'Bedroom', spot: 'Bedroom, by the bed', every: 5, last: 2, amount: '200 ml', light: 'Medium', note: 'Filtered water only. Tap water browns the leaf tips.' },
+  { id: 'ros', name: 'Rosemary', species: 'Salvia rosmarinus', room: 'Balcony', spot: 'Balcony, left planter', every: 4, last: 2, amount: '300 ml', light: 'Full sun', note: 'Let the top inch dry out between drinks. Bring indoors below 5°C.' },
+  { id: 'sgt', name: 'Sergeant', species: 'Snake plant', room: 'Living room', spot: 'Living room, by the door', every: 21, last: 6, amount: '200 ml', light: 'Any', note: 'Thrives on neglect. Water only when the soil is fully dry.' },
+  { id: 'zed', name: 'Zed', species: 'ZZ plant', room: 'Bedroom', spot: 'Bedroom, floor by the wardrobe', every: 18, last: 12, amount: '250 ml', light: 'Low', note: 'Its rhizomes store water. When unsure, wait a week.' },
+];
+const NUM = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight'];
+const RANGES = [
+  { id: 'wkd', label: 'Weekend', sub: '4 days', start: 2, days: 4 },
+  { id: '1w', label: 'A week', sub: '7 days', start: 3, days: 7 },
+  { id: '2w', label: 'Two weeks', sub: '14 days', start: 3, days: 14 },
+];
+const SUGG = [
+  { species: 'Peace lily', latin: 'Spathiphyllum wallisii', conf: '92%', every: 6, light: 'Medium', amount: '300 ml', care: 'It droops dramatically when thirsty and recovers within hours. Keep it away from cold draughts.' },
+  { species: 'Chinese evergreen', latin: 'Aglaonema commutatum', conf: '5%', every: 10, light: 'Low', amount: '250 ml', care: 'Slow and forgiving. Let the top half of the soil dry out between drinks.' },
+  { species: 'Dumb cane', latin: 'Dieffenbachia seguine', conf: '3%', every: 7, light: 'Bright', amount: '300 ml', care: 'Sap irritates skin, so wear gloves when pruning. Keep it out of reach of pets.' },
+];
+const ADD_ROOMS = ['Living room', 'Bedroom', 'Kitchen', 'Balcony'];
+const listNames = (a) => a.length <= 1 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+const GREEN = '#8FCB9C', CLAY = '#E0A27C';
+const sel3 = (on) => ({ bg: on ? '#ECEFE9' : 'transparent', color: on ? '#0F120F' : '#ECEFE9', border: on ? '#ECEFE9' : 'rgba(236,239,233,.14)' });
+
+class Component extends DCLogic {
+  state = {
+    ob: 0, level: 'new', remind: 'Evening',
+    screen: 'today', plants: PLANTS.map(p => ({ ...p })), completed: [], completing: null, snoozed: [], mistDone: false,
+    toast: null, selId: 'ott', from: 'today', room: 'All', view: 'grid',
+    range: '1w', sitter: 'Sam', awayStep: 'plan', copied: false, sitterDone: {},
+    add: null,
+  };
+  scrollRef = React.createRef();
+  componentDidMount() { this.applyProps(); }
+  componentDidUpdate(prev) { if (prev.startAt !== this.props.startAt || prev.plantsView !== this.props.plantsView) this.applyProps(); }
+  applyProps() {
+    const start = this.props.startAt ?? 'Onboarding';
+    this.setState({ ob: start === 'Onboarding' ? 0 : null, view: (this.props.plantsView ?? 'Grid') === 'Shelf' ? 'shelf' : 'grid' });
+  }
+  go(screen, extra) { this.setState({ screen, add: null, ...(extra || {}) }); if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; }
+  showToast(text, undo) { clearTimeout(this._t); this.setState({ toast: { text, undo } }); this._t = setTimeout(() => this.setState({ toast: null }), 4000); }
+  snapshot() { const { plants, completed, mistDone, snoozed } = this.state; return { plants, completed, mistDone, snoozed }; }
+  water(id) {
+    const snap = this.snapshot(); const p = this.state.plants.find(x => x.id === id);
+    this.setState(s => ({
+      plants: s.plants.map(x => x.id === id ? { ...x, last: 0 } : x),
+      completed: s.completed.some(c => c.id === 'w-' + id) ? s.completed : [...s.completed, { id: 'w-' + id, title: 'Watered ' + p.name }],
+    }));
+    this.showToast(`${p.name} is watered. Next drink ${fmt(p.every)}.`, snap);
+  }
+  moist(p) { return Math.max(.04, Math.min(1, 1 - p.last / p.every)); }
+  tasks() {
+    const { plants, snoozed, mistDone, completing } = this.state;
+    const t = plants.filter(p => p.last >= p.every && !snoozed.includes(p.id)).map(p => {
+      const late = p.last - p.every;
+      return { id: 'w-' + p.id, plantId: p.id, kind: 'water', title: p.name, meta: `Water · ${p.amount} · ${p.room}`, when: late <= 0 ? 'Due today' : `${late} day${late > 1 ? 's' : ''} late`, late: late > 0 };
+    });
+    if (!mistDone && !snoozed.includes('mist')) t.push({ id: 'm-pin', plantId: 'pin', kind: 'mist', title: 'Pinstripe', meta: 'Mist the leaves · Bedroom', when: 'This evening', late: false });
+    t.sort((a, b) => b.late - a.late);
+    return t.map(x => ({
+      ...x, whenColor: x.late ? CLAY : GREEN, checking: completing === x.id, idle: completing !== x.id,
+      onOpen: () => this.go('detail', { selId: x.plantId, from: 'today' }),
+      onSnooze: (e) => { e.stopPropagation(); const snap = this.snapshot(); this.setState(s => ({ snoozed: [...s.snoozed, x.kind === 'mist' ? 'mist' : x.plantId] })); this.showToast(`${x.title} can wait until tomorrow.`, snap); },
+      onCheck: () => {
+        if (this.state.completing) return;
+        this.setState({ completing: x.id });
+        setTimeout(() => {
+          this.setState({ completing: null });
+          if (x.kind === 'water') this.water(x.plantId);
+          else { const snap = this.snapshot(); this.setState(s => ({ mistDone: true, completed: [...s.completed, { id: x.id, title: 'Misted Pinstripe' }] })); this.showToast('Pinstripe is misted.', snap); }
+        }, 450);
+      },
+    }));
+  }
+  awayPlan() {
+    const r = RANGES.find(x => x.id === this.state.range);
+    const byDay = {}; const need = [], fine = [], before = [];
+    this.state.plants.forEach(p => {
+      if (p.last + r.start >= p.every) before.push(p.name);
+      const atDep = (p.last + r.start) >= p.every ? 0 : p.last + r.start;
+      let any = false;
+      for (let i = 1; i <= r.days; i++) if ((atDep + i) % p.every === 0) { (byDay[i] = byDay[i] || []).push(p); any = true; }
+      (any ? need : fine).push(p.name);
+    });
+    const visits = Object.keys(byDay).map(Number).sort((a, b) => a - b).map(i => ({
+      key: i, date: fmt(r.start + i), plants: byDay[i], names: byDay[i].map(p => p.name).join(', '),
+      detail: byDay[i].map(p => `${p.name} ${p.amount}`).join(' · '),
+    }));
+    return { r, visits, need, fine, before };
+  }
+  setAdd(patch) { this.setState(s => ({ add: { ...s.add, ...patch } })); }
+  renderVals() {
+    const st = this.state; const add = st.add;
+    const inApp = st.ob === null;
+    const tasks = this.tasks();
+    const dueCount = tasks.length;
+    const lateOne = tasks.find(t => t.late);
+    const tomorrow = st.plants.filter(p => p.every - p.last === 1 || st.snoozed.includes(p.id)).map(p => p.name);
+    if (st.snoozed.includes('mist')) tomorrow.push('Pinstripe (mist)');
+    const sel = st.plants.find(p => p.id === st.selId) || st.plants[0];
+    const left = sel.every - sel.last; const selM = this.moist(sel);
+    const plantList = st.plants.filter(p => st.room === 'All' || p.room === st.room);
+    const ap = this.awayPlan();
+    const sitterName = st.sitter.trim() || 'your sitter';
+    const sitterTotal = ap.visits.reduce((n, v) => n + v.plants.length, 0);
+    const sitterDoneN = ap.visits.reduce((n, v) => n + v.plants.filter(p => st.sitterDone[v.key + p.id]).length, 0);
+    const pick = add && SUGG[add.pick ?? 0];
+    const screenKey = !inApp ? 'ob' : add ? 'add' : st.screen === 'away' ? (st.awayStep === 'shared' ? 'shared' : 'away') : st.screen;
+    const jumpDefs = [
+      ['ob', 'Onboarding', () => { this.setState({ ob: 0, add: null }); }],
+      ['today', 'Today', () => { this.setState({ ob: null }); this.go('today'); }],
+      ['plants', 'Plants', () => { this.setState({ ob: null }); this.go('plants'); }],
+      ['detail', 'Plant detail', () => { this.setState({ ob: null }); this.go('detail', { selId: 'fig', from: 'plants' }); }],
+      ['add', 'Add a plant', () => { this.setState({ ob: null, add: { step: 'photo', pick: 0, nick: '', room: 'Living room', every: 6, scanning: false } }); }],
+      ['away', 'Away · plan', () => { this.setState({ ob: null }); this.go('away', { awayStep: 'plan' }); }],
+      ['shared', 'Away · hand-off', () => { this.setState({ ob: null }); this.go('away', { awayStep: 'shared' }); }],
+      ['sitter', "Sitter's view", () => { this.setState({ ob: null }); this.go('sitter'); }],
+    ];
+
+    return {
+      scrollRef: this.scrollRef,
+      jumps: jumpDefs.map(([k, l, fn]) => ({ label: l, onGo: fn, bg: screenKey === k ? '#171C17' : 'transparent', color: screenKey === k ? '#ECEFE9' : '#8C968C', border: screenKey === k ? 'rgba(143,203,156,.35)' : 'transparent' })),
+      // onboarding
+      isOb0: st.ob === 0, isOb1: st.ob === 1, isOb2: st.ob === 2,
+      obNext: () => this.setState(s => ({ ob: s.ob + 1 })), obFinish: () => { this.setState({ ob: null }); this.go('today'); },
+      levels: [['new', 'Still learning', 'Step-by-step guidance, gentle tips and reminders that explain why.'], ['mid', 'I know my way around', 'Schedules I can tune, moisture estimates and fewer explanations.']].map(([k, t, b]) => {
+        const on = st.level === k;
+        return { title: t, body: b, border: on ? '#8FCB9C' : 'rgba(236,239,233,.1)', bg: on ? 'rgba(63,107,74,.22)' : '#171C17', shadow: on ? '0 0 30px rgba(127,191,142,.15)' : 'none', onPick: () => this.setState({ level: k }) };
+      }),
+      remindOpts: [['Morning', '08:00'], ['Midday', '12:30'], ['Evening', '19:00']].map(([l, t]) => {
+        const on = st.remind === l;
+        return { label: l, time: t, border: on ? '#8FCB9C' : 'rgba(236,239,233,.1)', bg: on ? 'rgba(63,107,74,.22)' : '#171C17', timeColor: on ? GREEN : '#7D867D', onPick: () => this.setState({ remind: l }) };
+      }),
+      remindTime: { Morning: '08:00', Midday: '12:30', Evening: '19:00' }[st.remind],
+      // screens
+      isToday: inApp && !add && st.screen === 'today', isPlants: inApp && !add && st.screen === 'plants', isDetail: inApp && !add && st.screen === 'detail',
+      isAwayPlan: inApp && !add && st.screen === 'away' && st.awayStep === 'plan', isAwayShared: inApp && !add && st.screen === 'away' && st.awayStep === 'shared',
+      isSitter: inApp && !add && st.screen === 'sitter', isAdd: inApp && !!add,
+      showTabs: inApp && !add && ['today', 'plants', 'away'].includes(st.screen),
+      tabs: [['today', 'Today'], ['plants', 'Plants'], ['away', 'Away']].map(([k, l]) => {
+        const on = st.screen === k;
+        return { label: l, bg: on ? '#ECEFE9' : 'transparent', color: on ? '#0F120F' : '#ECEFE9', hasBadge: k === 'today' && dueCount > 0 && !on, badge: dueCount, onPick: () => this.go(k) };
+      }),
+      openAdd: () => this.setState({ add: { step: 'photo', pick: 0, nick: '', room: 'Living room', every: 6, scanning: false } }),
+      // today
+      headline: dueCount === 0 ? 'All tended.' : `${NUM[dueCount]} ${dueCount === 1 ? 'plant would' : 'plants would'} like your attention.`,
+      subline: dueCount === 0 ? 'Nothing else needs you today.' : lateOne ? `${lateOne.title} has waited longest. Start there.` : 'Everything is on schedule.',
+      tasks, allDone: dueCount === 0, showTip: st.level === 'new' && dueCount > 0,
+      completed: st.completed, hasCompleted: st.completed.length > 0,
+      showTomorrow: tomorrow.length > 0, tomorrowNames: tomorrow.join(', '), tomorrowLine: tomorrow.length ? `Tomorrow: ${tomorrow.join(', ')}` : 'Nothing due tomorrow either.',
+      // plants
+      plantCountLine: `${st.plants.length} plants · 4 rooms`,
+      views: [['grid', 'Grid'], ['shelf', 'Shelf']].map(([k, l]) => ({ label: l, bg: st.view === k ? '#ECEFE9' : 'transparent', color: st.view === k ? '#0F120F' : '#A3ACA3', onPick: () => this.setState({ view: k }) })),
+      isGrid: st.view === 'grid', isShelf: st.view === 'shelf',
+      rooms: ['All', 'Living room', 'Bedroom', 'Kitchen', 'Balcony'].map(r => ({ label: r, ...sel3(st.room === r), onPick: () => this.setState({ room: r }) })),
+      plantCards: plantList.map(p => {
+        const d = p.every - p.last; const m = this.moist(p); const low = m < .25;
+        return {
+          name: p.name, short: p.name.replace('Big ', ''), species: p.species,
+          status: d <= 0 ? 'Thirsty now' : d === 1 ? 'Water tomorrow' : `Water in ${d} days`,
+          statusColor: low ? CLAY : GREEN, color2: low ? '#F0B990' : '#B4E3BF', glow: low ? 'rgba(217,148,107,.4)' : 'rgba(127,191,142,.35)',
+          fill: Math.round(m * 100) + '%', pct: Math.round(m * 100) + '%', h: `calc(${Math.max(6, m * 100)}% - 8px)`,
+          onOpen: () => this.go('detail', { selId: p.id, from: 'plants' }),
+        };
+      }),
+      // detail
+      sel: {
+        ...sel, pct: Math.round(selM * 100) + '%', color: selM < .25 ? CLAY : GREEN, glow: selM < .25 ? 'rgba(217,148,107,.45)' : 'rgba(127,191,142,.4)',
+        lastText: sel.last === 0 ? 'Today' : sel.last === 1 ? 'Yesterday' : `${sel.last} days ago`, lastColor: left <= 0 ? CLAY : '#ECEFE9',
+        canWater: sel.last > 0, wateredToday: sel.last === 0,
+        waterLabel: left <= 0 ? `Water ${sel.name} now` : 'Watered early? Log it',
+        nextText: `Watered. Next drink ${fmt(sel.every)}`,
+        scheduleHint: st.level === 'new' ? 'Recommended for this species and room' : `Next drink ${fmt(Math.max(0, left))}`,
+        log: [0, 1, 2].map(k => ({ what: `Watered · ${sel.amount}`, when: fmt(-(sel.last + k * sel.every)) })),
+      },
+      backLabel: st.from === 'today' ? 'Today' : 'Plants', goBack: () => this.go(st.from),
+      waterSel: () => this.water(sel.id),
+      everyMinus: () => this.setState(s => ({ plants: s.plants.map(p => p.id === sel.id ? { ...p, every: Math.max(1, p.every - 1) } : p) })),
+      everyPlus: () => this.setState(s => ({ plants: s.plants.map(p => p.id === sel.id ? { ...p, every: Math.min(45, p.every + 1) } : p) })),
+      // away
+      ranges: RANGES.map(r => ({ ...r, bg: st.range === r.id ? '#ECEFE9' : '#171C17', color: st.range === r.id ? '#0F120F' : '#ECEFE9', border: st.range === r.id ? '#ECEFE9' : 'rgba(236,239,233,.1)', onPick: () => this.setState({ range: r.id }) })),
+      rangeDates: `${fmt(ap.r.start + 1)} – ${fmt(ap.r.start + ap.r.days)}`,
+      sitter: st.sitter, sitterName, onSitter: (e) => this.setState({ sitter: e.target.value }),
+      visits: ap.visits, visitSummary: `${ap.visits.length} visit${ap.visits.length === 1 ? '' : 's'}`, plantSummary: `${ap.need.length} of ${st.plants.length} plants need care`,
+      hasBefore: ap.before.length > 0, beforeLine: `water ${listNames(ap.before)} the evening before.`,
+      hasFine: ap.fine.length > 0, fineLine: listNames(ap.fine) + '.',
+      createLabel: `Create plan for ${sitterName}`,
+      createHandoff: () => this.go('away', { awayStep: 'shared', copied: false }),
+      letterTitle: `${st.sitter.trim() || 'Hello'}, thank you.`,
+      letterBody: `${ap.visits.length} short visits between ${fmt(ap.r.start + 1)} and ${fmt(ap.r.start + ap.r.days)}. Room-temperature water, poured slowly at the base.`,
+      copyLabel: st.copied ? '✓ Link copied' : 'Copy link to share', copyLink: () => this.setState({ copied: true }),
+      editPlan: () => this.go('away', { awayStep: 'plan' }),
+      openSitter: () => this.go('sitter'), closeSitter: () => this.go('away', { awayStep: 'shared' }),
+      sitterProgress: `${sitterDoneN} of ${sitterTotal} done`, sitterPct: sitterTotal ? Math.round(sitterDoneN / sitterTotal * 100) + '%' : '0%',
+      sitterVisits: ap.visits.map(v => ({
+        date: v.date,
+        items: v.plants.map(p => {
+          const k = v.key + p.id; const on = !!st.sitterDone[k];
+          return { name: p.name, amount: p.amount, where: p.spot, nameColor: on ? '#7D867D' : '#ECEFE9', ring: on ? '#3F6B4A' : '#4A544A', fill: on ? '#3F6B4A' : 'transparent', mark: on ? '✓' : '', shadow: on ? '0 0 14px rgba(127,191,142,.45)' : 'none', onToggle: () => this.setState(s => ({ sitterDone: { ...s.sitterDone, [k]: !s.sitterDone[k] } })) };
+        }),
+      })),
+      // add
+      isAddPhoto: !!add && add.step === 'photo', isAddId: !!add && add.step === 'id', isAddDetails: !!add && add.step === 'details',
+      addStepLabel: add ? ({ photo: '1 / 3', id: '2 / 3', details: '3 / 3' }[add.step]) : '',
+      addBackLabel: add && add.step !== 'photo' ? '‹ Back' : 'Cancel',
+      addCancel: () => { if (!add || add.step === 'photo') this.setState({ add: null }); else this.setAdd({ step: add.step === 'details' ? 'id' : 'photo', scanning: false }); },
+      scanText: add && add.scanning ? 'Identifying…' : 'camera · point at the leaves',
+      scanBorder: add && add.scanning ? '#8FCB9C' : 'rgba(236,239,233,.35)', scanGlow: add && add.scanning ? 'rgba(127,191,142,.35)' : 'transparent',
+      photoLabel: add && add.scanning ? 'Identifying…' : 'Take photo',
+      takePhoto: () => { if (add.scanning) return; this.setAdd({ scanning: true }); setTimeout(() => this.state.add && this.setAdd({ step: 'id', scanning: false, every: SUGG[0].every }), 1400); },
+      skipPhoto: () => this.setAdd({ step: 'id' }),
+      idHeadline: `Looks like a ${SUGG[0].species.toLowerCase()}.`,
+      suggestions: SUGG.map((sg, i) => {
+        const on = add && (add.pick ?? 0) === i;
+        return { ...sg, border: on ? '#8FCB9C' : 'rgba(236,239,233,.08)', bg: on ? 'rgba(63,107,74,.2)' : '#171C17', shadow: on ? '0 0 24px rgba(127,191,142,.15)' : 'none', confColor: i === 0 ? GREEN : '#7D867D', onPick: () => this.setAdd({ pick: i, every: sg.every }) };
+      }),
+      pickSpecies: pick ? pick.species.toLowerCase() : '',
+      toDetails: () => this.setAdd({ step: 'details' }),
+      addNick: add ? add.nick : '', onNick: (e) => this.setAdd({ nick: e.target.value }),
+      nickPlaceholder: pick ? `e.g. ${pick.species.split(' ')[0]}` : '',
+      addRooms: ADD_ROOMS.map(r => ({ label: r, ...sel3(add && add.room === r), onPick: () => this.setAdd({ room: r }) })),
+      addEvery: add ? add.every : 0,
+      addEveryHint: pick && add && add.every === pick.every ? 'Recommended starting point' : pick ? `We suggest ${pick.every} days` : '',
+      addMinus: () => this.setAdd({ every: Math.max(1, add.every - 1) }), addPlus: () => this.setAdd({ every: Math.min(45, add.every + 1) }),
+      addCareLine: pick ? `${pick.amount} per drink · ${pick.light} light. ${pick.care}` : '',
+      addConfirm: () => {
+        const name = add.nick.trim() || pick.species;
+        const np = { id: 'n' + Date.now(), name, species: pick.species, room: add.room, spot: add.room, every: add.every, last: 0, amount: pick.amount, light: pick.light, note: `New arrival. ${pick.care}` };
+        this.setState(s => ({ plants: [...s.plants, np], room: 'All', view: 'grid' }));
+        this.go('plants');
+        this.showToast(`${name} joins the collection.`, null);
+      },
+      // toast
+      hasToast: !!st.toast, toastText: st.toast ? st.toast.text : '', toastUndo: !!(st.toast && st.toast.undo),
+      undo: () => { clearTimeout(this._t); this.setState({ ...st.toast.undo, toast: null }); },
+    };
+  }
+}
+</script>
+</body>
+</html>
