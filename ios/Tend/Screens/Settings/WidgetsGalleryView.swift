@@ -150,45 +150,8 @@ struct StatesView: View {
 
     private var blurry: some View {
         VStack(spacing: 16) {
-            ZStack(alignment: .bottom) {
-                Stripes(a: Color(light: 0xDCE6CF, dark: 0x1C261B), b: Tend.C.stripeWideB, width: 7)
-                    .blur(radius: 5).padding(-10)
-                RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .strokeBorder(Tend.C.clayTint(0.7), style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
-                    .padding(.vertical, 50).padding(.horizontal, 40)
-                HStack(spacing: 12) {
-                    Text("!").font(Tend.F.sans(18, .bold)).foregroundStyle(Tend.C.clay)
-                        .frame(width: 36, height: 36).background(Tend.C.clayTint(0.14), in: Circle())
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Too blurry to read").font(Tend.F.sans(15, .semibold)).foregroundStyle(Tend.C.text)
-                        Text("This one didn't use a scan.").font(Tend.F.sans(13)).foregroundStyle(Tend.C.text3)
-                    }
-                    Spacer(minLength: 0)
-                }
-                .padding(.vertical, 14).padding(.horizontal, 16)
-                .background(Color(lightRGB: 0xFFFCF5, lightAlpha: 0.92, darkRGB: 0x172017, darkAlpha: 0.92),
-                            in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-                .padding(16)
-            }
-            .frame(height: 330)
-            .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-
-            VStack(spacing: 0) {
-                ForEach(Array(["Hold still for a second before tapping", "Tap a leaf on screen to focus", "Move nearer a window for softer light"].enumerated()), id: \.offset) { i, t in
-                    VStack(spacing: 0) {
-                        if i > 0 { RowDivider(opacity: 0.1) }
-                        HStack(spacing: 12) {
-                            Text("\(i + 1)").font(Tend.F.sans(12, .bold)).foregroundStyle(Tend.C.brandInk)
-                                .frame(width: 24, height: 24).background(Tend.C.leaf(0.14), in: Circle())
-                            Text(t).font(Tend.F.sans(14)).foregroundStyle(Tend.C.text)
-                            Spacer(minLength: 0)
-                        }
-                        .padding(.vertical, 12)
-                    }
-                }
-            }
-            .padding(.vertical, 4).padding(.horizontal, 18)
-            .card()
+            BlurryScanCard()
+            ScanTipsCard()
 
             Spacer(minLength: 20)
             Button("Retake photo") { model.openScan(.identify) }.buttonStyle(PrimaryButtonStyle())

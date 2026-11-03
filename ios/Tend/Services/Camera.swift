@@ -19,6 +19,8 @@ final class CameraController {
     @ObservationIgnored private var configured = false
     @ObservationIgnored private var meterTask: Task<Void, Never>?
     @ObservationIgnored private let queue = DispatchQueue(label: "tend.camera")
+    /// Keeps the capture delegate alive until the photo arrives.
+    @ObservationIgnored private var inFlight: PhotoCaptureDelegate?
 
     func start() async {
         #if targetEnvironment(simulator)
@@ -57,6 +59,22 @@ final class CameraController {
         #endif
     }
 
+    enum CaptureError: Error { case notRunning, failed }
+
+    /// Takes a still photo and returns it as JPEG data.
+    func capturePhoto() async throws -> Data {
+        guard status == .running else { throw CaptureError.notRunning }
+        let output = photoOutput
+        let delegate = PhotoCaptureDelegate()
+        inFlight = delegate
+        defer { inFlight = nil }
+        return try await withCheckedThrowingContinuation { (c: CheckedContinuation<Data, Error>) in
+            delegate.continuation = c
+            let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
+            output.capturePhoto(with: settings, delegate: delegate)
+        }
+    }
+
     func stop() {
         meterTask?.cancel()
         let session = self.session
@@ -85,6 +103,22 @@ final class CameraController {
         let ev100 = log2(n * n / t) - log2(iso / 100)
         let value = 2.5 * pow(2, ev100)
         lux = lux.map { $0 * 0.7 + value * 0.3 } ?? value
+    }
+}
+
+/// Bridges AVCapturePhotoOutput's delegate callback to async/await.
+final class PhotoCaptureDelegate: NSObject, AVCapturePhotoCaptureDelegate, @unchecked Sendable {
+    var continuation: CheckedContinuation<Data, Error>?
+
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        if let error {
+            continuation?.resume(throwing: error)
+        } else if let data = photo.fileDataRepresentation() {
+            continuation?.resume(returning: data)
+        } else {
+            continuation?.resume(throwing: CameraController.CaptureError.failed)
+        }
+        continuation = nil
     }
 }
 

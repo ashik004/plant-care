@@ -3,6 +3,7 @@
 **Tend** is a premium plant-care app for iPhone, built natively in SwiftUI for iOS 26. It identifies plants with AI, watches their health from room and sensor data, diagnoses pests, schedules care reminders, teaches care step by step and hands plants off to a sitter during trips.
 
 - `ios/`: the Xcode project (app + widget extension)
+- `backend/`: the Tend API, a Cloudflare Worker that runs plant identification without putting keys in the app
 - `design/`: the Claude Design handoff this was built from (prototypes, chats and spec). `design/Tend App v4.dc.html` is the source of truth for look and behaviour.
 
 ## Open and run
@@ -45,7 +46,8 @@ Other notes:
 ## Still needed before launch
 
 - **Real data.** Sensor readings drift on a timer (`RootView` and `AppModel.env`). Hook up HomeKit / Matter or a sensor SDK.
-- **AI backends.** Plant identification and diagnosis are mocked in `ScannerView.capture()`. Ask Tend posts to the URL in `TendAskEndpoint` in `ios/Config/Tend-Info.plist`; it expects `POST {"prompt": "…"}` and returns `{"answer": "…"}`. Keep model API keys on the server. With no endpoint set, the app shows a built-in fallback answer.
+- **Plant identification** is real once the backend is deployed (see `backend/README.md`) and `TendAPIBaseURL` is set in `ios/Config/Tend-Info.plist`. Until then the scanner runs in labelled demo mode. Care advice for identified plants comes from `ios/Tend/Resources/species-care.json`, a starter catalogue of 58 species, genera and families that needs expert review and expanding.
+- **Diagnosis** is still mocked in `ScannerView.capture()`. Ask Tend posts to the URL in `TendAskEndpoint` in `ios/Config/Tend-Info.plist`; it expects `POST {"prompt": "…"}` and returns `{"answer": "…"}`. Keep model API keys on the server. With no endpoint set, the app shows a built-in fallback answer.
 - **Purchases.** Create the products in App Store Connect: `app.tend.premium.lifetime` (non-consumable) and `app.tend.premium.monthly` (auto-renewing, 7-day free trial). For local testing, `ios/Config/Tend.storekit` is linked from the scheme; if Xcode doesn't pick it up, choose it under *Scheme → Run → Options → StoreKit Configuration*. Debug builds simulate a purchase when no products load.
 - **Widgets with live data.** Add the **App Groups** capability with `group.app.tend` to both targets. Until then the widgets show sample data.
 - **Photos.** Plant, guide and diagnosis photos are striped placeholders.

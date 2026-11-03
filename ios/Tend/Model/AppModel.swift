@@ -443,7 +443,7 @@ final class AppModel {
         let p = Plant(id: "n\(Int(Date.now.timeIntervalSince1970 * 1000))", name: name, species: c.species, room: room, spot: room,
                       waterEvery: every, daysSinceWater: 0, amount: c.amount, humidity: c.humidity, light: c.lightRange,
                       temperature: c.temperature, feedEvery: 21, daysSinceFeed: 0, repot: "Not needed this year",
-                      heights: Array(repeating: 30, count: 8), newLeaves: 0, photos: 1)
+                      heights: Array(repeating: 30, count: 8), newLeaves: 0, photos: 1, latin: c.latin)
         plants.append(p)
         roomFilter = "All"
         shelfView = false

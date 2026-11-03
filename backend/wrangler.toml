@@ -1,0 +1,9 @@
+name = "tend-api"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+# "all" covers every flora Pl@ntNet knows. Secrets are set with `wrangler secret put`:
+#   PLANTNET_API_KEY  (required)
+#   APP_TOKEN         (optional; the app sends it in X-Tend-Client)
+PLANTNET_PROJECT = "all"

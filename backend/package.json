@@ -1,0 +1,15 @@
+{
+  "name": "tend-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Tend API: keeps plant-identification keys off the phone.",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

@@ -26,6 +26,8 @@ struct Plant: Identifiable, Hashable, Codable {
     var trailing: Bool = false
     var pest: Bool = false
     var photos: Int = 4
+    /// Scientific name, when known (plants added with the scanner).
+    var latin: String? = nil
 
     var shortName: String { name.replacingOccurrences(of: "Big ", with: "") }
 }
@@ -60,7 +62,22 @@ struct ScanCandidate: Hashable {
     let temperature: ClosedRange<Double>
     let amount: String
     let care: String
+    /// A reference photo of the species (from the identification provider).
+    var referenceImageURL: URL? = nil
+    /// From ASPCA listings where known; nil when unknown.
+    var toxicToPets: Bool? = nil
+    /// How specific the care profile is.
+    var careSource: CareSource = .species
+    var genus: String? = nil
+    var family: String? = nil
+    /// True for the built-in sample results shown when no identification service is set up.
+    var isDemo = false
+
+    /// True when the provider gave a common name (otherwise `species` is the Latin name).
+    var hasCommonName: Bool { species != latin }
 }
+
+enum CareSource: String, Hashable { case species, genus, family, general }
 
 struct Guide: Identifiable, Hashable {
     let id: String
@@ -117,9 +134,9 @@ enum SampleData {
     ]
 
     static let candidates: [ScanCandidate] = [
-        .init(species: "Peace lily", latin: "Spathiphyllum wallisii", confidence: 92, waterEvery: 6, light: "Medium", humidityText: "50–70%", humidity: 50...70, lightRange: 1000...6000, temperature: 18...27, amount: "300 ml", care: "Droops dramatically when thirsty and perks up within hours. Keep it away from cold draughts and wipe the leaves monthly."),
-        .init(species: "Chinese evergreen", latin: "Aglaonema commutatum", confidence: 5, waterEvery: 10, light: "Low", humidityText: "40–60%", humidity: 40...60, lightRange: 300...4000, temperature: 18...27, amount: "250 ml", care: "Slow and forgiving. Let the top half of the soil dry out between drinks."),
-        .init(species: "Dumb cane", latin: "Dieffenbachia seguine", confidence: 3, waterEvery: 7, light: "Bright", humidityText: "50–65%", humidity: 50...65, lightRange: 3000...10000, temperature: 18...27, amount: "300 ml", care: "Its sap irritates skin, so wear gloves when pruning. Keep it out of reach of pets."),
+        .init(species: "Peace lily", latin: "Spathiphyllum wallisii", confidence: 92, waterEvery: 6, light: "Medium", humidityText: "50–70%", humidity: 50...70, lightRange: 1000...6000, temperature: 18...27, amount: "300 ml", care: "Droops dramatically when thirsty and perks up within hours. Keep it away from cold draughts and wipe the leaves monthly.", toxicToPets: true, isDemo: true),
+        .init(species: "Chinese evergreen", latin: "Aglaonema commutatum", confidence: 5, waterEvery: 10, light: "Low", humidityText: "40–60%", humidity: 40...60, lightRange: 300...4000, temperature: 18...27, amount: "250 ml", care: "Slow and forgiving. Let the top half of the soil dry out between drinks.", toxicToPets: true, isDemo: true),
+        .init(species: "Dumb cane", latin: "Dieffenbachia seguine", confidence: 3, waterEvery: 7, light: "Bright", humidityText: "50–65%", humidity: 50...65, lightRange: 3000...10000, temperature: 18...27, amount: "300 ml", care: "Its sap irritates skin, so wear gloves when pruning. Keep it out of reach of pets.", toxicToPets: true, isDemo: true),
     ]
 
     static let guides: [Guide] = [

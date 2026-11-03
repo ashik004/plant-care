@@ -13,6 +13,10 @@
 		<string>Newsreader-Italic.ttf</string>
 		<string>Newsreader-MediumItalic.ttf</string>
 	</array>
+	<key>TendAPIBaseURL</key>
+	<string></string>
+	<key>TendAPIAppToken</key>
+	<string></string>
 	<key>TendAskEndpoint</key>
 	<string></string>
 	<key>CFBundleURLTypes</key>

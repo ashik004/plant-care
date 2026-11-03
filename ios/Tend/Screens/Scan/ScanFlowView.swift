@@ -1,36 +1,57 @@
 import SwiftUI
+import PhotosUI
 
-enum ScanRoute: Hashable { case idResult, addDetails, diagnosis }
+enum ScanRoute: Hashable { case idResult, addDetails, diagnosis, noMatch }
+
+/// What a scan produced.
+enum ScanOutcome {
+    case identified([ScanCandidate], photo: UIImage?)
+    case noMatch(photo: UIImage?)
+    case diagnosed
+}
 
 /// The scanner, presented as a full-screen cover with its own navigation stack.
 struct ScanFlowView: View {
     @State var mode: ScanMode
     @State var path: [ScanRoute] = []
+    @State var candidates: [ScanCandidate] = SampleData.candidates
+    @State var photo: UIImage?
     /// Index of the picked candidate and the details being added.
     @State var pick = 0
     @State var nickname = ""
     @State var room = "Living room"
-    @State var every = SampleData.candidates[0].waterEvery
+    @State var every = 7
 
     init(initialMode: ScanMode) { _mode = State(initialValue: initialMode) }
 
     var body: some View {
         NavigationStack(path: $path) {
-            ScannerView(mode: $mode) { finishedMode in
-                pick = 0; nickname = ""; every = SampleData.candidates[0].waterEvery
-                path.append(finishedMode == .identify ? .idResult : .diagnosis)
+            ScannerView(mode: $mode) { outcome in
+                switch outcome {
+                case .identified(let found, let shot):
+                    candidates = found; photo = shot
+                    pick = 0; nickname = ""; every = found.first?.waterEvery ?? 7
+                    path.append(.idResult)
+                case .noMatch(let shot):
+                    photo = shot
+                    path.append(.noMatch)
+                case .diagnosed:
+                    path.append(.diagnosis)
+                }
             }
             .navigationDestination(for: ScanRoute.self) { r in
                 switch r {
                 case .idResult:
-                    IdResultView(pick: $pick, every: $every) {
-                        room = bestRoom(for: SampleData.candidates[pick])
+                    IdResultView(candidates: candidates, photo: photo, pick: $pick, every: $every) {
+                        room = bestRoom(for: candidates[pick])
                         path.append(.addDetails)
                     }
                 case .addDetails:
-                    AddDetailsView(candidate: SampleData.candidates[pick], nickname: $nickname, room: $room, every: $every)
+                    AddDetailsView(candidate: candidates[min(pick, candidates.count - 1)], nickname: $nickname, room: $room, every: $every)
                 case .diagnosis:
                     DiagnosisView()
+                case .noMatch:
+                    NoMatchView(photo: photo)
                 }
             }
         }
@@ -52,11 +73,16 @@ func bestRoom(for c: ScanCandidate) -> String {
 
 struct ScannerView: View {
     @Binding var mode: ScanMode
-    let onResult: (ScanMode) -> Void
+    let onResult: (ScanOutcome) -> Void
     @Environment(AppModel.self) var model
     @State var camera = CameraController()
     @State var analyzing = false
     @State var breathe = false
+    /// The frozen frame shown while Tend analyses it.
+    @State var still: UIImage?
+    @State var showPicker = false
+    @State var pickerItem: PhotosPickerItem?
+    var identifier: PlantIdentifier = PlantIdentifiers.current
 
     var body: some View {
         VStack(spacing: 18) {
@@ -80,13 +106,23 @@ struct ScannerView: View {
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
 
-            if !model.isPremium {
-                HStack(spacing: 8) {
-                    Text("\(model.scansLeft) of 3 free scans left this month").foregroundStyle(Tend.C.text4)
-                    Button("Go unlimited ›") { model.openPremium() }.foregroundStyle(Tend.C.accent).fontWeight(.semibold)
+            HStack(spacing: 16) {
+                if mode == .identify {
+                    Button { showPicker = true } label: {
+                        Label("Choose a photo", systemImage: "photo.on.rectangle")
+                            .font(Tend.F.sans(13, .semibold)).foregroundStyle(Tend.C.accent)
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(analyzing)
                 }
-                .font(Tend.F.sans(13))
-                .buttonStyle(.plain)
+                if !model.isPremium {
+                    HStack(spacing: 8) {
+                        Text("\(model.scansLeft) of 3 free scans left").foregroundStyle(Tend.C.text4)
+                        Button("Go unlimited ›") { model.openPremium() }.foregroundStyle(Tend.C.accent).fontWeight(.semibold)
+                    }
+                    .font(Tend.F.sans(13))
+                    .buttonStyle(.plain)
+                }
             }
 
             Spacer(minLength: 0)
@@ -100,7 +136,20 @@ struct ScannerView: View {
         .entrance()
         .background { AmbientBackground() }
         .toolbar(.hidden, for: .navigationBar)
+        .photosPicker(isPresented: $showPicker, selection: $pickerItem, matching: .images)
+        .onChange(of: pickerItem) { _, item in
+            guard let item else { return }
+            pickerItem = nil
+            Task {
+                guard let data = try? await item.loadTransferable(type: Data.self), let image = UIImage(data: data) else {
+                    model.showToast(IdentifyError.unreadablePhoto.localizedDescription)
+                    return
+                }
+                identify(image)
+            }
+        }
         .task { await camera.start() }
+        .onAppear { still = nil }
         .onDisappear { camera.stop() }
     }
 
@@ -109,6 +158,11 @@ struct ScannerView: View {
             StripedPlaceholder(label: "", stripe: 7, palette: .wide, radius: 0)
             if camera.status == .running {
                 CameraPreview(session: camera.session)
+            }
+            if let still {
+                Image(uiImage: still).resizable().scaledToFill()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity).clipped()
+                    .transition(.opacity)
             }
 
             // Inset frame: breathes while aiming; glows green while analysing.
@@ -123,34 +177,92 @@ struct ScannerView: View {
 
             if analyzing { ScanLine().padding(.horizontal, 46) }
 
-            if camera.status != .running {
+            if camera.status != .running && still == nil {
                 VStack(spacing: 14) {
                     LeafDrawIllustration()
-                    Text((analyzing ? (mode == .identify ? "Matching 30,000 species…" : "Checking for 120 pests & diseases…")
-                          : (mode == .identify ? "camera · frame a few leaves" : "camera · get close to the problem")).uppercased())
+                    Text(placeholderText.uppercased())
                         .font(Tend.F.mono(10)).tracking(0.6).foregroundStyle(Tend.C.text5)
                         .multilineTextAlignment(.center)
                 }
                 .padding(.horizontal, 70)
             }
+
+            if identifier.isDemo && mode == .identify {
+                VStack {
+                    Spacer()
+                    Text("DEMO · NO IDENTIFICATION SERVICE SET UP").font(Tend.F.mono(9)).tracking(0.5)
+                        .foregroundStyle(Tend.C.clay)
+                        .padding(.horizontal, 10).frame(height: 24)
+                        .background(Color(lightRGB: 0xFFFCF5, lightAlpha: 0.9, darkRGB: 0x172017, darkAlpha: 0.9), in: Capsule())
+                        .padding(.bottom, 16)
+                }
+            }
         }
         .frame(height: 440)
         .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .animation(.easeOut(duration: 0.25), value: still != nil)
         .onAppear { breathe = true }
+    }
+
+    private var placeholderText: String {
+        if analyzing { return mode == .identify ? "Matching species…" : "Checking for pests & diseases…" }
+        if camera.status == .denied { return "camera access is off · choose a photo instead" }
+        if camera.status == .unavailable { return "no camera here · choose a photo instead" }
+        return mode == .identify ? "camera · frame a few leaves" : "camera · get close to the problem"
     }
 
     private func capture() {
         guard !analyzing else { return }
         guard model.canScan else { model.openPremium(); return }
-        analyzing = true
-        model.consumeScan()
-        let m = mode
+
+        if mode == .diagnose {
+            // Diagnosis is still a placeholder: wire a disease model or API here.
+            analyzing = true
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(1600))
+                model.consumeScan()
+                model.buzz(.medium)
+                analyzing = false
+                onResult(.diagnosed)
+            }
+            return
+        }
+
+        guard camera.status == .running else { showPicker = true; return }
         Task { @MainActor in
-            // Placeholder for the plant-ID API / Core ML diagnosis call.
-            try? await Task.sleep(for: .milliseconds(1600))
-            model.buzz(.medium)
-            analyzing = false
-            onResult(m)
+            do {
+                let data = try await camera.capturePhoto()
+                guard let image = UIImage(data: data) else { throw CameraController.CaptureError.failed }
+                identify(image)
+            } catch {
+                model.showToast("Couldn't take the photo. Try again.")
+            }
+        }
+    }
+
+    /// Sends the photo for identification. A scan is only used up when it succeeds.
+    private func identify(_ image: UIImage) {
+        guard !analyzing else { return }
+        guard model.canScan else { model.openPremium(); return }
+        guard let jpeg = PhotoPrep.jpeg(image) else { model.showToast(IdentifyError.unreadablePhoto.localizedDescription); return }
+        withAnimation { still = image }
+        analyzing = true
+        let identifier = self.identifier
+        Task { @MainActor in
+            defer { analyzing = false }
+            do {
+                let found = try await identifier.identify(photos: [jpeg])
+                model.consumeScan()
+                model.buzz(.medium)
+                onResult(.identified(found, photo: image))
+            } catch IdentifyError.noMatch {
+                model.buzz(.warning)
+                onResult(.noMatch(photo: image))
+            } catch {
+                withAnimation { still = nil }
+                model.buzz(.warning)
+                model.showToast((error as? LocalizedError)?.errorDescription ?? "Identification is unavailable right now.")
+            }
         }
     }
 }
@@ -173,24 +285,42 @@ private struct ScanLine: View {
 // MARK: Identify result
 
 struct IdResultView: View {
+    let candidates: [ScanCandidate]
+    let photo: UIImage?
     @Binding var pick: Int
     @Binding var every: Int
     let onAdd: () -> Void
     @Environment(AppModel.self) var model
 
     var body: some View {
-        let c = SampleData.candidates[pick]
+        let c = candidates[min(pick, candidates.count - 1)]
         let word = c.confidence >= 85 ? "Very likely" : c.confidence >= 50 ? "Likely" : "Possible"
+        let others = candidates.count - 1
 
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 18) {
                 HStack {
                     BackPillText(title: "‹ Rescan")
                     Spacer()
-                    Text("IDENTIFIED").font(Tend.F.mono(11)).foregroundStyle(Tend.C.accent)
+                    Text(c.isDemo ? "DEMO RESULT" : "IDENTIFIED").font(Tend.F.mono(11))
+                        .foregroundStyle(c.isDemo ? Tend.C.clay : Tend.C.accent)
                 }
 
-                ScreenTitle(text: "It's a \(c.species.lowercased()).")
+                HStack(alignment: .top, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        ScreenTitle(text: c.hasCommonName ? "It's a \(c.species.lowercased())." : "It's \(c.species).")
+                        if c.hasCommonName {
+                            Text(c.latin).font(Tend.F.serifItalic(17)).foregroundStyle(Tend.C.text4)
+                        }
+                    }
+                    Spacer(minLength: 0)
+                    if let photo {
+                        Image(uiImage: photo).resizable().scaledToFill()
+                            .frame(width: 64, height: 64)
+                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                            .accessibilityLabel("Your photo")
+                    }
+                }
 
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
@@ -200,13 +330,13 @@ struct IdResultView: View {
                     }
                     .font(Tend.F.sans(13))
                     BarMeter(fraction: Double(c.confidence) / 100, color: Tend.C.brand, height: 6)
-                    Text("Matched on leaf shape, vein pattern and the flower spathe. Two lookalikes are listed below if yours seems different.")
+                    Text(confidenceLine(top: candidates[0], others: others))
                         .font(Tend.F.sans(13)).lineSpacing(2).foregroundStyle(Tend.C.text4)
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
                 VStack(spacing: 10) {
-                    ForEach(Array(SampleData.candidates.enumerated()), id: \.offset) { i, cand in
+                    ForEach(Array(candidates.enumerated()), id: \.offset) { i, cand in
                         candidateRow(i, cand)
                     }
                 }
@@ -222,8 +352,19 @@ struct IdResultView: View {
                 .overlay(alignment: .top) { RowDivider(opacity: 0.13) }
                 .overlay(alignment: .bottom) { RowDivider(opacity: 0.13) }
 
-                Text(c.care).font(Tend.F.sans(14)).lineSpacing(3).foregroundStyle(Tend.C.text3)
-                    .fixedSize(horizontal: false, vertical: true)
+                VStack(alignment: .leading, spacing: 10) {
+                    if let toxic = c.toxicToPets {
+                        TagPill(text: toxic ? "Toxic to cats and dogs" : "Safe for cats and dogs",
+                                color: toxic ? Tend.C.clay : Tend.C.accent,
+                                fill: toxic ? Tend.C.clayTint(0.12) : Tend.C.leaf(0.12))
+                    }
+                    Text(c.care).font(Tend.F.sans(14)).lineSpacing(3).foregroundStyle(Tend.C.text3)
+                        .fixedSize(horizontal: false, vertical: true)
+                    if let note = careSourceNote(c) {
+                        Text(note).font(Tend.F.sans(12)).foregroundStyle(Tend.C.text5)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
 
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 2) {
@@ -243,6 +384,10 @@ struct IdResultView: View {
                 .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Tend.C.amberTint(0.22), lineWidth: 1))
 
                 Button("Add to my plants", action: onAdd).buttonStyle(PrimaryButtonStyle()).padding(.top, 6)
+
+                Text(c.isDemo ? "DEMO RESULT · SET TendAPIBaseURL TO IDENTIFY REAL PLANTS" : "IDENTIFICATION BY PL@NTNET")
+                    .font(Tend.F.mono(9)).tracking(0.5).foregroundStyle(Tend.C.muted)
+                    .frame(maxWidth: .infinity)
             }
             .padding(.horizontal, Tend.S.side)
             .padding(.top, 8).padding(.bottom, 30)
@@ -252,16 +397,39 @@ struct IdResultView: View {
         .toolbar(.hidden, for: .navigationBar)
     }
 
+    private func confidenceLine(top: ScanCandidate, others: Int) -> String {
+        let lookalikes = others == 0 ? "" : others == 1 ? " A lookalike is listed below if yours seems different."
+            : " \(Care.numberWords[min(others, 9)]) lookalikes are listed below if yours seems different."
+        if top.isDemo {
+            return "Matched on leaf shape, vein pattern and the flower spathe." + lookalikes
+        }
+        if top.confidence < 50 {
+            return "Tend isn't certain. Compare the options below, or rescan with a clear photo of a single leaf or flower."
+        }
+        return "Matched from your photo against Pl@ntNet's plant database." + lookalikes
+    }
+
+    private func careSourceNote(_ c: ScanCandidate) -> String? {
+        switch c.careSource {
+        case .species: nil
+        case .genus: "Care advice covers the \(c.genus ?? "same") genus. Tend fine-tunes it as it learns your plant."
+        case .family: "Care advice covers the \(c.family ?? "same") family. Tend fine-tunes it as it learns your plant."
+        case .general: "Tend starts this one on a general schedule. Check the soil before watering for the first couple of weeks."
+        }
+    }
+
     private func candidateRow(_ i: Int, _ cand: ScanCandidate) -> some View {
         let on = pick == i
         return Button {
             withAnimation(.easeOut(duration: 0.2)) { pick = i; every = cand.waterEvery }
         } label: {
             HStack(spacing: 14) {
-                StripedPlaceholder(label: "photo", radius: 14, labelSize: 7).frame(width: 60, height: 60)
+                ReferenceThumb(url: cand.referenceImageURL).frame(width: 60, height: 60)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(cand.species).font(Tend.F.serif(21)).foregroundStyle(Tend.C.text)
-                    Text(cand.latin).font(Tend.F.serifItalic(14)).foregroundStyle(Tend.C.text4)
+                    Text(cand.species).font(Tend.F.serif(21)).foregroundStyle(Tend.C.text).lineLimit(1).minimumScaleFactor(0.8)
+                    if cand.hasCommonName {
+                        Text(cand.latin).font(Tend.F.serifItalic(14)).foregroundStyle(Tend.C.text4).lineLimit(1)
+                    }
                 }
                 Spacer(minLength: 0)
                 Text("\(cand.confidence)%").font(Tend.F.mono(12)).foregroundStyle(i == 0 ? Tend.C.accent : Tend.C.text5)
@@ -274,6 +442,7 @@ struct IdResultView: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(on ? .isSelected : [])
+        .accessibilityLabel("\(cand.species), \(cand.confidence) percent")
     }
 
     private func careCell(_ k: String, _ v: String, leading: CGFloat) -> some View {
@@ -283,6 +452,106 @@ struct IdResultView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 12).padding(.leading, leading).padding(.trailing, 8)
+    }
+}
+
+/// A reference photo of the species, or the striped placeholder while it loads.
+struct ReferenceThumb: View {
+    let url: URL?
+    var radius: CGFloat = 14
+    var body: some View {
+        AsyncImage(url: url) { phase in
+            if let image = phase.image {
+                image.resizable().scaledToFill()
+            } else {
+                StripedPlaceholder(label: "photo", radius: 0, labelSize: 7)
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
+        .accessibilityHidden(true)
+    }
+}
+
+/// Shown when Tend couldn't recognise the photo. It doesn't use a scan.
+struct NoMatchView: View {
+    let photo: UIImage?
+    @Environment(\.dismiss) var dismiss
+
+    var body: some View {
+        VStack(spacing: 16) {
+            HStack {
+                BackPillText(title: "‹ Back")
+                Spacer()
+            }
+            BlurryScanCard(photo: photo, title: "Couldn't identify this one", subtitle: "This one didn't use a scan.")
+            ScanTipsCard()
+            Spacer(minLength: 20)
+            Button("Retake photo") { dismiss() }.buttonStyle(PrimaryButtonStyle())
+        }
+        .padding(.horizontal, Tend.S.sideWide)
+        .padding(.top, 8).padding(.bottom, 16)
+        .entrance()
+        .background { AmbientBackground() }
+        .toolbar(.hidden, for: .navigationBar)
+    }
+}
+
+/// The blurred photo with a warning banner (no match / blurry scan).
+struct BlurryScanCard: View {
+    var photo: UIImage?
+    var title = "Too blurry to read"
+    var subtitle = "This one didn't use a scan."
+
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            Group {
+                if let photo {
+                    Image(uiImage: photo).resizable().scaledToFill()
+                } else {
+                    Stripes(a: Color(light: 0xDCE6CF, dark: 0x1C261B), b: Tend.C.stripeWideB, width: 7)
+                }
+            }
+            .blur(radius: 5).padding(-10)
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .strokeBorder(Tend.C.clayTint(0.7), style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
+                .padding(.vertical, 50).padding(.horizontal, 40)
+            HStack(spacing: 12) {
+                Text("!").font(Tend.F.sans(18, .bold)).foregroundStyle(Tend.C.clay)
+                    .frame(width: 36, height: 36).background(Tend.C.clayTint(0.14), in: Circle())
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title).font(Tend.F.sans(15, .semibold)).foregroundStyle(Tend.C.text)
+                    Text(subtitle).font(Tend.F.sans(13)).foregroundStyle(Tend.C.text3)
+                }
+                Spacer(minLength: 0)
+            }
+            .padding(.vertical, 14).padding(.horizontal, 16)
+            .background(Color(lightRGB: 0xFFFCF5, lightAlpha: 0.92, darkRGB: 0x172017, darkAlpha: 0.92),
+                        in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .padding(16)
+        }
+        .frame(height: 330)
+        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+    }
+}
+
+struct ScanTipsCard: View {
+    var body: some View {
+        VStack(spacing: 0) {
+            ForEach(Array(["Hold still for a second before tapping", "Fill the frame with one leaf or flower", "Move nearer a window for softer light"].enumerated()), id: \.offset) { i, t in
+                VStack(spacing: 0) {
+                    if i > 0 { RowDivider(opacity: 0.1) }
+                    HStack(spacing: 12) {
+                        Text("\(i + 1)").font(Tend.F.sans(12, .bold)).foregroundStyle(Tend.C.brandInk)
+                            .frame(width: 24, height: 24).background(Tend.C.leaf(0.14), in: Circle())
+                        Text(t).font(Tend.F.sans(14)).foregroundStyle(Tend.C.text)
+                        Spacer(minLength: 0)
+                    }
+                    .padding(.vertical, 12)
+                }
+            }
+        }
+        .padding(.vertical, 4).padding(.horizontal, 18)
+        .card()
     }
 }
 
